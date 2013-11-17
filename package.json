@@ -24,9 +24,10 @@
     "request":"2.9.x",
     "should": "0.6.x",
     "superagent": "0.4.x",
-    "zombie":"1.4.x"
+    "zombie":"1.4.x",
+    "nodeunit": "~0.7.4"
   },
   "scripts":{
-    "test":"mocha --compilers coffee:coffee-script --ignore-leaks -R spec"
+    "test":"./node_modules/.bin/nodeunit app/test"
   }
 }
