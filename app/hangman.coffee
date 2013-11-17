@@ -36,7 +36,7 @@ class Hangman
 				# the letter has already been added
 				continue
 			# the letter is contained in the word and has not 
-			# already be added
+			# been added
 			index = i
 			break
 		index
