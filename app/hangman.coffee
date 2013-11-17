@@ -20,7 +20,7 @@ class Hangman
 			if (@word[i] == ' ')
 				guessedword += ' '
 				continue
-			if ((indicies.filter (x) -> x == i).length > 0)
+			if (indicies.filter (x) -> x == i).length > 0
 				guessedword += @word[i]
 			else
 				guessedword += '_'
@@ -30,9 +30,9 @@ class Hangman
 	match = (word, letter, indicies) ->
 		index = -1
 		for i in [0...word.length]
-			if (letter != word[i])
+			if letter != word[i]
 				continue
-			if ((indicies.filter (x) -> x == i).length > 0)
+			if (indicies.filter (x) -> x == i).length > 0
 				# the letter has already been added
 				continue
 			# the letter is contained in the word and has not 
