@@ -10,18 +10,21 @@ app = express()
 app.configure ->
     app.use express.logger()
     app.use express.bodyParser()
-    app.use express.compiler({
-        src: __dirname + '/app/assets', 
-        dest: __dirname + '/public',
-        enable: ['less', 'coffeescript'] })
+    app.use require("less-middleware")(src: __dirname + "/app/assets")
+#    app.use express.compiler({
+#        src: __dirname + '/app/assets', 
+#        dest: __dirname + '/public',
+#        enable: ['less', 'coffeescript'] })
     app.use express.static(__dirname + '/public')
     
     app.set 'view engine', 'html'
     app.set 'views', './app/views'
-    app.register '.html', 
-        compile: (str, options) ->
-            return (locals) ->
-                eco.render str, locals
+#    app.register '.html', 
+#        compile: (str, options) ->
+#            return (locals) ->
+#                eco.render str, locals
+    app.engine "html", require("ejs").renderFile
+
 
 app.configure 'development', ->
     app.use express.errorHandler({ dumpExceptions: true, showStack: true })
