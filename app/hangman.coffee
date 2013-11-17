@@ -7,33 +7,39 @@ class Hangman
 	# word. in case a match has been found the guess is
 	# consumed.
 	check: (guesses) ->
+		indicies = []
+		for i in [0...guesses.length]
+			index = match @word, guesses[i], indicies
+			if (index == -1)
+				continue
+			indicies.push index
+		indicies.sort (a,b) -> a - b
+		
 		guessedword = ''
-		found = 0
-		for x in [0...@word.length]
-			if @word[x] == ' '
+		for i in [0...@word.length]
+			if (@word[i] == ' ')
 				guessedword += ' '
 				continue
-
-			index = match @word[x], guesses[found...guesses.length]
-			if index == -1
+			if ((indicies.filter (x) -> x == i).length > 0)
+				guessedword += @word[i]
+			else
 				guessedword += '_'
-			else 
-				# consume guess
-				guessedword += guesses[found + index]
-				found += 1
-
 		guessedword
 
-	match = (letter, guesses) ->
+	# TODO: check why word has to be passed and cannot be accessed by @word
+	match = (word, letter, indicies) ->
 		index = -1
-		for y in [0...guesses.length]
-			if letter != guesses[y]
+		for i in [0...word.length]
+			if (letter != word[i])
 				continue
-			index = y
+			if ((indicies.filter (x) -> x == i).length > 0)
+				# the letter has already been added
+				continue
+			# the letter is contained in the word and has not 
+			# already be added
+			index = i
+			break
 		index
-
-
-
 
 module.exports = Hangman
 
