@@ -6,10 +6,10 @@ class Hangman
 	# replaces each occurrence of a guess in the seeked
 	# word. in case a match has been found the guess is
 	# consumed.
-	check: (guesses) ->
+	check: (guesses, success, error) ->
 		indicies = []
 		for i in [0...guesses.length]
-			index = match @word, guesses[i], indicies
+			index = match @word, guesses[i], indicies, (index)
 			if (index == -1)
 				continue
 			indicies.push index
@@ -24,7 +24,8 @@ class Hangman
 				guessedword += @word[i]
 			else
 				guessedword += '_'
-		guessedword
+				
+		success guessedword
 
 	# TODO: check why word has to be passed and cannot be accessed by @word
 	match = (word, letter, indicies) ->

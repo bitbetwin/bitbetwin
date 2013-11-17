@@ -3,27 +3,25 @@ Hangman = require '../hangman'
 exports.HangmanTest =
 
 	setUp: (callback) ->
-		@complete = 'guess word test'
-		@empty = '_____ ____ ____'
-		@hangman = new Hangman @complete
+		@hangman = new Hangman 'guess word test'
 		callback()
 
 	'test check guess with multiple matches': (test) ->
-		guessedword = @hangman.check 'guess'
-		test.equal 'guess ____ ____', guessedword
-		test.done()
+		@hangman.check 'guess', (guessedword) ->
+			test.equal 'guess ____ ____', guessedword
+			test.done()
 
 	'test check guess without match': (test) ->
-		guessedword = @hangman.check 'axyz1389?'
-		test.equal @empty, guessedword
-		test.done()
+		@hangman.check 'axyz1389?', (guessedword) ->
+			test.equal '_____ ____ ____', guessedword
+			test.done()
 
 	'test check guess in divers orders': (test) ->
-		guessedword = @hangman.check 'seuotss'
-		test.equal '_uess _o__ t_s_', guessedword
-		test.done()
+		@hangman.check 'seuotss', (guessedword) ->
+			test.equal '_uess _o__ t_s_', guessedword
+			test.done()
 
 	'test check guess with complete match': (test) ->
-		guessedword = @hangman.check 'seuotssgrdwte'
-		test.equal @complete, guessedword
-		test.done()
+		@hangman.check 'seuotssgrdwte', (guessedword) ->
+			test.equal 'guess word test', guessedword
+			test.done()
