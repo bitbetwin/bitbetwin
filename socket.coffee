@@ -21,23 +21,19 @@ class exports.Server
     @app.use require('connect-assets') src: __dirname + '/public'
 
 
-    @app.set 'views', __dirname + '/client/pages'
+    @app.set 'views', __dirname + '/app/views'
     @app.set 'view engine', 'jade'
     @app.use express.bodyParser()
     @app.use express.methodOverride()
     @app.use require('stylus').middleware src: __dirname + '/public' 
     @app.use(express.static(__dirname + '/public'))
     @app.use(express.cookieParser('test'))
-    @app.use(express.session { secret :'civ9Ohlaiza11e', store: MemoryStore, key: 'sessionID'})
+    @app.use(express.session { secret :'ci843tgbza11e', key: 'sessionID'})
 
     #development
     @app.use(express.errorHandler({
       dumpExceptions: true, showStack: true
     }))
-
-
-    @session_handler = new SessionHandler
-    @email_handler = new EmailHandler
 
     # logging
     logger= (req, res, next) ->
@@ -56,7 +52,10 @@ class exports.Server
    
     @app.get '/', (req, res) =>
       console.log "/ called "
-      res.render('app', vars)
+      vars=
+        foo: true
+        youAreUsingJade: true
+      res.render('index', vars)
 
 
     # Socket IO
