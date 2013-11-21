@@ -27,7 +27,6 @@ class Hangman
 				
 		success guessedword
 
-	# TODO: check why word has to be passed and cannot be accessed by @word
 	match: (letter, indicies) ->
 		index = -1
 		for i in [0...@word.length]
