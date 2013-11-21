@@ -9,7 +9,7 @@ class Hangman
 	check: (guesses, success, error) ->
 		indicies = []
 		for i in [0...guesses.length]
-			index = match @word, guesses[i], indicies, (index)
+			index = @match guesses[i], indicies, (index)
 			if (index == -1)
 				continue
 			indicies.push index
@@ -28,10 +28,10 @@ class Hangman
 		success guessedword
 
 	# TODO: check why word has to be passed and cannot be accessed by @word
-	match = (word, letter, indicies) ->
+	match: (letter, indicies) ->
 		index = -1
-		for i in [0...word.length]
-			if letter != word[i]
+		for i in [0...@word.length]
+			if letter != @word[i]
 				continue
 			if (indicies.filter (x) -> x == i).length > 0
 				# the letter has already been added
