@@ -42,4 +42,3 @@ class Hangman
 		index
 
 module.exports = Hangman
-
