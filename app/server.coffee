@@ -10,6 +10,12 @@ io = io.listen(server)
 
 server.listen(8080)
 
+app.use((req, res, next) ->
+  if (/\/public\/hidden\/*/.test(req.path))
+    res.send(404, "Not Found")
+  next()
+)
+app.use(express.static(__dirname + "/../public"))
 app.get('/', (req, res) -> res.sendfile(__dirname + '/views/index.html'))
 
 io.sockets.on('connection', (socket) ->
