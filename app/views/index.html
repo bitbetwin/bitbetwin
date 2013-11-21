@@ -1,8 +1,9 @@
-<html>
+<html ng-app="phonecatApp">
 <head>
 <title>Bangman</title>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/angular/angular.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+<script src="/js/controllers.js"></script>
 <script>
   var socket = io.connect('http://localhost:8080');
   socket.on('news', function (data) {
@@ -10,7 +11,16 @@
     socket.emit('my other event', { my: 'data' });
   });
 </script>
-<body>
+<body ng-controller="PhoneListCtrl">
 	<p>bangman :)</p>
+	<p>1 + 2 = {{ 1 + 2 }}</p>
+
+	<ul>
+    <li ng-repeat="phone in phones">
+      {{phone.name}}
+      <p>{{phone.snippet}}</p>
+    </li>
+  </ul>
+
 </body>
 </html>
