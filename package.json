@@ -14,10 +14,16 @@
     "express" : "3.3.x",
     "coffee-script": "1.6.x",
     "connect": "2.8.x",
+    "connect-assets" : "2.4.x",
+    "connect-flash" : "0.1.x",
     "eco" : "1.1.x",
     "less" : "1.5.x",
     "less-middleware" : "0.1.x",
-    "ejs" : "0.8.x"
+    "ejs" : "0.8.x",
+    "jade": "0.32.x",    
+    "socket.io": "0.9.x",
+    "socket.io-client": "0.9.x",
+    "stylus": "0.33.x"
   },
  "devDependencies": {
     "mocha": "1.13.x",
