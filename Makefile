@@ -4,10 +4,8 @@ all: public modules
 modules:
 	npm install express
 	npm install coffee-script
-	npm install eco
-	npm install less
-	npm install less-middleware
-	npm install ejs
+	npm install async
+	npm install socket.io
     
 public:
 	mkdir -p public/css
