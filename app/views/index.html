@@ -1,4 +1,4 @@
-<html ng-app="phonecatApp">
+<html ng-app="bangman">
 <head>
 <title>Bangman</title>
 <script src="/socket.io/socket.io.js"></script>
@@ -11,16 +11,12 @@
     socket.emit('my other event', { my: 'data' });
   });
 </script>
-<body ng-controller="PhoneListCtrl">
+<body>
 	<p>bangman :)</p>
-	<p>1 + 2 = {{ 1 + 2 }}</p>
 
-	<ul>
-    <li ng-repeat="phone in phones">
-      {{phone.name}}
-      <p>{{phone.snippet}}</p>
-    </li>
-  </ul>
+  <div ng-controller="HangmanCtrl">
+    <p>{{word}}</p>
+  </div>
 
 </body>
 </html>
