@@ -2,8 +2,8 @@
 
 /* Controllers */
 
-var bangman = angular.module('bangman', []);
+var bangmanControllers = angular.module('bangmanControllers', []);
 
-bangman.controller('HangmanCtrl', function($scope) {
+bangmanControllers.controller('HangmanCtrl', ['$scope', function($scope) {
 	$scope.word = 'test';
-});
+}]);
