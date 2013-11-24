@@ -16,6 +16,8 @@ app.use((req, res, next) ->
   next()
 )
 app.use(express.static(__dirname + "/../public"))
+app.use(express.static(__dirname + "/views"))
+#app.use(express.directory(__dirname + "/"));
 app.get('/', (req, res) -> res.sendfile(__dirname + '/views/index.html'))
 
 io.sockets.on('connection', (socket) ->

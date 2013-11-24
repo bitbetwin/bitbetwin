@@ -3,15 +3,14 @@
 <title>Bangman</title>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.min.js"></script>
 <script src="/js/app.js"></script>
 <script src="/js/services.js"></script>
 <script src="/js/controllers.js"></script>
 	<body>
 	<p>bangman :)</p>
 
-  <div ng-controller="HangmanCtrl">
-    <p>{{word}}</p>
-  </div>
+  <div ng-view></div>
 
 </body>
 </html>
