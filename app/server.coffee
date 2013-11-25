@@ -1,6 +1,7 @@
 http = require('http')
 io = require('socket.io')
 express = require('express')
+Hangman = require('./hangman')
 
 # TODO: package the server into a class
 
@@ -20,7 +21,15 @@ app.use(express.static(__dirname + "/views"))
 #app.use(express.directory(__dirname + "/"));
 app.get('/', (req, res) -> res.sendfile(__dirname + '/views/index.html'))
 
+hangman = new Hangman 'Congratulations you guessed the sentence correctly'
+
 io.sockets.on('connection', (socket) ->
-  socket.emit('news', { hello: 'world' })
-  socket.on('my other event', (data) -> console.log(data))
+	hangman.check [], (match) -> 
+		socket.emit('hangman', { phrase: match })
+
+	socket.on('guess', (data) -> 
+		console.log(data)
+  		hangman.check data, (match) -> 
+  			socket.emit('hangman', { phrase: match })
+	)
 )

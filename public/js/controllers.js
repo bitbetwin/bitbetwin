@@ -4,7 +4,11 @@
 
 var bangmanControllers = angular.module('bangmanControllers', []);
 bangmanControllers.controller('HangmanCtrl', ['$scope', 'socket', function($scope, socket) {
-	socket.on('news', function(data) {
-		$scope.word = data.hello;
+	socket.on('hangman', function(hangman) {
+		$scope.word = hangman.phrase;
 	})
+
+	$scope.guess = function() {
+    	socket.emit('guess', $scope.letter)
+  	};
 }]);
