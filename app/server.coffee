@@ -28,7 +28,6 @@ io.sockets.on('connection', (socket) ->
 		socket.emit('hangman', { phrase: match })
 
 	socket.on('guess', (data) -> 
-		console.log(data)
   		hangman.check data, (match) -> 
   			socket.emit('hangman', { phrase: match })
 	)
