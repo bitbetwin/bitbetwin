@@ -1,6 +1,7 @@
 request = require 'request'
 socketio = require 'socket.io'
 express = require 'express'
+Hangman = require './app/hangman'
 
 DEBUG = false
 
@@ -59,10 +60,17 @@ class exports.Server
 
     # Socket IO
     @public=(socketio.listen @http_server)
-    @public.sockets.on 'connection', (socket) ->
-      socket.emit('news', { hello: 'world' })
-    
 
+    hangman = new Hangman 'Congratulations you guessed the sentence correctly'
+
+    @public.sockets.on 'connection', (socket) ->
+      hangman.check [], (match) -> 
+        socket.emit('hangman', { phrase: match })
+
+      socket.on 'guess', (data) -> 
+        hangman.check data, (match) -> 
+          socket.emit('hangman', { phrase: match })
+        
   stop: (callback) ->
     console.log "Stop called"
     @private.server.close()
