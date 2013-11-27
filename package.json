@@ -13,7 +13,11 @@
     "async": "0.2.x",
     "express" : "3.3.x",
     "coffee-script": "1.6.x",
-    "socket.io": "0.9.x"
+    "connect": "2.8.x",
+    "connect-assets" : "2.4.x",
+    "connect-flash" : "0.1.x",
+    "socket.io": "0.9.x",
+    "jade": "0.32.x" 
   },
  "devDependencies": {
     "nodeunit": "~0.7.4"

@@ -2,10 +2,7 @@
 all: public modules
 
 modules:
-	npm install express
-	npm install coffee-script
-	npm install async
-	npm install socket.io
+	npm install 
     
 public:
 	mkdir -p public/css

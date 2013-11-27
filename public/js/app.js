@@ -5,14 +5,14 @@
 var bangman = angular.module('bangman', [
 	'ngRoute',
 	'bangmanControllers',
-  'bangmanServices'
+	'bangmanServices'
 ]);
 
 bangman.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
       when('/', {
-        templateUrl: 'partials/guess.html',
+        templateUrl: 'guess',
         controller: 'HangmanCtrl'
       }).
       otherwise({
