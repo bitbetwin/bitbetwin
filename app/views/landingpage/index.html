@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html ng-app="landingpage">
+	<head>
+		<title>Overflow by HTML5 UP</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic" rel="stylesheet" type="text/css" />
+		<!--[if lte IE 8]><script src="/landingpage/css/ie/html5shiv.js"></script><![endif]-->
+		<script src="/landingpage/js/jquery.min.js"></script>
+		<script src="/landingpage/js/jquery.poptrox.min.js"></script>
+		<script src="/landingpage/js/skel.min.js"></script>
+		<script src="/landingpage/js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="/landingpage/css/skel-noscript.css" />
+			<link rel="stylesheet" href="/landingpage/css/style.css" />
+		</noscript>
+		<!--[if lte IE 8]><link rel="stylesheet" href="/landingpage/css/ie/v8.css" /><![endif]-->
+		<script src="http://code.angularjs.org/1.2.1/angular.min.js"></script>
+		<script src="/js/app.js"></script>
+	</head>
+	<body>
+
+		<!-- Header -->
+		<section id="header">
+			<header>
+				<h1>Bangman</h1>
+				<p>by Team Awesome</p>
+			</header>
+			<footer>
+				<a href="#banner" class="button style2 scrolly">Read more</a>
+			</footer>
+		</section>
+		
+		<!-- Intro -->
+		<section id="banner">
+			<header>
+				<h2>This is Bangman</h2>
+			</header>
+			<p>Got some spare time? You like to play hangman?</p>
+			<p>Soon you can play with others worldwide and win a bitload of Bitcoins!</p>
+			<footer>
+				<a href="#signup" class="button style2 scrolly">Interessted?</a>
+			</footer>
+		</section>
+		
+		<!-- Contact -->
+		<article id="signup" class="container box style3" ng-controller="LandingpageCtrl">
+			<header>
+				<h2>Sign up!</h2>
+				<p>Leave your email address if you want to be notified!</p>
+				<p ng-show="message">{{ message }}</p>
+				<p>E-Mail: {{ email }}</p>
+			</header>
+			<form>
+				<div class="row half">
+					<div class="12u"><input ng-model="email" type="text" class="text" name="email" placeholder="Email" /></div>
+				</div>
+				<div class="row">
+					<div class="12u">
+						<ul class="actions">
+							<li><a ng-click="signup()" href="" class="button form">Submit</a></li>
+							<!-- <li><input type="submit" class="button form" value="Submit" /></li> -->
+						</ul>
+					</div>
+				</div>
+			</form>
+		</article>
+		
+		<!-- Footer -->
+		<section id="footer">
+			<ul class="icons">
+				<li><a href="#" class="fa fa-twitter solo"><span>Twitter</span></a></li>
+				<li><a href="#" class="fa fa-facebook solo"><span>Facebook</span></a></li>
+			</ul>
+			<div class="copyright">
+				<ul class="menu">
+					<li>&copy; Untitled. All rights reserved.</li>
+					<li>Design: <a href="http://html5up.net/">HTML5 UP</a></li>
+				</ul>
+			</div>
+		</section>
+
+	</body>
+</html>
