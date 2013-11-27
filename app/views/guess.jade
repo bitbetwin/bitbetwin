@@ -1,8 +1,6 @@
-<div>
-	<p>Guessed Word: {{ word }}</p>
-</div>
-<div>
-	<form ng-submit="guess()">
-		<input ng-model="letter" type="text" placeholder="Enter a letter!" /> <input type="submit" value="guess" />
-	</form>
-</div>
+div
+	p Guessed Word: {{ word }}
+div
+	form(ng-submit="guess()")
+		input(ng-model="letter", type="text", placeholder="Enter a letter!")
+		input(type="submit", value="guess")
