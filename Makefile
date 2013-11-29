@@ -2,7 +2,7 @@
 all: public modules
 
 modules:
-	npm install 
+	npm install
     
 public:
 	mkdir -p public/css
