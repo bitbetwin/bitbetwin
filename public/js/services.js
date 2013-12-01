@@ -4,7 +4,7 @@
 
 var bangmanServices = angular.module('bangmanServices', []);
 
-bangmanServices.factory('socket', function ($rootScope) {
+bangmanServices.factory('$socket', function ($rootScope) {
   var socket = io.connect('http://localhost:8080');
   return {
     on: function (eventName, callback) {
