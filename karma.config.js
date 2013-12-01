@@ -15,10 +15,10 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'public/js/lib/*.js',
-      'public/js/*.js',
       'public/js/test/lib/*.js',
+      'public/js/*.js',
       'public/js/test/unit/*.js',
-
+      'public/js/test/e2e/*.js'
     ],
 
 
@@ -67,6 +67,13 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: false
+    singleRun: false,
+
+    urlRoot: '/__karma/',
+
+    proxies: {
+        '/' : 'localhost:9876/'
+    },
+
   });
 };
