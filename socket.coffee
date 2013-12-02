@@ -27,6 +27,13 @@ class exports.Server
     @app.use express.static(__dirname + '/public')
     @app.use express.cookieParser('guess')
     @app.use express.session { secret :'ci843tgbza11e', key: 'sessionID'}
+    
+    #security stuff, aka login, authentication
+    Security = require('./app/security').Security
+    security = new Security
+    security.init @app, (error, passport) =>
+      @app.use @app.router
+
 
     #development
     @app.use(express.errorHandler({
@@ -57,6 +64,10 @@ class exports.Server
     #TODO move partial templates into subfolder
     @app.get '/guess', (req, res) =>
       res.render('guess')
+
+    
+    @app.get '/login', (req, res) ->
+      res.render('login', {user: req.user, message: req.flash('error')})
 
     # Socket IO
     @public=(socketio.listen @http_server)
