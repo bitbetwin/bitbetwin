@@ -58,6 +58,10 @@ class exports.Server
     @app.get '/guess', (req, res) =>
       res.render('guess')
 
+    # Landingpage route
+    @app.get '/landingpage', (req, res) => 
+      res.render('landingpage')
+
     # Socket IO
     @public=(socketio.listen @http_server)
 
