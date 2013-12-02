@@ -18,7 +18,9 @@
     "connect-flash" : "0.1.x",
     "socket.io": "0.9.x",
     "jade": "0.32.x",
-    "request": "2.27.x"
+    "request": "2.27.x",
+    "passport": "0.1.x",
+    "passport-local": "0.1.x"
   },
  "devDependencies": {
     "nodeunit": "~0.7.4"
