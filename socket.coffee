@@ -10,6 +10,8 @@ class exports.Server
   constructor: (@port) ->
 
     @connect = require 'connect'
+    flash = require 'connect-flash'
+
 
     MemoryStore = express.session.MemoryStore
 
@@ -27,6 +29,14 @@ class exports.Server
     @app.use express.static(__dirname + '/public')
     @app.use express.cookieParser('guess')
     @app.use express.session { secret :'ci843tgbza11e', key: 'sessionID'}
+
+    # error message handling
+    @app.use(flash())
+
+    #settings
+    env = "development" # or change to "production" if production
+    config = require("./app/config/config")[env]
+    @DEBUG = config.debug
     
     #security stuff, aka login, authentication
     Security = require('./app/security').Security
@@ -48,8 +58,8 @@ class exports.Server
     @app.use logger
 
   start: (callback) ->
-    DEBUG = (process.env.DEBUG=="true")
-    console.log "DEBUG flag:", DEBUG
+
+    console.log "DEBUG flag:", @DEBUG
 
     console.log 'Server starting'
     @http_server=@app.listen @port
@@ -65,7 +75,7 @@ class exports.Server
     @app.get '/guess', (req, res) =>
       res.render('guess')
 
-    
+
     @app.get '/login', (req, res) ->
       res.render('login', {user: req.user, message: req.flash('error')})
 
