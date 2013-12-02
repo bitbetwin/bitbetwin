@@ -1,5 +1,6 @@
 mongoose = require("mongoose")
 hash = require("../utils/hash")
+
 UserSchema = mongoose.Schema(
   email: String
   salt: String

@@ -41,6 +41,6 @@ class exports.Security
     passport.deserializeUser (id, done) ->
       User.findById id, done  
 
-    app.post '/login', passport.authenticate('local', { successRedirect: '/loggedin',  failureRedirect: '/', failureFlash: true })
+    app.post '/login', passport.authenticate('local', { successRedirect: '/loggedin',  failureRedirect: '/login', failureFlash: true })
 
     callback null, passport
