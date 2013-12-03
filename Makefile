@@ -3,6 +3,7 @@ all: public modules
 
 modules:
 	npm install
+	bower install
     
 public:
 	mkdir -p public/css
