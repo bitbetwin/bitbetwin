@@ -34,7 +34,15 @@ class exports.Server
     @app.use(flash())
 
     #settings
-    env = "development" # or change to "production" if production
+    switch process.env.NODE_ENV
+      when "development" 
+        env = "development"
+      when "production"
+        env = "production" 
+      else
+         env = "development" # default development for now
+    
+    console.log env + " mode started"
     config = require("./app/config/config")[env]
     @DEBUG = config.debug
     
