@@ -17,7 +17,7 @@ describe "User", ->
     done()
     
   beforeEach (done)->
-    User.remove {}, done
+    User.remove {}, done #empty database
   
   it "looks for a nonexisting user in db", (done) ->
     User.findOne email: "nonexisting@gmail.com" , (err, user) ->
