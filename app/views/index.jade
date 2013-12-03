@@ -1,4 +1,3 @@
-!!! 5
 html(ng-app='bangman')
 head
     title Bangman
@@ -12,4 +11,6 @@ head
     script(src='/js/services.js')
     script(src='/js/controllers.js')
     body
-        .container(ng-view='ng-view')
+      p bangman :)
+      span Welcome #{user.email}
+      div(ng-view='ng-view')
