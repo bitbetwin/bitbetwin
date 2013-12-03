@@ -12,3 +12,10 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', function($sco
     	$socket.emit('guess', $scope.letter)
   	};
 }]);
+
+var landingpageControllers = angular.module('landingpageControllers', []);
+landingpageControllers.controller('LandingpageCtrl', function($scope) {
+	$scope.signup = function() {
+	  $scope.message = 'Thanks for signing up! You will receive an invitation at ' + $scope.email + '.';
+	}
+});

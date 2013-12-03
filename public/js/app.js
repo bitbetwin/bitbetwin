@@ -20,9 +20,4 @@ bangman.config(['$routeProvider',
       });
   }]);
 
-var landingpage = angular.module('landingpage', [])
-  .controller('LandingpageCtrl', function($scope) {
-    $scope.signup = function() {
-      $scope.message = 'Thanks for signing up! You will receive an invitation at ' + $scope.email + '.';
-    }
-  });
+var landingpage = angular.module('landingpage', ['landingpageControllers']);
