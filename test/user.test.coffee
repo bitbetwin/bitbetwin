@@ -17,7 +17,6 @@ describe "User", ->
     done()
     
   beforeEach (done)->
-    console.log "Users removed"
     User.remove {}, done
   
   it "looks for a nonexisting user in db", (done) ->
