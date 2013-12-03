@@ -28,9 +28,11 @@
     "mongoose":"3.6.x"
   },
  "devDependencies": {
-    "nodeunit": "~0.7.4"
+    "mocha": "1.13.x",
+    "request":"2.9.x",
+    "should": "0.6.x"
   },
   "scripts":{
-    "test":"./node_modules/.bin/nodeunit app/test"
+    "test":"mocha --compilers coffee:coffee-script"
   }
 }
