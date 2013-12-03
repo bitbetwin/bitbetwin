@@ -1,0 +1,68 @@
+!!! 5
+html(ng-app='landingpage')
+head
+    title Overflow by HTML5 UP
+    meta(http-equiv='content-type', content='text/html; charset=utf-8')
+    meta(name='description', content='')
+    meta(name='keywords', content='')
+    link(href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic', rel='stylesheet', type='text/css')
+    //if lte IE 8
+      script(src='/landingpage/css/ie/html5shiv.js')
+    script(src='/landingpage/js/jquery.min.js')
+    script(src='/landingpage/js/jquery.poptrox.min.js')
+    script(src='/landingpage/js/skel.min.js')
+    script(src='/landingpage/js/init.js')
+    noscript
+      link(rel='stylesheet', href='/landingpage/css/skel-noscript.css')
+      link(rel='stylesheet', href='/landingpage/css/style.css')
+    //if lte IE 8
+      link(rel='stylesheet', href='/landingpage/css/ie/v8.css')
+    script(src='http://code.angularjs.org/1.2.1/angular.min.js')
+    script(src='/js/app.js')
+  body
+    // Header 
+    section#header
+      header
+        h1 Bangman
+        p by Team Awesome
+      footer
+        a.button.style2.scrolly(href='#banner') Read more
+    // Intro 
+    section#banner
+      header
+        h2 This is Bangman
+      p Got some spare time? You like to play hangman?
+      p Soon you can play with others worldwide and win a bitload of Bitcoins!
+      footer
+        a.button.style2.scrolly(href='#signup') Interessted?
+    // Contact 
+    article#signup.container.box.style3(ng-controller='LandingpageCtrl')
+      header
+        h2 Sign up!
+        p Leave your email address if you want to be notified!
+        p(ng-show='message') {{ message }}
+        p E-Mail: {{ email }}
+      form
+        .row.half
+          .12u
+            input.text(ng-model='email', type='text', name='email', placeholder='Email')
+        .row
+          .12u
+            ul.actions
+              li
+                a.button.form(ng-click='signup()', href='') Submit
+    // Footer 
+    section#footer
+      ul.icons
+        li
+          a.fa.fa-twitter.solo(href='#')
+            span Twitter
+        li
+          a.fa.fa-facebook.solo(href='#')
+            span Facebook
+      .copyright
+        ul.menu
+          li © Untitled. All rights reserved.
+          li
+            | Design:
+            a(href='http://html5up.net/') HTML5 UP

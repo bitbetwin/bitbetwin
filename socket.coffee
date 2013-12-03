@@ -3,7 +3,6 @@ socketio = require 'socket.io'
 express = require 'express'
 Hangman = require './app/hangman'
 
-DEBUG = false
 
 class exports.Server
 
@@ -28,6 +27,18 @@ class exports.Server
     @app.use express.cookieParser('guess')
     @app.use express.session { secret :'ci843tgbza11e', key: 'sessionID'}
 
+    #settings
+    switch process.env.NODE_ENV
+      when "development" 
+        env = "development"
+      when "production"
+        env = "production" 
+      else
+         env = "development" # default development for now
+    console.log env + " mode started"
+    config = require("./app/config/config")[env]
+    @DEBUG = config.debug
+
     #development
     @app.use(express.errorHandler({
       dumpExceptions: true, showStack: true
@@ -41,8 +52,8 @@ class exports.Server
     @app.use logger
 
   start: (callback) ->
-    DEBUG = (process.env.DEBUG=="true")
-    console.log "DEBUG flag:", DEBUG
+    
+    console.log "DEBUG flag:", @DEBUG
 
     console.log 'Server starting'
     @http_server=@app.listen @port
@@ -57,6 +68,10 @@ class exports.Server
     #TODO move partial templates into subfolder
     @app.get '/guess', (req, res) =>
       res.render('guess')
+
+    # Landingpage route
+    @app.get '/landingpage', (req, res) => 
+      res.render('landingpage')
 
     # Socket IO
     @public=(socketio.listen @http_server)
