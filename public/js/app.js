@@ -15,6 +15,9 @@ bangman.config(['$routeProvider',
         templateUrl: 'guess',
         controller: 'HangmanCtrl'
       }).
+      when('/login', {
+        templateUrl: 'login',
+      }).
       otherwise({
         redirectTo: '/'
       });
