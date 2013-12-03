@@ -24,6 +24,7 @@ class exports.Server
     @app.use express.methodOverride()
     
     @app.use express.static(__dirname + '/public')
+    @app.use '/components', express.static(__dirname + '/bower_components');
     @app.use express.cookieParser('guess')
     @app.use express.session { secret :'ci843tgbza11e', key: 'sessionID'}
 

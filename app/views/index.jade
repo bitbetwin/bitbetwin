@@ -1,6 +1,10 @@
+!!! 5
 html(ng-app='bangman')
 head
     title Bangman
+    link(href='/components/bootstrap/dist/css/bootstrap.min.css', rel='stylesheet')
+    script(src='/components/jquery/jquery.min.js')
+    script(src='/components/bootstrap/dist/js/bootstrap.min.js')
     script(src='/socket.io/socket.io.js')
     script(src='/js/lib/angular-1.2.0.js')
     script(src='/js/lib/angular-route-1.2.0.js')
@@ -8,5 +12,4 @@ head
     script(src='/js/services.js')
     script(src='/js/controllers.js')
     body
-      p bangman :)
-      div(ng-view='ng-view')
+        .container(ng-view='ng-view')
