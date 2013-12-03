@@ -13,27 +13,24 @@ class exports.Security
 
     LocalStrategy = require('passport-local').Strategy
     
-    passport.use new LocalStrategy (email, password, done) ->
+    passport.use new LocalStrategy 
+      usernameField: 'email',
+      passwordField: 'password'
+    , (email, password, done) ->
 
       process.nextTick ->
-        console.log "login called"
         condition = 
           email: email
-        blackboard={}
-        async.waterfall [
-          (callback)->
-            User.findOne condition, callback
-          (user, callback)->
-            if !user 
-              return callback "User not found"
-            else
-              if !bcrypt.compareSync password, user.login_methods.email.password_hash
-                return callback "Password is wrong"
-            callback null, user
-          (user, callback)->
-            blackboard.user=user
-            callback null, blackboard.user
-        ], done
+        User.findOne condition, (err, user) ->
+          return done(err)  if err
+          unless user
+            return done(null, false,
+              message: "Incorrect username or password."
+            )
+          unless user.password==password #TODO encrypt password
+            return done(null, false, message: "Incorrect password.")
+          done null, user
+
 
     passport.serializeUser (user, done) ->
       done(null, user._id)
@@ -41,6 +38,6 @@ class exports.Security
     passport.deserializeUser (id, done) ->
       User.findById id, done  
 
-    app.post '/login', passport.authenticate('local', { successRedirect: '/loggedin',  failureRedirect: '/login', failureFlash: true })
+    app.post '/login', passport.authenticate('local', { successRedirect: '/',  failureRedirect: '/login', failureFlash: true })
 
     callback null, passport
