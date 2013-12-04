@@ -61,6 +61,10 @@ class exports.Server
     security.init @app, (error, passport) =>
       @app.use @app.router
 
+    #Subscriber
+    Subscribe = require('./app/subscribe').Subscribe
+    subscribe = new Subscribe
+    subscribe.init @app
 
     #settings
     switch process.env.NODE_ENV
