@@ -5,11 +5,12 @@
 var bangmanServices = angular.module('bangmanServices', []);
 
 bangmanServices.factory('$socket', function ($rootScope) {
-  var socket = io.connect('http://localhost:8080');
+  var socket = io.connect('http://localhost:8080/auth');
   return {
     on: function (eventName, callback) {
       socket.on(eventName, function () {  
         var args = arguments;
+        console.log(args);
         $rootScope.$apply(function () {
           callback.apply(socket, args);
         });

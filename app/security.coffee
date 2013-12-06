@@ -38,6 +38,6 @@ class exports.Security
     passport.deserializeUser (id, done) ->
       User.findById id, done  
 
-    app.post '/login', passport.authenticate('local', { successRedirect: '/',  failureRedirect: '/login', failureFlash: true })
+    app.post '/login', passport.authenticate('local', { successRedirect: '/',  failureRedirect: '/', failureFlash: true })
 
     callback null, passport
