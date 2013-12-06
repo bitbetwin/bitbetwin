@@ -41,8 +41,7 @@ head
       header
         h2 Sign up!
         p Leave your email address if you want to be notified!
-        p(ng-show='message') {{ message }}
-        p E-Mail: {{ email }}
+        p(ng-show='response') {{ response.msg }}
       form
         .row.half
           .12u

@@ -22,7 +22,7 @@ landingpageControllers.controller('LandingpageCtrl', function($scope, $http) {
 	$scope.signup = function() {
 	  //$scope.message = 'Thanks for signing up! You will receive an invitation at ' + $scope.email + '.';
 		$http.put('/subscribe/' + $scope.email, {email: $scope.email}).success(function (data, status) {
-		 	$scope.message = JSON.stringify(data);
+		 	$scope.response = data;
 		});
 	}
 });

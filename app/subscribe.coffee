@@ -13,21 +13,31 @@ class exports.Subscribe
 		app.put '/subscribe/:email', (req, res) ->
 			email = req.params.email
 
+			ret =
+				err: false
+				msg: ""
+
 			# Check for existing subscribers
 			Subscriber.find { email: email }, (err, docs) ->
 				# console.log "found subscriber: #{docs}"
 				if docs.length == 0
 
 					# Save subscriber into MongoDB
-					@subscriber = new Subscriber
+					s = new Subscriber
 						email: email
 					
-					@subscriber.save (err) ->
-						console.log "#{email} subscribed" unless err
-						console.log "err #{err}"
+					s.save (err) ->
+						if err
+							ret.err = true
+							ret.msg = "Sorry, we an error occured. Please try again later."
+							console.warn err.message
+						else
+							ret.msg = "You are now subscribed and should receive a confirmation mail soon."
+							console.log "#{email} subscribed" unless err
+
 						res.format
 							json: ->
-								res.json err
+								res.json ret
 
 					# Send confirmation mail to subscriber
 					m = new Mandrill.Mandrill(process.env.MANDRILL_APIKEY)
@@ -37,10 +47,17 @@ class exports.Subscribe
 
 					m.messages.send
 						"message": email_message
-						"async": true
+						"async": false
 						(results) ->
 							console.log "Mandrill result: #{JSON.stringify results}"
+							if (results[0].sent == "sent")
+								s.confrimation_sent = yes
+								s.update
 						(e) ->
-							console.log "a mandrill error occurred: #{e.name} - #{e.message}"
+							console.warn "a mandrill error occurred: #{e.name} - #{e.message}"
 				else
 					console.log "#{email} already subscribed"
+					ret.msg = "You are already subscribed!"
+					res.format
+						json: ->
+							res.json ret
