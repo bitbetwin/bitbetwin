@@ -1,5 +1,5 @@
 html(ng-app='bangman')
-head
+block head
     title Bangman
     link(href='/components/bootstrap/dist/css/bootstrap.min.css', rel='stylesheet')
     script(src='/components/jquery/jquery.min.js')
@@ -10,5 +10,7 @@ head
     script(src='/js/app.js')
     script(src='/js/services.js')
     script(src='/js/controllers.js')
-    body
-      div(ng-view='ng-view')
+    block body
+        include userpanel/main      
+
+        div(ng-view='ng-view')

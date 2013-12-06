@@ -25,6 +25,7 @@ config = require("./app/config/config")[env]
 class exports.Server
 
   constructor: (@port) ->
+    @SESSION_SECRET = "ci843tgbza11e"
 
     console.log env + " mode started"
     
@@ -32,6 +33,8 @@ class exports.Server
 
     @connect = require 'connect'
     flash = require 'connect-flash'
+    @cookie = require 'cookie'
+
 
     MemoryStore = express.session.MemoryStore
     @sessionStore = new MongoStore url: config.db_address
@@ -50,7 +53,8 @@ class exports.Server
     @app.use express.static(__dirname + '/public')
     @app.use '/components', express.static(__dirname + '/bower_components');
     @app.use express.cookieParser('guess')
-    @app.use express.session { secret :'ci843tgbza11e', store: @sessionStore, key: 'sessionID'}
+
+    @app.use express.session { secret :@SESSION_SECRET, store: @sessionStore, key: 'sessionID'}
 
     # error message handling
     @app.use(flash())
@@ -65,18 +69,6 @@ class exports.Server
     Subscribe = require('./app/subscribe').Subscribe
     subscribe = new Subscribe
     subscribe.init @app
-
-    #settings
-    switch process.env.NODE_ENV
-      when "development" 
-        env = "development"
-      when "production"
-        env = "production" 
-      else
-         env = "development" # default development for now
-    console.log env + " mode started"
-    config = require("./app/config/config")[env]
-    @DEBUG = config.debug
 
     #development
     @app.use(express.errorHandler({
@@ -111,8 +103,12 @@ class exports.Server
     @app.get '/landingpage', (req, res) => 
       res.render('landingpage')
 
-    @app.get '/login', (req, res) ->
-      res.render('login', {user: req.user, message: req.flash('error')})
+#    @app.get '/login', (req, res) ->
+#      res.render('login', {user: req.user, message: req.flash('error')})
+
+    @app.get '/logout', (req, res) ->
+      req.logOut()
+      res.redirect('/');
 
     mongoose.connect config.db_address, (error) ->
       console.log "could not connecte because: " + error if error
@@ -133,9 +129,11 @@ class exports.Server
             console.log "user saved" unless err            
             throw err if err          
             # fetch user and test password verification
-      
+
     # Socket IO
     @public=(socketio.listen @http_server)
+
+    @private = @public.of "/auth"
 
     hangman = new Hangman 'Congratulations you guessed the sentence correctly'
 
@@ -146,6 +144,53 @@ class exports.Server
       socket.on 'guess', (data) -> 
         hangman.check data, (match) -> 
           socket.emit('hangman', { phrase: match })
+
+    # private socket.io stuff
+    @private.authorization (data, accept) =>
+      if @DEBUG 
+        console.log "authorization called with cookies:", data?.headers?.cookie
+      if data.headers.cookie
+        cookie = @cookie.parse(data.headers.cookie)
+      else
+        cookie = data.query
+      # NOTE: To detect which session this socket is associated with,
+      # we need to parse the cookies.
+      return accept("Session cookie required.", false)  unless cookie
+
+      # NOTE: Next, verify the signature of the session cookie.
+      data.cookie = @connect.utils.parseSignedCookies(cookie, @SESSION_SECRET)
+
+      # NOTE: save ourselves a copy of the sessionID.
+      data.sessionID = data.cookie["sessionID"]
+      @sessionStore.get data.sessionID, (err, session) ->
+        if err
+          return accept("Error in session store.", false)
+        else return accept("Session not found.", false)  unless session
+        if (!session.passport.user)
+          return accept("NO User in session found.", false)
+        # success! we're authenticated with a known session.
+        data.session = session
+        data.user = session.passport.user
+        accept null, true
+
+    @private.on "connection", (socket) =>
+      hs = socket.handshake
+      if @DEBUG
+        console.log "establishing connection"
+        console.log "trying to find user:", hs.user
+      User.findById hs.user, (err, user) =>
+        return console.log "Couldnt find user:", user if err || !user
+        if @DEBUG
+          console.log "found user by email:", user
+        socket.user= user
+        user.socket= socket
+        if @DEBUG
+          console.log "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
+        data=
+          username:user.email
+        socket.emit "loggedin", data
+
+
 
     return callback() # finishes start function
 

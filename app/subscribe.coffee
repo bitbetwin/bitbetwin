@@ -3,10 +3,10 @@ Mandrill = require 'mandrill-api/mandrill'
 
 email_message =
 	html: "<p>Thanks for your interest!<br/><br/><em>Your Team Awesome</em></p>"
-  text: "Thanks for your interest! Your Team Awesome"
-  subject: "Bangman"
-  from_email: "no-reply@example.com"
-  from_name: "Team Awesome"
+	text: "Thanks for your interest! Your Team Awesome"
+	subject: "Bangman"
+	from_email: "no-reply@example.com"
+	from_name: "Team Awesome"
 
 class exports.Subscribe
 	init: (app) ->
