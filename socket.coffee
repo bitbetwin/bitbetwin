@@ -61,19 +61,6 @@ class exports.Server
     security.init @app, (error, passport) =>
       @app.use @app.router
 
-
-    #settings
-    switch process.env.NODE_ENV
-      when "development" 
-        env = "development"
-      when "production"
-        env = "production" 
-      else
-         env = "development" # default development for now
-    console.log env + " mode started"
-    config = require("./app/config/config")[env]
-    @DEBUG = config.debug
-
     #development
     @app.use(express.errorHandler({
       dumpExceptions: true, showStack: true
