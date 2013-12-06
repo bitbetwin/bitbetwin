@@ -30,7 +30,7 @@ class exports.Subscribe
 								res.json err
 
 					# Send confirmation mail to subscriber
-					m = new mandrill.Mandrill(process.env.MANDRILL_APIKEY)
+					m = new Mandrill.Mandrill(process.env.MANDRILL_APIKEY)
 					email_message.to = [
 						"email": email
 					]
@@ -39,6 +39,8 @@ class exports.Subscribe
 						"message": email_message
 						"async": true
 						(results) ->
-							console.log "Mandrill result: #{results}"
+							console.log "Mandrill result: #{JSON.stringify results}"
 						(e) ->
-							console.log "A mandrill error occurred: #{e.name} - #{e.message}"
+							console.log "a mandrill error occurred: #{e.name} - #{e.message}"
+				else
+					console.log "#{email} already subscribed"
