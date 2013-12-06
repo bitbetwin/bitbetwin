@@ -25,6 +25,7 @@ config = require("./app/config/config")[env]
 class exports.Server
 
   constructor: (@port) ->
+    
     @SESSION_SECRET = "ci843tgbza11e"
 
     console.log env + " mode started"
