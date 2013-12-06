@@ -12,3 +12,10 @@ Linux:
     * type: db.users.save( { email:"user", password: "password" } )
     * type: db.users.find( {} ) to find inserted user
     * type: show dbs to verify if bangmandb was created
+
+coding style: 
+* please make use of the following settings 
+    * tabs size = 2
+    * tabs are spaces
+    * for sublime text: 
+        * http://www.sublimetext.com/docs/2/indentation.html
