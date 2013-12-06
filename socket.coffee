@@ -142,7 +142,8 @@ class exports.Server
 
     # private socket.io stuff
     @private.authorization (data, accept) =>
-      console.log "authorization called with cookies:", data?.headers?.cookie
+      if @DEBUG 
+        console.log "authorization called with cookies:", data?.headers?.cookie
       if data.headers.cookie
         cookie = @cookie.parse(data.headers.cookie)
       else
@@ -169,14 +170,17 @@ class exports.Server
 
     @private.on "connection", (socket) =>
       hs = socket.handshake
-      console.log "establishing connection"
-      console.log "trying to find user:", hs.user
+      if @DEBUG
+        console.log "establishing connection"
+        console.log "trying to find user:", hs.user
       User.findById hs.user, (err, user) =>
         return console.log "Couldnt find user:", user if err || !user
-        console.log "found user by email:", user
+        if @DEBUG
+          console.log "found user by email:", user
         socket.user= user
         user.socket= socket
-        console.log "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
+        if @DEBUG
+          console.log "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
         data=
           username:user.email
         socket.emit "loggedin", data
