@@ -5,8 +5,8 @@ if (!user)
             label Username:
             input(type='text', name='email', id="email")
             label Password:
-            input(type='password', name='password')
+            input(type='password', name='password', id="password")
             input(type='submit', value='Log In', id='login-btn')
 if (user)
-  p You are currently logged in as #{user.email}
+  p(id="welcome") You are currently logged in as #{user.email}
   a(href="/logout") Logout
