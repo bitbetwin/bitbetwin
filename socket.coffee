@@ -131,16 +131,6 @@ class exports.Server
 
     @private = @public.of "/auth"
 
-    hangman = new Hangman 'Congratulations you guessed the sentence correctly'
-
-    @public.sockets.on 'connection', (socket) ->
-      hangman.check [], (match) -> 
-        socket.emit('hangman', { phrase: match })
-
-      socket.on 'guess', (data) -> 
-        hangman.check data, (match) -> 
-          socket.emit('hangman', { phrase: match })
-
     # private socket.io stuff
     @private.authorization (data, accept) =>
       if @DEBUG 
@@ -169,6 +159,9 @@ class exports.Server
         data.user = session.passport.user
         accept null, true
 
+
+    hangman = new Hangman 'Congratulations you guessed the sentence correctly'
+    
     @private.on "connection", (socket) =>
       hs = socket.handshake
       if @DEBUG
@@ -185,6 +178,13 @@ class exports.Server
         data=
           username:user.email
         socket.emit "loggedin", data
+
+      hangman.check [], (match) -> 
+        socket.emit('hangman', { phrase: match })
+
+      socket.on 'guess', (data) -> 
+        hangman.check data, (match) -> 
+          socket.emit('hangman', { phrase: match })  
 
 
 
