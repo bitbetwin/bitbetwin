@@ -21,7 +21,7 @@ var landingpageControllers = angular.module('landingpageControllers', []);
 landingpageControllers.controller('LandingpageCtrl', function($scope, $http) {
 	$scope.signup = function() {
 	  //$scope.message = 'Thanks for signing up! You will receive an invitation at ' + $scope.email + '.';
-		$http.put('/subscribe/' + $scope.email, {email: $scope.email}).success(function (data, status) {
+		$http.put('/subscribe/' + $scope.email, {name: $scope.name, email: $scope.email}).success(function (data, status) {
 		 	$scope.response = data;
 		});
 	}

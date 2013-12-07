@@ -11,11 +11,19 @@ email_message =
 class exports.Subscribe
 	init: (app) ->
 		app.put '/subscribe/:email', (req, res) ->
-			email = req.params.email
+
+			email = req.body.email
+			name = req.body.name
 
 			ret =
 				err: false
 				msg: ""
+
+			console.log "PUT: name=#{name}, email=#{email}"
+
+			if !email? or !name?
+				res.send(500);
+				return
 
 			# Check for existing subscribers
 			Subscriber.find { email: email }, (err, docs) ->
@@ -25,6 +33,7 @@ class exports.Subscribe
 					# Save subscriber into MongoDB
 					s = new Subscriber
 						email: email
+						name: name
 					
 					s.save (err) ->
 						if err
