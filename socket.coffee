@@ -1,7 +1,6 @@
 request = require 'request'
 socketio = require 'socket.io'
 express = require 'express'
-Hangman = require './app/hangman'
 
 restful = require 'node-restful'
 mongoose = restful.mongoose
@@ -164,7 +163,7 @@ class exports.Server
         data.user = session.passport.user
         accept null, true
 
-
+    Hangman = require('./app/hangman').Hangman
     hangman = new Hangman 'Congratulations you guessed the sentence correctly'
     
     @private.on "connection", (socket) =>
