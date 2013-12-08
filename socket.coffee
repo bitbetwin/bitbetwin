@@ -2,13 +2,10 @@ request = require 'request'
 socketio = require 'socket.io'
 express = require 'express'
 
-restful = require 'node-restful'
-mongoose = restful.mongoose
-
 MongoStore = require('connect-mongo')(express)
 ObjectId = require('mongoose').Types.ObjectId
 
-User = require './app/models/user'
+DataAccess = require './app/dataaccess'
 
 #settings
 switch process.env.NODE_ENV
@@ -86,26 +83,6 @@ class exports.Server
     httpHandler = new HttpHandler
     httpHandler.init @app
 
-    mongoose.connect config.db_address, (error) ->
-      console.log "could not connecte because: " + error if error
-    db = mongoose.connection
-
-    db.on 'error', console.error.bind(console, 'Mongo DB connection error:')
-    
-    db.once 'open', (callback) ->
-      console.log "connected with mongodb"
-      
-    #create a user a new user    
-    testUser = new User email: "user", password: "password"
-    User.findOne email: testUser.email , (err, user) ->
-        console.log "no user found, creating new user" if err
-        throw err if err
-        if !user? 
-          testUser.save (err) -> 
-            console.log "user saved" unless err            
-            throw err if err          
-            # fetch user and test password verification
-
     # Socket IO
     @public=(socketio.listen @http_server)
 
@@ -115,11 +92,13 @@ class exports.Server
     socketHandler = new SocketHandler
     socketHandler.init @private, @sessionStore, @DEBUG, @SESSION_SECRET
 
+    DataAccess.startup()
+
     return callback() # finishes start function
 
         
   stop: (callback) ->
     console.log "Stop called"
-    mongoose.disconnect()
+    DataAccess.shutdown()
     @private.server.close()
     callback()
