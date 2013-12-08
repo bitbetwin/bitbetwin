@@ -3,7 +3,7 @@
   "name": "bangman",
   "description": "bangman",
   "keywords": ["get rich fast","tool"],
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "socket.coffee",
   "engines": {
     "node": "0.10.x",
