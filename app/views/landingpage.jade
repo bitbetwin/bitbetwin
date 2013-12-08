@@ -41,9 +41,11 @@ head
       header
         h2 Sign up!
         p Leave your email address if you want to be notified!
-        p(ng-show='message') {{ message }}
-        p E-Mail: {{ email }}
+        p(ng-show='response') {{ response.msg }}
       form
+        .row.half
+          .12u
+            input.text(ng-model='name', type='text', name='name', placeholder='Name')
         .row.half
           .12u
             input.text(ng-model='email', type='text', name='email', placeholder='Email')
