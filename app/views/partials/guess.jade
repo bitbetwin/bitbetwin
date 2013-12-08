@@ -1,0 +1,13 @@
+.row
+	.col-md-1
+	.col-md-10
+		h1 Bangman :) Hey: {{username}}
+		.jumbotron
+			.well.well-lg
+				span Guessed Word: {{ word }}
+			form(role='form', ng-submit="guess()")
+				.form-group
+					label(for='letter') Submit your guess
+					input.form-control#letter(ng-model="letter", type="text", placeholder="Enter a letter!")
+				input.btn.btn-primary(type="submit", value="Guess!")
+	.col-md-1

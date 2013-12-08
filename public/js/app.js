@@ -12,7 +12,7 @@ bangman.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
       when('/', {
-        templateUrl: 'guess',
+        templateUrl: 'partials/guess',
         controller: 'HangmanCtrl'
       }).
       when('/login', {

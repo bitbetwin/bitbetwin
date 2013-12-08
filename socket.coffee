@@ -92,14 +92,14 @@ class exports.Server
       res.render('index', vars)
 
     #TODO move partial templates into subfolder
-    @app.get '/guess', (req, res) =>
-      res.render('guess')
+    @app.get '/partials/guess', (req, res) ->
+      res.render('partials/guess')
 
     # Landingpage route
     @app.get '/landingpage', (req, res) => 
       res.render('landingpage')
 
-#    @app.get '/login', (req, res) ->
+    #    @app.get '/login', (req, res) ->
 #      res.render('login', {user: req.user, message: req.flash('error')})
 
     @app.get '/logout', (req, res) ->
