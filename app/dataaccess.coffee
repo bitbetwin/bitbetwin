@@ -5,18 +5,7 @@ User = require './models/user'
 
 class DataAccess
 
-	#settings
-	switch process.env.NODE_ENV
-	  when "development" 
-	    env = "development"
-	  when "production"
-	    env = "production" 
-	  else
-	    env = "development" # default development for now
-
-	config = require("./config/config")[env]
-
-	@startup: () ->
+	@startup: (config) ->
 		mongoose.connect config.db_address, (error) ->
 	      console.log "could not connect because: " + error if error
 	    db = mongoose.connection

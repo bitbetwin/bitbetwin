@@ -92,7 +92,7 @@ class exports.Server
     socketHandler = new SocketHandler
     socketHandler.init @private, @sessionStore, @DEBUG, @SESSION_SECRET
 
-    DataAccess.startup()
+    DataAccess.startup config
 
     return callback() # finishes start function
 
