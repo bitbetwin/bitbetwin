@@ -1,7 +1,6 @@
-class Hangman
+class exports.Hangman
 
 	constructor: (@word) ->
-
 
 	# replaces each occurrence of a guess in the seeked
 	# word. in case a match has been found the guess is
@@ -40,5 +39,3 @@ class Hangman
 			index = i
 			break
 		index
-
-module.exports = Hangman
