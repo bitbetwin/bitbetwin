@@ -1,5 +1,3 @@
-Security = require('./security').Security
-
 class exports.HttpHandler
   init: (app) ->
     app.get '/', (req, res) ->

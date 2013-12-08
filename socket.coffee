@@ -24,18 +24,13 @@ config = require("./app/config/config")[env]
 class exports.Server
 
   constructor: (@port) ->
-    
-    @SESSION_SECRET = "ci843tgbza11e"
-
     console.log env + " mode started"
-    
+
+    @SESSION_SECRET = "ci843tgbza11e"
     @DEBUG = config.debug
 
-    @connect = require 'connect'
     flash = require 'connect-flash'
-    @cookie = require 'cookie'
 
-    MemoryStore = express.session.MemoryStore
     @sessionStore = new MongoStore url: config.db_address
 
     @app = express()
@@ -116,62 +111,9 @@ class exports.Server
 
     @private = @public.of "/auth"
 
-    # private socket.io stuff
-    @private.authorization (data, accept) =>
-      if @DEBUG 
-        console.log "authorization called with cookies:", data?.headers?.cookie
-      if data.headers.cookie
-        cookie = @cookie.parse(data.headers.cookie)
-      else
-        cookie = data.query
-      # NOTE: To detect which session this socket is associated with,
-      # we need to parse the cookies.
-      return accept("Session cookie required.", false)  unless cookie
-
-      # NOTE: Next, verify the signature of the session cookie.
-      data.cookie = @connect.utils.parseSignedCookies(cookie, @SESSION_SECRET)
-
-      # NOTE: save ourselves a copy of the sessionID.
-      data.sessionID = data.cookie["sessionID"]
-      @sessionStore.get data.sessionID, (err, session) ->
-        if err
-          return accept("Error in session store.", false)
-        else return accept("Session not found.", false)  unless session
-        if (!session.passport.user)
-          return accept("NO User in session found.", false)
-        # success! we're authenticated with a known session.
-        data.session = session
-        data.user = session.passport.user
-        accept null, true
-
-    Hangman = require('./app/hangman').Hangman
-    hangman = new Hangman 'Congratulations you guessed the sentence correctly'
-    
-    @private.on "connection", (socket) =>
-      hs = socket.handshake
-      if @DEBUG
-        console.log "establishing connection"
-        console.log "trying to find user:", hs.user
-      User.findById hs.user, (err, user) =>
-        return console.log "Couldnt find user:", user if err || !user
-        if @DEBUG
-          console.log "found user by email:", user
-        socket.user= user
-        user.socket= socket
-        if @DEBUG
-          console.log "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
-        data=
-          username:user.email
-        socket.emit "loggedin", data
-
-      hangman.check [], (match) -> 
-        socket.emit('hangman', { phrase: match })
-
-      socket.on 'guess', (data) -> 
-        hangman.check data, (match) -> 
-          socket.emit('hangman', { phrase: match })  
-
-
+    SocketHandler = require('./app/sockethandler').SocketHandler
+    socketHandler = new SocketHandler
+    socketHandler.init @private, @sessionStore, @DEBUG, @SESSION_SECRET
 
     return callback() # finishes start function
 
