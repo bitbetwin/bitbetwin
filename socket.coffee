@@ -35,7 +35,6 @@ class exports.Server
     flash = require 'connect-flash'
     @cookie = require 'cookie'
 
-
     MemoryStore = express.session.MemoryStore
     @sessionStore = new MongoStore url: config.db_address
 
@@ -43,7 +42,6 @@ class exports.Server
 
     # convert existing coffeescript, styl, and less resources to js and css for the browser
     @app.use require('connect-assets') src: __dirname + '/public'
-
 
     @app.set 'views', __dirname + '/app/views'
     @app.set 'view engine', 'jade'
@@ -89,26 +87,9 @@ class exports.Server
     console.log 'Server starting on port ' + @port
     @http_server=@app.listen @port
    
-    @app.get '/', (req, res) =>
-      console.log "/ called "
-      vars=
-        user: req.user
-      res.render('index', vars)
-
-    #TODO move partial templates into subfolder
-    @app.get '/partials/guess', (req, res) ->
-      res.render('partials/guess')
-
-    # Landingpage route
-    @app.get '/landingpage', (req, res) => 
-      res.render('landingpage')
-
-    #    @app.get '/login', (req, res) ->
-#      res.render('login', {user: req.user, message: req.flash('error')})
-
-    @app.get '/logout', (req, res) ->
-      req.logOut()
-      res.redirect('/');
+    HttpHandler = require('./app/httphandler').HttpHandler
+    httpHandler = new HttpHandler
+    httpHandler.init @app
 
     mongoose.connect config.db_address, (error) ->
       console.log "could not connecte because: " + error if error
