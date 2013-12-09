@@ -1,9 +1,9 @@
-Hangman = require '../app/hangman'
 should = require "should"
 
 describe "Hangman", ->
 
 	before (done) ->
+		Hangman = require('../app/hangman').Hangman
 		@hangman = new Hangman 'guess word test'
 		done()
 
