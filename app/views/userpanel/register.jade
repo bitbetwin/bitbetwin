@@ -4,11 +4,11 @@ h2 Register
     - each error in errors
       li.error= error
 form(action='/register', method='POST')
-  #email
-    label(for='email') Email
+  #reg-email
+    label(for='reg-email') Email
     input(type='text', name='email', value='email')
-  #password
-    label(for='password') Password
+  #reg-password
+    label(for='reg-password') Password
     input(type='password', name='password', value='password'  )
-  #submit
-    input(type='submit') Register
+  #reg-submit
+    input(type='submit', id='register-btn') Register
