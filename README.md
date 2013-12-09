@@ -23,7 +23,7 @@ coding style:
 
 testing:
 
-* Unit Testing
+* Unit Testing - Karma
    * run tests
       * karma start public/js/test/karma.config.js
 
