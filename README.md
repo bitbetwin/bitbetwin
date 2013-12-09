@@ -19,3 +19,25 @@ coding style:
     * tabs are spaces
     * for sublime text: 
         * http://www.sublimetext.com/docs/2/indentation.html
+
+
+testing
+*Unit Testing*
+
+1. run tests
+ karma start public/js/test/karma.config.js
+
+***
+
+*e2e Testing - Protractor*
+
+0. assure you have installed a jdk.
+ selenium runs on java.
+
+1. installation
+npm install -g protractor
+webdriver-manager update
+
+2. run tests
+ assure you started the server: coffee server.coffee
+ protractor public/js/test/protractor.conf.js
