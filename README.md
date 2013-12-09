@@ -33,7 +33,6 @@ testing:
    * installation
       * npm install -g protractor
       * webdriver-manager update
-
-* run tests
-   * assure you started the server: coffee server.coffee
-   * protractor public/js/test/protractor.conf.js
+   * run tests
+      * assure you started the server: coffee server.coffee
+      * protractor public/js/test/protractor.conf.js
