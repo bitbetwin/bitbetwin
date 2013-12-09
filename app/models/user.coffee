@@ -10,6 +10,7 @@ UserSchema = new Schema(
   password: String
   salt: String
   hash: String
+  btc_id: String
 )
 UserSchema.pre "save", (next) ->
   user = this
