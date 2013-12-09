@@ -23,22 +23,17 @@ coding style:
 
 testing:
 
-*Unit Testing*
+* Unit Testing
+   * run tests
+      * karma start public/js/test/karma.config.js
 
-1. run tests
- karma start public/js/test/karma.config.js
+* e2e Testing - Protractor
+   * assure you have installed a jdk.
+      * selenium runs on java.
+   * installation
+      * npm install -g protractor
+      * webdriver-manager update
 
-***
-
-*e2e Testing - Protractor*
-
-0. assure you have installed a jdk.
- selenium runs on java.
-
-1. installation
-npm install -g protractor
-webdriver-manager update
-
-2. run tests
- assure you started the server: coffee server.coffee
- protractor public/js/test/protractor.conf.js
+* run tests
+   * assure you started the server: coffee server.coffee
+   * protractor public/js/test/protractor.conf.js
