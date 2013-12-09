@@ -14,7 +14,8 @@ class DataAccess
 	    
 	    db.once 'open', (callback) ->
 	      console.log "connected with mongodb"
-	      
+	    
+	    #TODO 
 	    #create a user a new user    
 	    testUser = new User email: "user", password: "password"
 	    User.findOne email: testUser.email , (err, user) ->

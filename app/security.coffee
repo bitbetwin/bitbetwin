@@ -40,4 +40,23 @@ class exports.Security
 
     app.post '/login', passport.authenticate('local', { successRedirect: '/',  failureRedirect: '/', failureFlash: true })
 
+    app.post "/register", (req, res) ->  
+      # attach POST to user schema
+      user = new User(
+        email: req.body.email
+        password: req.body.password
+      )      
+      # save in Mongo
+      user.save (err) ->
+        if err
+          console.log err
+        else
+          console.log "user: " + user.email + " saved."
+          req.login user, (err) ->
+            console.log err  if err
+            res.redirect "/"
+
+
+
+
     callback null, passport
