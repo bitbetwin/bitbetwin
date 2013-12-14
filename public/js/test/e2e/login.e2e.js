@@ -12,5 +12,8 @@ describe('HangmanCtrl', function() {
 
     var welcometext = element(by.id('welcome')).getText();
     expect(welcometext).toEqual('You are currently logged in as user');
+    var greetingtext = element(by.id('greeting')).getText();
+    expect(greetingtext).toEqual('Bangman :) Hey: user');
+
   });
 });
