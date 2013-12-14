@@ -36,8 +36,9 @@ class exports.SocketHandler
 
       User = require('./models/user')
 
-      Hangman = require('./hangman').Hangman
-      hangman = new Hangman 'Congratulations you guessed the sentence correctly'
+      Game = require('./hangman/game').Game
+      game = new Game
+      game.init()
     
       path.on "connection", (socket) ->
         hs = socket.handshake
@@ -57,9 +58,8 @@ class exports.SocketHandler
             username:user.email
           socket.emit "loggedin", data
 
-        hangman.check [], (match) -> 
-          socket.emit('hangman', { phrase: match })
+          game.check [], socket
 
-        socket.on 'guess', (data) -> 
-          hangman.check data, (match) -> 
-            socket.emit('hangman', { phrase: match }) 
+        socket.on 'guess', (data) ->
+          #TODO: handle socket event generic
+          game.check data, @ 
