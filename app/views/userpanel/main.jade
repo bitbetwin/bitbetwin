@@ -1,1 +1,6 @@
-include login
+if (!user)
+  include login
+  include register
+if (user)
+  p(id="welcome") You are currently logged in as #{user.email}
+  a(href="/logout") Logout

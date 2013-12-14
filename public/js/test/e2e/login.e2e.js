@@ -3,7 +3,7 @@
 describe('HangmanCtrl', function() {
   
   it('should login', function() {
-    browser.get('http://localhost:8080/');
+    browser.get('http://localhost:8080/logout');
 
     element(by.id('email')).sendKeys('user');
     element(by.id('password')).sendKeys('password');

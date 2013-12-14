@@ -1,0 +1,14 @@
+h2 Register
+- if ('undefined' !== typeof errors && errors.length)
+  ul#errors
+    - each error in errors
+      li.error= error
+form(action='/register', method='POST')
+  #reg-email-div
+    label(for='reg-email') Email
+    input(type='text', name='email', id='reg-email')
+  #reg-password-div
+    label(for='reg-password') Password
+    input(type='password', name='password', id='reg-password' )
+  #reg-submit-div
+    input(type='submit', id='register-btn') Register
