@@ -1,7 +1,7 @@
-.row
+.row(ng-if="loggedIn()")
 	.col-md-1
 	.col-md-10
-		h1 Bangman :) Hey: {{username}}
+		h1 Bangman :) Hey: {{ username }}
 		.jumbotron
 			.well.well-lg
 				span Guessed Word: {{ word }}

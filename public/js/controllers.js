@@ -11,9 +11,13 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', function($sco
         $scope.username=variables.username;
     });
 
-
 	$scope.guess = function() {
-    	$socket.emit('guess', $scope.letter)
+		console.log(this.letter);
+    	$socket.emit('guess', this.letter);
+  	};
+
+  	$scope.loggedIn = function() {
+  		return typeof this.username !== 'undefined';
   	};
 }]);
 

@@ -61,5 +61,6 @@ class exports.SocketHandler
           game.check [], socket
 
         socket.on 'guess', (data) ->
-          #TODO: handle socket event generic
+          #TODO: handle socket event 
+          console.log data
           game.check data, @ 
