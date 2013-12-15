@@ -1,10 +1,11 @@
 connect = require 'connect'
 cook = require 'cookie'
+socketio = require 'socket.io'
 
 class exports.SocketHandler
 
-	init: (path, sessionStore, DEBUG, SESSION_SECRET) ->
-		path.authorization (data, accept) ->
+	init: (io, sessionStore, DEBUG, SESSION_SECRET) ->
+		io.authorization (data, accept) ->
 			if DEBUG 
         console.log "authorization called with cookies:", data?.headers?.cookie
       if data.headers.cookie
@@ -37,10 +38,10 @@ class exports.SocketHandler
       User = require('./models/user')
 
       Game = require('./hangman/game').Game
-      game = new Game
+      game = new Game io
       game.init()
     
-      path.on "connection", (socket) ->
+      io.on "connection", (socket) ->
         hs = socket.handshake
         console.log "debug " + DEBUG
         if DEBUG
@@ -58,9 +59,9 @@ class exports.SocketHandler
             username:user.email
           socket.emit "loggedin", data
 
-          game.check [], socket
+          game.join socket
 
         socket.on 'guess', (data) ->
-          #TODO: handle socket event 
+          #TODO: add generic handling of socket events
           console.log data
           game.check data, @ 

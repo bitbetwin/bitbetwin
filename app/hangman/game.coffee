@@ -1,6 +1,6 @@
 class exports.Game
 
-	constructor: () ->
+	constructor: (@io) ->
 		Hangman = require('./hangman').Hangman
 		SimpleGenerator = require('./simplegenerator').SimpleGenerator
 		simpleGenerator = new SimpleGenerator
@@ -8,14 +8,21 @@ class exports.Game
 
 	check: (guess, player) ->
 		@hangman.check guess, (match) ->
-			console.log "sending" + match
+			player.emit('hangman', { phrase: match })
+
+	join: (player) ->
+		@hangman.check [], (match) ->
 			player.emit('hangman', { phrase: match })
 
 	start: () ->
 		console.log "starting game"
+		for socket in @io.clients()
+        	@check [], socket
 
 	end: () ->
 		console.log "ending game"
+		for socket in @io.clients()
+        	@check [], socket
 
 	init: () ->
 		console.log "initialisation"

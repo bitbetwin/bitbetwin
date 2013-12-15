@@ -85,12 +85,11 @@ class exports.Server
 
     # Socket IO
     @public=(socketio.listen @http_server)
-
-    @private = @public.of "/auth"
+    io = @public.of "/auth"
 
     SocketHandler = require('./app/sockethandler').SocketHandler
     socketHandler = new SocketHandler
-    socketHandler.init @private, @sessionStore, @DEBUG, @SESSION_SECRET
+    socketHandler.init io, @sessionStore, @DEBUG, @SESSION_SECRET
 
     DataAccess.startup config
 
