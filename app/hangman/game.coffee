@@ -18,6 +18,10 @@ class exports.Game
 		console.log "starting game"
 		for socket in @io.clients()
         	@check [], socket
+        setTimeout (game) ->
+        	game.end()
+        	game.start()
+        ,5000, @
 
 	end: () ->
 		console.log "ending game"
