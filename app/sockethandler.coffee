@@ -39,7 +39,7 @@ class exports.SocketHandler
 
       Game = require('./hangman/game').Game
       game = new Game io
-      game.init()
+      game.start()
     
       io.on "connection", (socket) ->
         hs = socket.handshake

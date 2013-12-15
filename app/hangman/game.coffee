@@ -13,25 +13,19 @@ class exports.Game
 	join: (player) ->
 		@hangman.check [], (match) ->
 			player.emit('hangman', { phrase: match })
+			player.emit('time', { time: 15 })
 
 	start: () ->
 		console.log "starting game"
 		for socket in @io.clients()
         	@check [], socket
+        	socket.emit('time', { time: 15 })
         setTimeout (game) ->
         	game.end()
         	game.start()
-        ,5000, @
+        , 15000, @
 
 	end: () ->
 		console.log "ending game"
 		for socket in @io.clients()
         	@check [], socket
-
-	init: () ->
-		console.log "initialisation"
-		@start()
-		setTimeout (game) -> 
-			game.end()
-			game.start()
-		, 5000, @
