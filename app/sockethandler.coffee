@@ -4,7 +4,7 @@ socketio = require 'socket.io'
 
 class exports.SocketHandler
 
-	init: (io, sessionStore, DEBUG, SESSION_SECRET) ->
+	init: (io, sessionStore, DEBUG, SESSION_SECRET, game) ->
 		io.authorization (data, accept) ->
 			if DEBUG 
         console.log "authorization called with cookies:", data?.headers?.cookie
@@ -36,10 +36,6 @@ class exports.SocketHandler
         accept null, true
 
       User = require('./models/user')
-
-      Game = require('./hangman/game').Game
-      game = new Game io
-      game.start()
     
       io.on "connection", (socket) ->
         hs = socket.handshake
@@ -51,17 +47,13 @@ class exports.SocketHandler
           return console.log "Couldnt find user:", user if err || !user
           if DEBUG
             console.log "found user by email:", user
-          socket.user= user
-          user.socket= socket
+          socket.user = user
+          user.socket = socket
           if DEBUG
             console.log "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
-          data=
-            username:user.email
+          data = username:user.email
           socket.emit "loggedin", data
-
-          game.join socket
 
         socket.on 'guess', (data) ->
           #TODO: add generic handling of socket events
-          console.log data
-          game.check data, @ 
+          game.check data, @

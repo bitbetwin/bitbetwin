@@ -85,16 +85,19 @@ class exports.Server
 
     # Socket IO
     @public=(socketio.listen @http_server)
-    io = @public.of "/auth"
+    @private = @public.of "/auth"
+
+    Game = require('./app/hangman/game').Game
+    game = new Game @private
+    game.start()
 
     SocketHandler = require('./app/sockethandler').SocketHandler
     socketHandler = new SocketHandler
-    socketHandler.init io, @sessionStore, @DEBUG, @SESSION_SECRET
+    socketHandler.init @private, @sessionStore, @DEBUG, @SESSION_SECRET, game
 
     DataAccess.startup config
 
     return callback() # finishes start function
-
         
   stop: (callback) ->
     console.log "Stop called"

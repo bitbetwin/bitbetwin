@@ -10,22 +10,17 @@ class exports.Game
 		@hangman.check guess, (match) ->
 			player.emit('hangman', { phrase: match })
 
-	join: (player) ->
-		@hangman.check [], (match) ->
-			player.emit('hangman', { phrase: match })
-			player.emit('time', { time: 15 })
-
 	start: () ->
 		console.log "starting game"
 		for socket in @io.clients()
         	@check [], socket
         	socket.emit('time', { time: 15 })
         setTimeout (game) ->
-        	game.end()
+        	game.stop()
         	game.start()
         , 15000, @
 
-	end: () ->
-		console.log "ending game"
+	stop: () ->
+		console.log "stopping game"
 		for socket in @io.clients()
         	@check [], socket

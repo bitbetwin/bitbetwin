@@ -8,18 +8,18 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', f
 		$scope.word = hangman.phrase;
 	});
     $socket.on('loggedin', function(variables) {
-        $scope.username=variables.username;
+        $scope.username = variables.username;
     });
     var countdown;
     $socket.on('time', function(data) {
     	$timeout.cancel(countdown);
     	$scope.time = data.time;
 	    $scope.onTimeout = function() {
-	        $scope.time--;
+        $scope.time--;
     		if ($scope.time <= 0) {
     			 $timeout.cancel(countdown);
     		} 
-	        countdown = $timeout($scope.onTimeout,1000);
+        countdown = $timeout($scope.onTimeout,1000);
 	    }
 	    countdown = $timeout($scope.onTimeout,1000);
     });
