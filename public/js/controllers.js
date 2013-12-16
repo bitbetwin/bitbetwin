@@ -4,12 +4,14 @@
 
 var bangmanControllers = angular.module('bangmanControllers', []);
 bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', function($scope, $socket, $timeout) {
-	$socket.on('hangman', function(hangman) {
-		$scope.word = hangman.phrase;
-	});
+  	$socket.on('hangman', function(hangman) {
+  		$scope.word = hangman.phrase;
+  	});
+
     $socket.on('loggedin', function(variables) {
         $scope.username = variables.username;
     });
+
     var countdown;
     $socket.on('time', function(data) {
     	$timeout.cancel(countdown);
@@ -24,8 +26,9 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', f
 	    countdown = $timeout($scope.onTimeout,1000);
     });
 
-	$scope.guess = function() {
+    $scope.guess = function() {
     	$socket.emit('guess', this.letter);
+      this.letter = '';
   	};
 
   	$scope.loggedIn = function() {

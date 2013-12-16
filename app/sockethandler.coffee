@@ -53,6 +53,7 @@ class exports.SocketHandler
             console.log "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
           data = username:user.email
           socket.emit "loggedin", data
+          socket.guess = []
 
         socket.on 'guess', (data) ->
           #TODO: add generic handling of socket events

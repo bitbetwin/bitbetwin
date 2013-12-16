@@ -7,13 +7,15 @@ class exports.Game
 		@hangman = new Hangman simpleGenerator.generate()
 
 	check: (guess, player) ->
-		@hangman.check guess, (match) ->
+		player.guess.push guess
+		@hangman.check player.guess, (match) ->
 			player.emit('hangman', { phrase: match })
 
 	start: () ->
 		console.log "starting game"
 		for socket in @io.clients()
         	@check [], socket
+        	socket.guess = []
         	socket.emit('time', { time: 15 })
         setTimeout (game) ->
         	game.stop()
@@ -23,4 +25,5 @@ class exports.Game
 	stop: () ->
 		console.log "stopping game"
 		for socket in @io.clients()
+        	socket.guess.length = 0
         	@check [], socket
