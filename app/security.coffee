@@ -56,7 +56,20 @@ class exports.Security
             console.log err  if err
             res.redirect "/"
 
-
-
+    app.get "/signup", (req, res) ->
+      token = req.query["token"]
+      User.findOne token: token, (err, data) ->
+        return next(err)  if err
+        unless data
+          res.send "Token not found. Where are u come from?"
+        else
+          _email = data.email
+          if data.activated is true
+            res.send "Your account has already been activated. Just head to the login page."
+          else
+            data.activated = true
+            data.save()
+            res.render "index",
+              message: "Please sign in " + data.email
 
     callback null, passport

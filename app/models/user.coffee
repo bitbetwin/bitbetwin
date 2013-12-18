@@ -7,10 +7,14 @@ SALT_WORK_FACTOR = 10
 
 UserSchema = new Schema(
   email: String
+  token: String
   password: String
   salt: String
   hash: String
   btc_id: String
+  activated: 
+      type: Boolean
+      default: false
 )
 UserSchema.pre "save", (next) ->
   user = this
@@ -28,7 +32,17 @@ UserSchema.pre "save", (next) ->
       
       # override the cleartext password with the hashed one
       user.password = hash
-      next()
+
+      #generate registration token
+      bcrypt.genSalt SALT_WORK_FACTOR, (err, salt) ->
+        return next(err)  if err
+        bcrypt.hash user.email, salt, (err, hash) ->
+          return next(err)  if err
+          user.token = hash
+          console.log "user token=" + user.token 
+          next()
+
+  
 
 UserSchema.methods.comparePassword = (candidatePassword, cb) ->
   bcrypt.compare candidatePassword, @password, (err, isMatch) ->
