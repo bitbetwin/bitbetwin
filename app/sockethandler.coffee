@@ -5,6 +5,8 @@ socketio = require 'socket.io'
 class exports.SocketHandler
 
 	init: (io, sessionStore, DEBUG, SESSION_SECRET, game) ->
+    #TODO: check why game connot instantiated here.
+
 		io.authorization (data, accept) ->
 			if DEBUG 
         console.log "authorization called with cookies:", data?.headers?.cookie
@@ -54,6 +56,7 @@ class exports.SocketHandler
           data = username:user.email
           socket.emit "loggedin", data
           socket.guess = []
+          game.join socket
 
         socket.on 'guess', (data) ->
           #TODO: add generic handling of socket events

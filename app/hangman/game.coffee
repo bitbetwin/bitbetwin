@@ -11,6 +11,9 @@ class exports.Game
 		@hangman.check player.guess, (match) ->
 			player.emit('hangman', { phrase: match })
 
+	join: (player) ->
+		@check [], player
+
 	start: () ->
 		console.log "starting game"
 		for socket in @io.clients()

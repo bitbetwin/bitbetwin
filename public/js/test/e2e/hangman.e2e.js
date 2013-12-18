@@ -15,9 +15,9 @@ describe('HangmanCtrl', function() {
 
     var matchtext = element(by.id('match')).getText();
     expect(matchtext).toEqual('Guessed Word: _______________ ___ _______ ___ ________ _________');
-    element(by.model('letter')).sendKeys('Con');
+    element(by.model('letter')).sendKeys('C');
     element(by.id('guess')).click();
     matchtext = element(by.id('match')).getText();
-    expect(matchtext).toEqual('Guessed Word: Con____________ ___ _______ ___ ________ _________');
+    expect(matchtext).toEqual('Guessed Word: C______________ ___ _______ ___ ________ _________');
   });
 });
