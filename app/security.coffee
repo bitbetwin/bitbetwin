@@ -56,7 +56,7 @@ class exports.Security
             console.log err  if err
             res.redirect "/"
 
-    app.get "/signup", (req, res) ->
+    app.get "/activate", (req, res) ->
       token = req.query["token"]
       User.findOne token: token, (err, data) ->
         return next(err)  if err
