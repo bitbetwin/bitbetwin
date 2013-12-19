@@ -1,23 +1,30 @@
 class exports.Game
 
 	constructor: (@io, @name) ->
+		console.log "initialising simpleGenerator"
 		SimpleGenerator = require('./simplegenerator').SimpleGenerator
 		@simpleGenerator = new SimpleGenerator
 
 	check: (player, guess) ->
-		player.guess.push guess
-		@hangman.check player.guess, (match) ->
-			player.emit('hangman', { phrase: match })
+		player.game.guess.push guess
+		that = @
+		@hangman.check player.game.guess, (match) ->
+			player.emit('hangman', { time: that.countdown, phrase: match })
 
 	join: (player) ->
 		console.log player.user.email + " joined " + @name
 		player.join @name
+		player.game = {}
+		player.game.name = @name
 		@broadcast player
 
+	leave: (player) ->
+		console.log player.user.email + " left " + @name
+		player.leave @name
+
 	broadcast: (player) ->
-		player.guess = []
+		player.game.guess = []
 		@check player, []
-		player.emit 'time', { time: @countdown }
 
 	start: () ->
 		console.log "starting " + @name
@@ -34,19 +41,19 @@ class exports.Game
 		
 		console.log "broadcast game start"
 		for socket in @io.clients @name
-        	@broadcast socket	
-        
-        interval = setInterval (game) ->
-        	game.countdown = game.countdown - 1
-        , 1000, @
-        
-        setTimeout (game) ->
-        	game.stop()
-        	clearInterval interval
-        	game.start()
-        , @countdown * 1000, @
+			@broadcast socket
+
+		interval = setInterval (game) ->
+			game.countdown = game.countdown - 1
+		, 1000, @
+
+		setTimeout (game) ->
+			game.stop()
+			clearInterval interval
+			game.start()
+		, @countdown * 1000, @
 
 	stop: () ->
 		console.log "stopping " + @name
 		for socket in @io.clients @name
-        	socket.guess.length = 0
+			socket.game.guess.length = 0

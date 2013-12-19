@@ -3,7 +3,7 @@
 	.col-md-10
 		h1(id="greeting") Bangman :) Hey: {{ username }}
 		p(id="countdown") {{ time }}
-		.jumbotron(ng-if="started()")
+		.jumbotron(ng-show="started()")
 			.well.well-lg
 				span(id='match') Guessed Word: {{ word }}
 			form(role='form', ng-submit="guess()")
@@ -11,7 +11,8 @@
 					label(for='letter') Submit your guess
 					input.form-control#letter(ng-model="letter", type="text", placeholder="Enter a letter!")
 				input.btn.btn-primary(id="guess", type="submit", value="Guess!")
-		.jumbotron(ng-if="!started()")
+				input.btn.btn-primary(ng-click="leave()", id="leave", type="button", value="Leave")
+		.jumbotron(ng-show="!started()")
 			.well.well-lg
 				.form-group
 					span Available games:

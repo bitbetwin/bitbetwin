@@ -58,6 +58,7 @@ class exports.SocketHandler
 
         #TODO: add generic handling of socket events
         socket.on 'guess', (data) ->
+          console.log @.user.email + " guessed " + data
           game.check @, data
 
         socket.on 'join', (data) ->
@@ -65,3 +66,8 @@ class exports.SocketHandler
             game.join @
           else
             console.log "could not find game " + data
+
+        socket.on 'leave', () ->
+          game.leave @
+          data = { username: @.user.email, games: [ {name: game.name }] }
+          socket.emit "loggedin", data

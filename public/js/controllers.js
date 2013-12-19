@@ -3,14 +3,30 @@
 /* Controllers */
 
 var loggedIn = false;
+var started = false;
 
 var bangmanControllers = angular.module('bangmanControllers', []);
 bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '$log', 
   function($scope, $socket, $timeout, $log) {
 
+    var countdown;
   	$socket.on('hangman', function(hangman) {
+      $log.info('hangman');
+      started = true;
       $log.info(hangman.phrase);
+      $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
   		$scope.word = hangman.phrase;
+      $scope.time = hangman.time;
+      $scope.onTimeout = function() {
+        $scope.time--;
+        if ($scope.time <= 0) {
+          $log.info($scope.time)
+          $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
+        } else {
+          countdown = $timeout($scope.onTimeout,1000);
+        }
+      }
+      countdown = $timeout($scope.onTimeout,1000);
   	});
 
     $socket.on('loggedin', function(variables) {
@@ -20,26 +36,18 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '
         $scope.games = variables.games;
     });
 
-    var countdown;
-    $socket.on('time', function(data) {
-    	$log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
-    	$scope.time = data.time;
-	    $scope.onTimeout = function() {
-        $scope.time--;
-    		if ($scope.time <= 0) {
-          $log.info($scope.time)
-          $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
-    		} else {
-          countdown = $timeout($scope.onTimeout,1000);
-        }
-	    }
-	    countdown = $timeout($scope.onTimeout,1000);
-    });
-
     $scope.guess = function() {
+      $log.info('guessing ' + this.letter);
     	$socket.emit('guess', this.letter);
       this.letter = '';
   	};
+
+    $scope.leave = function() {
+      started = false;
+      $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
+      $scope.time = '';
+      $socket.emit('leave');
+    }
 
     $scope.join = function(game) {
       $log.info('joining ' + game);
@@ -47,12 +55,11 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '
     }
 
   	$scope.loggedIn = function() {
-      $log.info(loggedIn);
       return loggedIn;
   	};
 
     $scope.started = function() {
-      return typeof this.time !== 'undefined'
+      return started;
     }
 }]);
 
