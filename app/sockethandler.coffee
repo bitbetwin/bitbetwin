@@ -56,8 +56,10 @@ class exports.SocketHandler
           data = username:user.email
           socket.emit "loggedin", data
           socket.guess = []
-          game.join socket
 
+        #TODO: add generic handling of socket events
         socket.on 'guess', (data) ->
-          #TODO: add generic handling of socket events
           game.check data, @
+
+        socket.on 'join', () ->
+          game.join @

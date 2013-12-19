@@ -31,9 +31,17 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', f
       this.letter = '';
   	};
 
+    $scope.join = function() {
+      $socket.emit('join');
+    }
+
   	$scope.loggedIn = function() {
   		return typeof this.username !== 'undefined';
   	};
+
+    $scope.started = function() {
+      return typeof this.time !== 'undefined'
+    }
 }]);
 
 var landingpageControllers = angular.module('landingpageControllers', []);

@@ -87,8 +87,9 @@ class exports.Server
     @public=(socketio.listen @http_server)
     @private = @public.of "/auth"
 
+    #TODO: move game to sockethandler
     Game = require('./app/hangman/game').Game
-    game = new Game @private
+    game = new Game @private, 'game1'
     game.start()
 
     SocketHandler = require('./app/sockethandler').SocketHandler
