@@ -14,6 +14,8 @@
 		.jumbotron(ng-if="!started()")
 			.well.well-lg
 				.form-group
-					span A game is currently running. Waiting for new game to start.
-				input.btn.btn-primary(id="join", ng-click="join()", type="submit", value="Join Now!")
+					span Available games:
+					ul(ng:repeat='game in games')
+						li(ng-click="join(game.name)") 
+							a(href='#') Join {{ game.name }} 
 	.col-md-1

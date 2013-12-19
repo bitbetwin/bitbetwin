@@ -2,15 +2,22 @@
 
 /* Controllers */
 
+var loggedIn = false;
+
 var bangmanControllers = angular.module('bangmanControllers', []);
 bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '$log', 
   function($scope, $socket, $timeout, $log) {
+
   	$socket.on('hangman', function(hangman) {
+      $log.info(hangman.phrase);
   		$scope.word = hangman.phrase;
   	});
 
     $socket.on('loggedin', function(variables) {
+        loggedIn = true;
+        $log.info(loggedIn);
         $scope.username = variables.username;
+        $scope.games = variables.games;
     });
 
     var countdown;
@@ -22,7 +29,7 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '
     		if ($scope.time <= 0) {
           $log.info($scope.time)
           $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
-    		}  else {
+    		} else {
           countdown = $timeout($scope.onTimeout,1000);
         }
 	    }
@@ -34,12 +41,14 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '
       this.letter = '';
   	};
 
-    $scope.join = function() {
-      $socket.emit('join');
+    $scope.join = function(game) {
+      $log.info('joining ' + game);
+      $socket.emit('join', game);
     }
 
   	$scope.loggedIn = function() {
-  		return typeof this.username !== 'undefined';
+      $log.info(loggedIn);
+      return loggedIn;
   	};
 
     $scope.started = function() {

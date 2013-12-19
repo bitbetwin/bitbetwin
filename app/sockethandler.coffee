@@ -53,13 +53,15 @@ class exports.SocketHandler
           user.socket = socket
           if DEBUG
             console.log "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
-          data = username:user.email
+          data = { username: user.email, games: [ {name: game.name }] }
           socket.emit "loggedin", data
-          socket.guess = []
 
         #TODO: add generic handling of socket events
         socket.on 'guess', (data) ->
-          game.check data, @
+          game.check @, data
 
-        socket.on 'join', () ->
-          game.join @
+        socket.on 'join', (data) ->
+          if (data == 'game1')
+            game.join @
+          else
+            console.log "could not find game " + data

@@ -4,24 +4,28 @@ class exports.Game
 		SimpleGenerator = require('./simplegenerator').SimpleGenerator
 		@simpleGenerator = new SimpleGenerator
 
-	check: (guess, player) ->
+	check: (player, guess) ->
 		player.guess.push guess
 		@hangman.check player.guess, (match) ->
 			player.emit('hangman', { phrase: match })
 
 	join: (player) ->
-		console.log player.user.email + " is joining game1"
-		player.join(@name)
-		@check [], player
+		console.log player.user.email + " joined " + @name
+		player.join @name
+		@broadcast player
+
+	broadcast: (player) ->
+		player.guess = []
+		@check player, []
 		player.emit 'time', { time: @countdown }
 
 	start: () ->
-		console.log "starting game"
+		console.log "starting " + @name
 		
 		console.log "generating phrase"
 		word = @simpleGenerator.generate()
 		
-		console.log "initialising game"
+		console.log "initialising " + @name
 		Hangman = require('./hangman').Hangman
 		@hangman = new Hangman word
 		
@@ -29,10 +33,8 @@ class exports.Game
 		@countdown = 15 #TODO: calculate game duration depending on the phrase difficulty
 		
 		console.log "broadcast game start"
-		for socket in @io.clients(@name)
-        	@check [], socket
-        	socket.guess = []
-        	socket.emit 'time', { time: @countdown }
+		for socket in @io.clients @name
+        	@broadcast socket	
         
         interval = setInterval (game) ->
         	game.countdown = game.countdown - 1
@@ -45,7 +47,6 @@ class exports.Game
         , @countdown * 1000, @
 
 	stop: () ->
-		console.log "stopping game"
-		for socket in @io.clients(@name)
+		console.log "stopping " + @name
+		for socket in @io.clients @name
         	socket.guess.length = 0
-        	@check [], socket
