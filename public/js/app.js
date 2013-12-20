@@ -11,15 +11,19 @@ var bangman = angular.module('bangman', [
 bangman.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
-      when('/', {
+      when('/guess', {
         templateUrl: 'partials/guess',
-        controller: 'HangmanCtrl'
+        controller: 'GuessCtrl'
+      }).
+      when('/report', {
+        templateUrl: 'partials/report',
+        controller: 'ReportCtrl'
       }).
       when('/login', {
         templateUrl: 'login',
       }).
       otherwise({
-        redirectTo: '/'
+        redirectTo: '/guess'
       });
   }]);
 

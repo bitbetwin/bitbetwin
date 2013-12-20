@@ -13,8 +13,6 @@
 				div(ng-if="!complete()")
 					input.btn.btn-primary(id="guess", type="submit", value="Guess!")
 					input.btn.btn-primary(ng-click="leave()", id="leave", type="button", value="Leave")
-				div(ng-if="complete()")
-					p You win! Waiting for new game to start!
 				div
 					label(for='guesses') Guesses
 					input.form-control#guesses(ng-model="guesses", type="text", readonly)

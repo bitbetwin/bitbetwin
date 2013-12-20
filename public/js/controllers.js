@@ -7,8 +7,8 @@ var started = false;
 var complete = false;
 
 var bangmanControllers = angular.module('bangmanControllers', []);
-bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '$log', 
-  function($scope, $socket, $timeout, $log) {
+bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$log', '$location', 
+  function($scope, $socket, $timeout, $log, $location) {
 
     var countdown;
   	$socket.on('hangman', function(hangman) {
@@ -20,10 +20,15 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '
       $scope.guesses = hangman.guesses;
       $scope.time = hangman.time;
       complete = hangman.complete;
+      if (complete) {
+        $log.info('complete');
+        $location.path('/report');
+      }
+
       $scope.onTimeout = function() {
         $scope.time--;
         if ($scope.time <= 0) {
-          $log.info($scope.time)
+          $log.info($scope.time);
           $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
         } else {
           countdown = $timeout($scope.onTimeout,1000);
@@ -38,6 +43,11 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '
         $log.info(loggedIn);
         $scope.username = variables.username;
         $scope.games = variables.games;
+    });
+
+    $socket.on('stop', function() {
+        $log.info('incomplete');
+        $location.path('/report'); 
     });
 
     $scope.guess = function() {
@@ -58,16 +68,49 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '
       $socket.emit('join', game);
     };
 
-    $scope.complete = function() {
-      return complete;
-    };
-
-  	$scope.loggedIn = function() {
+    $scope.loggedIn = function() {
       return loggedIn;
-  	};
+    };
 
     $scope.started = function() {
       return started;
+    };
+}]);
+
+bangmanControllers.controller('ReportCtrl', ['$scope', '$socket', '$log', '$location', '$timeout',
+  function($scope, $socket, $log, $location, $timeout) {
+
+    $socket.on('start', function() {
+      $location.path('/guess');
+    });
+
+    var countdown;
+    $socket.on('report', function(data) {
+      $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
+      $scope.time = data.time;
+      $scope.onTimeout = function() {
+        $scope.time--;
+        if ($scope.time <= 0) {
+          $log.info($scope.time);
+          $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
+        } else {
+          countdown = $timeout($scope.onTimeout,1000);
+        }
+      }
+      countdown = $timeout($scope.onTimeout,1000);
+    });
+
+    $scope.$on('$routeChangeSuccess', function(next, current) { 
+      $log.info('init report!');
+      $socket.emit('report');
+    });
+
+    $scope.loggedIn = function() {
+      return loggedIn;
+    };
+
+    $scope.complete = function() {
+      return complete;
     };
 }]);
 

@@ -12,6 +12,8 @@ class exports.SocketHandler
     game2 = new Game io, 'game2'
     game2.start()
 
+    io.log.info "initialised games"
+
     io.authorization (data, accept) ->
       if DEBUG 
         console.log "authorization called with cookies:", data?.headers?.cookie
@@ -76,9 +78,15 @@ class exports.SocketHandler
             game2.join @
 
         socket.on 'leave', () ->
-          if (data == 'game1')
+          if (@.game.name == 'game1')
             game1.leave @
-          if (data == 'game2')
+          if (@.game.name == 'game2')
             game2.leave @
           data = { username: @.user.email, games: [ {name: game1.name }, {name: game2.name}] }
           socket.emit "loggedin", data
+
+        socket.on 'report', (data) ->
+          if (@.game.name == 'game1')
+            game1.report @
+          if (@.game.name == 'game2')
+            game2.report @

@@ -13,10 +13,9 @@ class exports.Game
 		that = @
 		@hangman.check player.game.guess, (match) ->
 			complete = (match == that.hangman.word)
+			player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
 			if (complete)
 				that.io.log.info player.user.email + " guessed the whole word correctly!"
-				
-			player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
 
 	join: (player) ->
 		@io.log.info player.user.email + " joined " + @name
@@ -48,6 +47,7 @@ class exports.Game
 		
 		@io.log.info "broadcast game start"
 		for socket in @io.clients @name
+			socket.emit 'start'
 			@broadcast socket
 
 		interval = setInterval (game) ->
@@ -57,10 +57,17 @@ class exports.Game
 		setTimeout (game) ->
 			game.stop()
 			clearInterval interval
-			game.start()
+			setTimeout (game) ->
+				game.start() 
+			, 10 * 1000, game
 		, @countdown * 1000, @
 
 	stop: () ->
 		@io.log.info "stopping " + @name
 		for socket in @io.clients @name
 			socket.game.guess.length = 0
+			socket.emit 'stop'
+
+	report: (player) ->
+		@io.log.info "sending report to " + player.user.email
+		player.emit 'report', {'time': 10 + @countdown - 1 }

@@ -7,6 +7,9 @@ class exports.HttpHandler
     app.get '/partials/guess', (req, res) ->
       res.render('partials/guess')
 
+    app.get '/partials/report', (req, res) ->
+      res.render('partials/report')
+
     # Landingpage route
     app.get '/landingpage', (req, res) -> 
       res.render('landingpage')
