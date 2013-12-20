@@ -1,11 +1,19 @@
 connect = require 'connect'
 cook = require 'cookie'
+socketio = require 'socket.io'
 
 class exports.SocketHandler
 
-	init: (path, sessionStore, DEBUG, SESSION_SECRET) ->
-		path.authorization (data, accept) ->
-			if DEBUG 
+	init: (io, sessionStore, DEBUG, SESSION_SECRET) ->
+    #TODO: handle game instances generic
+    Game = require('./hangman/game').Game
+    game1 = new Game io, 'game1'
+    game1.start()
+    game2 = new Game io, 'game2'
+    game2.start()
+
+    io.authorization (data, accept) ->
+      if DEBUG 
         console.log "authorization called with cookies:", data?.headers?.cookie
       if data.headers.cookie
         cookie = cook.parse(data.headers.cookie)
@@ -35,12 +43,8 @@ class exports.SocketHandler
         accept null, true
 
       User = require('./models/user')
-
-      Game = require('./hangman/game').Game
-      game = new Game
-      game.init()
     
-      path.on "connection", (socket) ->
+      io.on "connection", (socket) ->
         hs = socket.handshake
         console.log "debug " + DEBUG
         if DEBUG
@@ -50,17 +54,31 @@ class exports.SocketHandler
           return console.log "Couldnt find user:", user if err || !user
           if DEBUG
             console.log "found user by email:", user
-          socket.user= user
-          user.socket= socket
+          socket.user = user
+          user.socket = socket
           if DEBUG
             console.log "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
-          data=
-            username:user.email
+          data = { username: user.email, games: [ {name: game1.name }, {name: game2.name}] }
           socket.emit "loggedin", data
 
-          game.check [], socket
-
+        #TODO: add generic handling of socket events
+        #TODO: handle game instance generic
         socket.on 'guess', (data) ->
-          #TODO: handle socket event 
-          console.log data
-          game.check data, @ 
+          if (@.game.name == 'game1')
+            game1.check @, data
+          if (@.game.name == 'game2')
+            game2.check @, data
+
+        socket.on 'join', (data) ->
+          if (data == 'game1')
+            game1.join @
+          if (data == 'game2')
+            game2.join @
+
+        socket.on 'leave', () ->
+          if (data == 'game1')
+            game1.leave @
+          if (data == 'game2')
+            game2.leave @
+          data = { username: @.user.email, games: [ {name: game1.name }, {name: game2.name}] }
+          socket.emit "loggedin", data

@@ -2,23 +2,73 @@
 
 /* Controllers */
 
+var loggedIn = false;
+var started = false;
+var complete = false;
+
 var bangmanControllers = angular.module('bangmanControllers', []);
-bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', function($scope, $socket) {
-	$socket.on('hangman', function(hangman) {
-		$scope.word = hangman.phrase;
-	});
+bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '$log', 
+  function($scope, $socket, $timeout, $log) {
+
+    var countdown;
+  	$socket.on('hangman', function(hangman) {
+      $log.info('hangman');
+      started = true;
+      $log.info(hangman.phrase);
+      $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
+  		$scope.word = hangman.phrase;
+      $scope.guesses = hangman.guesses;
+      $scope.time = hangman.time;
+      complete = hangman.complete;
+      $scope.onTimeout = function() {
+        $scope.time--;
+        if ($scope.time <= 0) {
+          $log.info($scope.time)
+          $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
+        } else {
+          countdown = $timeout($scope.onTimeout,1000);
+        }
+      }
+      countdown = $timeout($scope.onTimeout,1000);
+  	});
+
     $socket.on('loggedin', function(variables) {
-        $scope.username=variables.username;
+        loggedIn = true;
+        complete = false;
+        $log.info(loggedIn);
+        $scope.username = variables.username;
+        $scope.games = variables.games;
     });
 
-	$scope.guess = function() {
-		console.log(this.letter);
+    $scope.guess = function() {
+      $log.info('guessing ' + this.letter);
     	$socket.emit('guess', this.letter);
+      this.letter = '';
   	};
 
+    $scope.leave = function() {
+      started = false;
+      $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
+      $scope.time = '';
+      $socket.emit('leave');
+    };
+
+    $scope.join = function(game) {
+      $log.info('joining ' + game);
+      $socket.emit('join', game);
+    };
+
+    $scope.complete = function() {
+      return complete;
+    };
+
   	$scope.loggedIn = function() {
-  		return typeof this.username !== 'undefined';
+      return loggedIn;
   	};
+
+    $scope.started = function() {
+      return started;
+    };
 }]);
 
 var landingpageControllers = angular.module('landingpageControllers', []);

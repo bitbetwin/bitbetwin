@@ -21,6 +21,7 @@ config = require("./app/config/config")[env]
 class exports.Server
 
   constructor: (@port) ->
+
     console.log env + " mode started"
 
     @SESSION_SECRET = "ci843tgbza11e"
@@ -66,7 +67,7 @@ class exports.Server
     }))
 
     # logging
-    logger= (req, res, next) ->
+    logger = (req, res, next) ->
       console.log "GOT REQUEST !", req.originalUrl, req.query
       next(); 
 
@@ -85,9 +86,9 @@ class exports.Server
 
     # Socket IO
     @public=(socketio.listen @http_server)
-
     @private = @public.of "/auth"
 
+    @private.log.info "initialising socketHandler"
     SocketHandler = require('./app/sockethandler').SocketHandler
     socketHandler = new SocketHandler
     socketHandler.init @private, @sessionStore, @DEBUG, @SESSION_SECRET
@@ -95,7 +96,6 @@ class exports.Server
     DataAccess.startup config
 
     return callback() # finishes start function
-
         
   stop: (callback) ->
     console.log "Stop called"

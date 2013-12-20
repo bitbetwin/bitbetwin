@@ -56,7 +56,4 @@ class exports.Security
             console.log err  if err
             res.redirect "/"
 
-
-
-
     callback null, passport
