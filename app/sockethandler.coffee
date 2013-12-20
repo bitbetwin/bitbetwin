@@ -5,10 +5,12 @@ socketio = require 'socket.io'
 class exports.SocketHandler
 
 	init: (io, sessionStore, DEBUG, SESSION_SECRET) ->
-    console.log "initialising game1"
+    #TODO: handle game instances generic
     Game = require('./hangman/game').Game
-    game = new Game io, 'game1'
-    game.start()
+    game1 = new Game io, 'game1'
+    game1.start()
+    game2 = new Game io, 'game2'
+    game2.start()
 
     io.authorization (data, accept) ->
       if DEBUG 
@@ -56,21 +58,27 @@ class exports.SocketHandler
           user.socket = socket
           if DEBUG
             console.log "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
-          data = { username: user.email, games: [ {name: game.name }] }
+          data = { username: user.email, games: [ {name: game1.name }, {name: game2.name}] }
           socket.emit "loggedin", data
 
         #TODO: add generic handling of socket events
+        #TODO: handle game instance generic
         socket.on 'guess', (data) ->
-          console.log @.user.email + " guessed " + data
-          game.check @, data
+          if (@.game.name == 'game1')
+            game1.check @, data
+          if (@.game.name == 'game2')
+            game2.check @, data
 
         socket.on 'join', (data) ->
           if (data == 'game1')
-            game.join @
-          else
-            console.log "could not find game " + data
+            game1.join @
+          if (data == 'game2')
+            game2.join @
 
         socket.on 'leave', () ->
-          game.leave @
-          data = { username: @.user.email, games: [ { name: game.name }] }
+          if (data == 'game1')
+            game1.leave @
+          if (data == 'game2')
+            game2.leave @
+          data = { username: @.user.email, games: [ {name: game1.name }, {name: game2.name}] }
           socket.emit "loggedin", data

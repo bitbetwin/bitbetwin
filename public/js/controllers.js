@@ -4,6 +4,7 @@
 
 var loggedIn = false;
 var started = false;
+var complete = false;
 
 var bangmanControllers = angular.module('bangmanControllers', []);
 bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '$log', 
@@ -18,6 +19,7 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '
   		$scope.word = hangman.phrase;
       $scope.guesses = hangman.guesses;
       $scope.time = hangman.time;
+      complete = hangman.complete;
       $scope.onTimeout = function() {
         $scope.time--;
         if ($scope.time <= 0) {
@@ -32,6 +34,7 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '
 
     $socket.on('loggedin', function(variables) {
         loggedIn = true;
+        complete = false;
         $log.info(loggedIn);
         $scope.username = variables.username;
         $scope.games = variables.games;
@@ -48,12 +51,16 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '
       $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
       $scope.time = '';
       $socket.emit('leave');
-    }
+    };
 
     $scope.join = function(game) {
       $log.info('joining ' + game);
       $socket.emit('join', game);
-    }
+    };
+
+    $scope.complete = function() {
+      return complete;
+    };
 
   	$scope.loggedIn = function() {
       return loggedIn;
@@ -61,7 +68,7 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '
 
     $scope.started = function() {
       return started;
-    }
+    };
 }]);
 
 var landingpageControllers = angular.module('landingpageControllers', []);

@@ -1,27 +1,32 @@
 class exports.Game
 
 	constructor: (@io, @name) ->
-		console.log "initialising simplePhraseGenerator"
+		@io.log.info "initialising simplePhraseGenerator"
 		SimplePhraseGenerator = require('./simplephrasegenerator').SimplePhraseGenerator
 		SimpleDurationCalculator = require('./simpledurationcalculator').SimpleDurationCalculator
 		@simplePhraseGenerator = new SimplePhraseGenerator
 		@simpleDurationCalculator = new SimpleDurationCalculator
 
 	check: (player, guess) ->
+		@io.log.info player.user.email + " guessed " + guess
 		player.game.guess.push guess
 		that = @
 		@hangman.check player.game.guess, (match) ->
-			player.emit('hangman', { guesses: player.game.guess, time: that.countdown, phrase: match })
+			complete = (match == that.hangman.word)
+			if (complete)
+				@io.log.info player.user.email + " guessed the whole word correctly!"
+				
+			player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
 
 	join: (player) ->
-		console.log player.user.email + " joined " + @name
+		@io.log.info player.user.email + " joined " + @name
 		player.join @name
 		player.game = {}
 		player.game.name = @name
 		@broadcast player
 
 	leave: (player) ->
-		console.log player.user.email + " left " + @name
+		@io.log.info player.user.email + " left " + @name
 		player.leave @name
 
 	broadcast: (player) ->
@@ -29,19 +34,19 @@ class exports.Game
 		@check player, []
 
 	start: () ->
-		console.log "starting " + @name
+		@io.log.info "starting " + @name
 		
-		console.log "generating phrase"
+		@io.log.info "generating phrase"
 		phrase = @simplePhraseGenerator.generate()
 		
-		console.log "initialising " + @name
+		@io.log.info "initialising " + @name
 		Hangman = require('./hangman').Hangman
 		@hangman = new Hangman phrase
 		
-		console.log "calculating game duration"
+		@io.log.info "calculating game duration"
 		@countdown = @simpleDurationCalculator.calculate phrase
 		
-		console.log "broadcast game start"
+		@io.log.info "broadcast game start"
 		for socket in @io.clients @name
 			@broadcast socket
 
@@ -56,6 +61,6 @@ class exports.Game
 		, @countdown * 1000, @
 
 	stop: () ->
-		console.log "stopping " + @name
+		@io.log.info "stopping " + @name
 		for socket in @io.clients @name
 			socket.game.guess.length = 0
