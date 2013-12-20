@@ -14,7 +14,7 @@ class exports.Game
 		@hangman.check player.game.guess, (match) ->
 			complete = (match == that.hangman.word)
 			if (complete)
-				@io.log.info player.user.email + " guessed the whole word correctly!"
+				that.io.log.info player.user.email + " guessed the whole word correctly!"
 				
 			player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
 
