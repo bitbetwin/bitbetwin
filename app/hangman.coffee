@@ -1,7 +1,6 @@
 class exports.Hangman
 
 	constructor: (@word) ->
-		console.log "word" + @word
 
 	# replaces each occurrence of a guess in the seeked
 	# word. in case a match has been found the guess is

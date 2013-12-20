@@ -2,12 +2,25 @@
 	.col-md-1
 	.col-md-10
 		h1(id="greeting") Bangman :) Hey: {{ username }}
-		.jumbotron
+		p(id="countdown") {{ time }}
+		.jumbotron(ng-if="started()")
 			.well.well-lg
 				span(id='match') Guessed Word: {{ word }}
 			form(role='form', ng-submit="guess()")
 				.form-group
 					label(for='letter') Submit your guess
 					input.form-control#letter(ng-model="letter", type="text", placeholder="Enter a letter!")
-				input.btn.btn-primary(id="guess", type="submit", value="Guess!")
+				div(ng-if="!complete()")
+					input.btn.btn-primary(id="guess", type="submit", value="Guess!")
+					input.btn.btn-primary(ng-click="leave()", id="leave", type="button", value="Leave")
+				div
+					label(for='guesses') Guesses
+					input.form-control#guesses(ng-model="guesses", type="text", readonly)
+		.jumbotron(ng-if="!started()")
+			.well.well-lg
+				.form-group
+					span Available games:
+					ul(class='games')
+						li(ng:repeat='game in games') 
+							a(id="{{ game.name }}", ng-click="join(game.name)", href='#') Join {{ game.name }} 
 	.col-md-1

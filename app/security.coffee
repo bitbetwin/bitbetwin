@@ -72,4 +72,3 @@ class exports.Security
             res.render "index",
               message: "Please sign in " + data.email
 
-    callback null, passport
