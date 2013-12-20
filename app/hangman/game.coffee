@@ -11,7 +11,7 @@ class exports.Game
 		player.game.guess.push guess
 		that = @
 		@hangman.check player.game.guess, (match) ->
-			player.emit('hangman', { time: that.countdown, phrase: match })
+			player.emit('hangman', { guesses: player.game.guess, time: that.countdown, phrase: match })
 
 	join: (player) ->
 		console.log player.user.email + " joined " + @name

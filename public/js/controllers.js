@@ -16,6 +16,7 @@ bangmanControllers.controller('HangmanCtrl', ['$scope', '$socket', '$timeout', '
       $log.info(hangman.phrase);
       $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
   		$scope.word = hangman.phrase;
+      $scope.guesses = hangman.guesses;
       $scope.time = hangman.time;
       $scope.onTimeout = function() {
         $scope.time--;
