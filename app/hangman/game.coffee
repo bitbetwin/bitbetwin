@@ -1,9 +1,11 @@
 class exports.Game
 
 	constructor: (@io, @name) ->
-		console.log "initialising simpleGenerator"
-		SimpleGenerator = require('./simplegenerator').SimpleGenerator
-		@simpleGenerator = new SimpleGenerator
+		console.log "initialising simplePhraseGenerator"
+		SimplePhraseGenerator = require('./simplephrasegenerator').SimplePhraseGenerator
+		SimpleDurationCalculator = require('./simpledurationcalculator').SimpleDurationCalculator
+		@simplePhraseGenerator = new SimplePhraseGenerator
+		@simpleDurationCalculator = new SimpleDurationCalculator
 
 	check: (player, guess) ->
 		player.game.guess.push guess
@@ -30,14 +32,14 @@ class exports.Game
 		console.log "starting " + @name
 		
 		console.log "generating phrase"
-		word = @simpleGenerator.generate()
+		phrase = @simplePhraseGenerator.generate()
 		
 		console.log "initialising " + @name
 		Hangman = require('./hangman').Hangman
-		@hangman = new Hangman word
+		@hangman = new Hangman phrase
 		
 		console.log "calculating game duration"
-		@countdown = 15 #TODO: calculate game duration depending on the phrase difficulty
+		@countdown = @simpleDurationCalculator.calculate phrase
 		
 		console.log "broadcast game start"
 		for socket in @io.clients @name

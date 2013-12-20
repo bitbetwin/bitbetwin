@@ -87,16 +87,10 @@ class exports.Server
     @public=(socketio.listen @http_server)
     @private = @public.of "/auth"
 
-    #TODO: move game to sockethandler
-    console.log "initialising game1"
-    Game = require('./app/hangman/game').Game
-    game = new Game @private, 'game1'
-    game.start()
-
     console.log "initialising socketHandler"
     SocketHandler = require('./app/sockethandler').SocketHandler
     socketHandler = new SocketHandler
-    socketHandler.init @private, @sessionStore, @DEBUG, @SESSION_SECRET, game
+    socketHandler.init @private, @sessionStore, @DEBUG, @SESSION_SECRET
 
     DataAccess.startup config
 

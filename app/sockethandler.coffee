@@ -4,11 +4,14 @@ socketio = require 'socket.io'
 
 class exports.SocketHandler
 
-	init: (io, sessionStore, DEBUG, SESSION_SECRET, game) ->
-    #TODO: check why game connot instantiated here.
+	init: (io, sessionStore, DEBUG, SESSION_SECRET) ->
+    console.log "initialising game1"
+    Game = require('./hangman/game').Game
+    game = new Game io, 'game1'
+    game.start()
 
-		io.authorization (data, accept) ->
-			if DEBUG 
+    io.authorization (data, accept) ->
+      if DEBUG 
         console.log "authorization called with cookies:", data?.headers?.cookie
       if data.headers.cookie
         cookie = cook.parse(data.headers.cookie)
@@ -69,5 +72,5 @@ class exports.SocketHandler
 
         socket.on 'leave', () ->
           game.leave @
-          data = { username: @.user.email, games: [ {name: game.name }] }
+          data = { username: @.user.email, games: [ { name: game.name }] }
           socket.emit "loggedin", data
