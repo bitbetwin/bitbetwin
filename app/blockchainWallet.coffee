@@ -22,43 +22,41 @@ class exports.BlockchainWallet
       callback null, result
 
 
-  balance = (callback) ->
-    makeRequest "balance", false, {}, callback
+  balance : (callback) ->
+    @makeRequest "balance", false, {}, callback
 
-  list = (callback) ->
-    makeRequest "list", false, {}, callback
+  list : (callback) ->
+    @makeRequest "list", false, {}, callback
 
-  addressBalance = (address, confirmations, callback) ->
-    makeRequest "address_balance", false,
+  addressBalance : (address, confirmations, callback) ->
+    @makeRequest "address_balance", false,
       address: address
       confirmations: confirmations
     , callback
 
-  payment = (to, amount, params, callback) ->
+  payment : (to, amount, params, callback) ->
     params.to = to
     params.amount = amount
-    makeRequest "payment", true, params, callback
+    @makeRequest "payment", true, params, callback
 
-  sendMany = (recipients, params, callback) ->
+  sendMany : (recipients, params, callback) ->
     params.recipients = JSON.stringify(recipients)
-    makeRequest "sendmany", true, params, callback
+    @makeRequest "sendmany", true, params, callback
 
-  newAddress = (params, callback) ->
-    makeRequest "new_address", true, params, callback
+  newAddress : (params, callback) ->
+    @makeRequest "new_address", true, params, callback
 
-  archiveAddress = (address, callback) ->
-    makeRequest "archive_address", true,
+  archiveAddress : (address, callback) ->
+    @makeRequest "archive_address", true,
       address: address
     , callback
 
-  unarchiveAddress = (address, callback) ->
-    makeRequest "unarchive_address", true,
+  unarchiveAddress : (address, callback) ->
+    @makeRequest "unarchive_address", true,
       address: address
     , callback
 
-  autoConsolidate = (days, callback) ->
-    makeRequest "auto_consolidate", true,
+  autoConsolidate : (days, callback) ->
+    @makeRequest "auto_consolidate", true,
       days: days
     , callback
-
-module.exports = BlockchainWallet
