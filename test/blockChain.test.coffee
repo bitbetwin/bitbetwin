@@ -15,7 +15,7 @@ describe "Blockchain", ->
     @blockchainWallet.init guid, pass1, pass2
     done()
 
-  it 'tests a guess with multiple matches', (done) ->
+  it 'tests blockchain api', (done) ->
     @blockchainWallet.list (err, data) ->
       throw err  if err
       console.log data
