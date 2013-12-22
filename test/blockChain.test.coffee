@@ -3,7 +3,7 @@ should = require "should"
 describe "Blockchain", ->
 
   before (done) ->
-    BlockchainWallet = require('../app/blockchainWallet').BlockchainWallet
+    BlockchainWallet = require('../app/btc/blockchainWallet').BlockchainWallet
     guid = process.env.bitchainAdress
     pass1= process.env.bitchain1
     pass2= process.env.bitchain2
