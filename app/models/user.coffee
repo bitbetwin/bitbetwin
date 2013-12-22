@@ -36,7 +36,7 @@ UserSchema.pre "save", (next) ->
       user.password = hash
       callback null, salt
   , (salt, callback) ->
-    #generate the actual token
+    #generate the registration token
     bcrypt.hash user.email, salt, (err, hash) ->    
       return next(err)  if err         
       callback null, hash
