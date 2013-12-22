@@ -72,12 +72,16 @@ class exports.Security
                 console.log "activation email send succesfully"
               res.render "index",
                 info: "Please check your emails in order to activate your account #{user.email}"
+            if err
+              console.log err
+              #todo render error message
             else
               res.render "index",
                 info: "Please check your emails in order to activate your account #{user.email}"
                 debug: "Please activate localhost:8080/activate?token=#{user.token}"
 
           
+
 
     app.get "/activate", (req, res) ->
       token = req.query["token"]
