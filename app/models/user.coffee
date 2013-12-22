@@ -52,6 +52,7 @@ UserSchema.pre "save", (next) ->
     return next(err)  if err
     #assign token to user
     user.token = hash
+
     next() 
 
 UserSchema.methods.comparePassword = (candidatePassword, cb) ->
