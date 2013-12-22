@@ -33,11 +33,8 @@ UserSchema.pre "save", (next) ->
     # hash the password along with our new salt
     bcrypt.hash user.password, salt, (err, hash) ->
       return next(err)  if err
-      callback null, hash
-  , (hash, callback) ->
-    #overwrite user password
-    user.password = hash
-    callback null
+      user.password = hash
+      callback null
   , (callback) ->
     #generate a second salt for user activation token
     bcrypt.genSalt SALT_WORK_FACTOR, (err, salt) ->
