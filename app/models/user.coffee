@@ -22,7 +22,7 @@ UserSchema.pre "save", (next) ->
   user = this
   
   # only hash the password if it has been modified (or is new)
-  return next()  unless user.isModified("password")
+  return next() unless user.isModified("password")
   
   async.waterfall [(callback) ->
     # generate a salt
@@ -37,8 +37,8 @@ UserSchema.pre "save", (next) ->
   , (hash, callback) ->
     #overwrite user password
     user.password = hash
-    callback null, hash
-  , (hash, callback) ->
+    callback null
+  , (callback) ->
     #generate a second salt for user activation token
     bcrypt.genSalt SALT_WORK_FACTOR, (err, salt) ->
       return next(err)  if err         
@@ -52,7 +52,6 @@ UserSchema.pre "save", (next) ->
     return next(err)  if err
     #assign token to user
     user.token = hash
-
     next() 
 
 UserSchema.methods.comparePassword = (candidatePassword, cb) ->
