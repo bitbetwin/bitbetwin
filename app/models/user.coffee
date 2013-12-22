@@ -38,13 +38,11 @@ UserSchema.pre "save", (next) ->
   , (salt, callback) ->
     #generate the registration token
     bcrypt.hash user.email, salt, (err, hash) ->    
-      return next(err)  if err         
-      callback null, hash
-  ], (err, hash) ->      
-    return next(err)  if err
-    #assign token to user
-    user.token = hash
-    next() 
+      return next(err)  if err  
+      #assign token to user
+      user.token = hash       
+      callback()
+  ], next
 
 UserSchema.methods.comparePassword = (candidatePassword, cb) ->
   bcrypt.compare candidatePassword, @password, (err, isMatch) ->
