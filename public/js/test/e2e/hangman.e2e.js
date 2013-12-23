@@ -33,7 +33,7 @@ describe('HangmanCtrl', function() {
     element(by.id('register-btn')).click();
 
     var welcometext = element(by.id('welcome')).getText();
-    expect(welcometext).toEqual('You are currently logged in as new-user');
+    expect(welcometext).toEqual('Please check your emails in order to activate your account new-user');
   });
 
   it('should login and make a sample guess', function() {
