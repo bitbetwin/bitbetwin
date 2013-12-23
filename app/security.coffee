@@ -27,7 +27,7 @@ class exports.Security
           unless user
             return done(null, false, message: "Incorrect username or password.")
           unless user.activated==true 
-           return done(null, false, message: "Your account is not activated, please activate it.")
+           return done(null, false, message: "Please check your emails in order to activate your account #{user.email}")
           user.comparePassword password, (err, isMatch) ->
             throw err if err
             done(null, false, message: "Incorrect password.") if !isMatch
