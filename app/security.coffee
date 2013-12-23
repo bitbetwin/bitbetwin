@@ -23,18 +23,20 @@ class exports.Security
         condition = 
           email: email
         User.findOne condition, (err, user) ->
-          console.log "found #{user}"
-          return done(err)  if err
+          console.log "--------------------- #{err}" if err
+          return done(err) if err
           unless user
-            return done(null, false,
-              message: "Incorrect username or password."
-            )
-          unless user.activated==true
-            console.log "got here"
-            return done(null, false, message: "Your account is not activated, please activate it.")
-          unless user.password==password
-            return done(null, false, message: "Incorrect password.")
-          done null, user
+            console.log "user not found #{email}"
+            return done(null, false, message: "Incorrect username or password.")
+          #unless user.activated==true
+          #  console.log "got here"
+          #  return done(null, false, message: "Your account is not activated, please activate it.")
+          user.comparePassword password, (err, isMatch) ->
+            throw err if err
+            console.log "wrong password--------------------" if !isMatch
+            console.log "correct password--------------------" if isMatch
+            done(null, false, message: "Incorrect password.") if !isMatch
+            done(null, user) if isMatch
 
 
     passport.serializeUser (user, done) ->

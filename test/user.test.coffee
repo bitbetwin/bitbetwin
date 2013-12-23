@@ -45,10 +45,10 @@ describe "User", ->
       User.findOne email: "encypt@gmail.com", (err, user) ->
         throw err  if err
         callback err, user
-    , (arg1, callback) ->
-      arg1.comparePassword "compl1c4t3d", (err, isMatch) ->
+    , (user, callback) ->
+      user.comparePassword "compl1c4t3d", (err, isMatch) ->
         throw err  if err
-        callback null, arg1, isMatch
+        callback null, user, isMatch
     , (user, arg1, callback) ->
       user.comparePassword "123Password", (err, isMatch) ->
         throw err  if err
