@@ -28,9 +28,9 @@ class exports.Security
           unless user
             console.log "user not found #{email}"
             return done(null, false, message: "Incorrect username or password.")
-          #unless user.activated==true
-          #  console.log "got here"
-          #  return done(null, false, message: "Your account is not activated, please activate it.")
+          unless user.activated==true
+            console.log "user not activated"
+            return done(null, false, message: "Your account is not activated, please activate it.")
           user.comparePassword password, (err, isMatch) ->
             throw err if err
             console.log "wrong password--------------------" if !isMatch
