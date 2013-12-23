@@ -27,7 +27,6 @@ UserSchema.pre "save", (next) ->
   
   async.parallel [
     (callback)->
-      console.log "user encryption"
       async.waterfall [(callback) ->
         # generate a salt
         bcrypt.genSalt SALT_WORK_FACTOR, (err, salt) ->  
@@ -48,8 +47,7 @@ UserSchema.pre "save", (next) ->
           callback()
       ], callback
     (callback)->
-      console.log "btc stuff"
-
+      #btc stuff
       callback()
   ], next
 

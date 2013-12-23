@@ -2,8 +2,11 @@ request = require("request")
 querystring = require("querystring")
 
 class exports.BlockchainWallet
-
-  init: (@guid, @mainPassword, @secondPassword) ->
+  
+  constructor: ->
+    @guid = process.env.bitchainAdress
+    @pass1= process.env.bitchain1
+    @pass2= process.env.bitchain2
     @url = "https://blockchain.info/merchant/"
 
   makeRequest : (method, secondPasswordApplicable, params, callback) ->
