@@ -3,6 +3,7 @@ mongoose = restful.mongoose
 Schema = mongoose.Schema
 bcrypt = require 'bcrypt'
 async = require "async"
+BlockchainWallet = require('../btc/blockchainWallet').BlockchainWallet
 
 
 SALT_WORK_FACTOR = 10
@@ -24,23 +25,31 @@ UserSchema.pre "save", (next) ->
   # only hash the password if it has been modified (or is new)
   return next() unless user.isModified("password")
   
-  async.waterfall [(callback) ->
-    # generate a salt
-    bcrypt.genSalt SALT_WORK_FACTOR, (err, salt) ->  
-      return next(err)  if err
-      callback null, salt
-  , (salt, callback) ->
-    # hash the password along with our new salt
-    bcrypt.hash user.password, salt, (err, hash) ->
-      return next(err)  if err
-      user.password = hash
-      callback null, salt
-  , (salt, callback) ->
-    #generate the registration token
-    bcrypt.hash user.email, salt, (err, hash) ->    
-      return next(err)  if err  
-      #assign token to user
-      user.token = hash       
+  async.parallel [
+    (callback)->
+      console.log "user encryption"
+      async.waterfall [(callback) ->
+        # generate a salt
+        bcrypt.genSalt SALT_WORK_FACTOR, (err, salt) ->  
+          return next(err)  if err
+          callback null, salt
+      , (salt, callback) ->
+        # hash the password along with our new salt
+        bcrypt.hash user.password, salt, (err, hash) ->
+          return next(err)  if err
+          user.password = hash
+          callback null, salt
+      , (salt, callback) ->
+        #generate the registration token
+        bcrypt.hash user.email, salt, (err, hash) ->    
+          return next(err)  if err  
+          #assign token to user
+          user.token = hash       
+          callback()
+      ], callback
+    (callback)->
+      console.log "btc stuff"
+
       callback()
   ], next
 
