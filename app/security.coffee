@@ -1,5 +1,6 @@
 async = require 'async'
 User = require './models/user'
+EmailActivator = require './emailActivator'.EmailActivator
 passport = require 'passport'
 bcrypt = require 'bcrypt'
 
@@ -27,7 +28,7 @@ class exports.Security
             return done(null, false,
               message: "Incorrect username or password."
             )
-          unless user.password==password #TODO encrypt password
+          unless user.password==password
             return done(null, false, message: "Incorrect password.")
           done null, user
 
@@ -51,7 +52,10 @@ class exports.Security
         if err
           console.log err
         else
-          console.log "user: " + user.email + " saved."
+          #sending activation email
+          emailActivator = new EmailActivator
+          emailActivator.send user
+          #login user
           req.login user, (err) ->
             console.log err  if err
             res.redirect "/"
