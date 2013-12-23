@@ -1,6 +1,6 @@
 async = require 'async'
 User = require './models/user'
-EmailActivator = require './emailActivator'.EmailActivator
+EmailActivator = require './emailActivator'
 passport = require 'passport'
 bcrypt = require 'bcrypt'
 
@@ -53,8 +53,10 @@ class exports.Security
           console.log err
         else
           #sending activation email
-          emailActivator = new EmailActivator
-          emailActivator.send user
+          emailActivator = new EmailActivator.EmailActivator
+          emailActivator.send user, (err) ->
+            console.error "error while sending activation link : #{err}" if err
+            console.log "activation email send succesfully"
           #login user
           req.login user, (err) ->
             console.log err  if err

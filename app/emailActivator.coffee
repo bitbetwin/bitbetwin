@@ -9,7 +9,7 @@ email_message =
   from_name: "Team Awesome"
 
 class exports.EmailActivator
-  send: (user) ->
+  send: (user, callback) ->
     # Send confirmation mail to subscriber
     m = new Mandrill.Mandrill(process.env.MANDRILL_APIKEY)
 
@@ -17,19 +17,18 @@ class exports.EmailActivator
       "email": user.email
     ]
 
-    email_message.text = "Thanks for your registration! Please click the following link"+
-    "in order to activate your account : "+
-    "<a href=localhost:8080/activate?token=#{user.token}>Click here to activate your account.</a>" + 
-    "or copy the following url: " + 
+    html = "Thanks for your registration! Please click the following link" + 
+    "in order to activate your account : " + 
+    "<a href=localhost:8080/activate?token=#{user.token}>Click here to activate your account.</a>"  +
+    "or copy the following url: "  + 
     "localhost:8080/activate?token=#{user.token}"
+    email_message.html = html
 
     m.messages.send 
       "message": email_message
       "async": false
       (results) ->
-        console.log "Mandrill result: #{JSON.stringify results}"
-        if (results[0].sent == "sent")
-          s.confrimation_sent = yes
-          s.update
+        callback()
       (e) ->
-        console.warn "a mandrill error occurred: #{e.name} - #{e.message}"
+        console.log "a mandrill error occurred: #{e.name} - #{e.message}"
+        callback(e)
