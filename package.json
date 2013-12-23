@@ -21,6 +21,7 @@
     "cookie": "0.0.x",
     "node-restful":"0.1.x",
     "socket.io": "0.9.x",
+    "sinon": "1.7.x",
     "jade": "0.32.x",
     "request": "2.27.x",
     "passport": "0.1.x",
