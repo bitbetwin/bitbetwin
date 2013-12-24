@@ -52,7 +52,6 @@ UserSchema.pre "save", (next) ->
     return next(err)  if err
     #assign token to user
     user.token = hash
-    console.log "user token=" + user.token 
     next() 
 
 UserSchema.methods.comparePassword = (candidatePassword, cb) ->

@@ -18,8 +18,9 @@ class DataAccess
 	    #TODO 
 	    #create a user a new user    
 	    testUser = new User email: "user", password: "password"
+	    testUser.activated=true
 	    User.findOne email: testUser.email , (err, user) ->
-	        console.log "no user found, creating new user" if err
+	        console.log "no user found, creating new user" unless user
 	        throw err if err
 	        if !user? 
 	          testUser.save (err) -> 
