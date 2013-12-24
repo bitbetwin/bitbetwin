@@ -20,11 +20,11 @@ describe('HangmanCtrl', function() {
     expect(greetingtext).toEqual('Bangman :) Hey: user');
 
     var games = element.all(by.repeater('games'));
-    expect(games.count()).toEqual(1);
+    expect(games.count()).toEqual(2);
     expect(games.get(0).getText()).toEqual('Join game1');
   });
 
-  it('should register and be logged in afterwards', function() {
+  it('registering should fail', function() {
     browser.get('http://localhost:8080/logout');
 
     element(by.id('reg-email')).sendKeys('new-user');
@@ -32,9 +32,22 @@ describe('HangmanCtrl', function() {
 
     element(by.id('register-btn')).click();
 
-    var welcometext = element(by.id('welcome')).getText();
-    expect(welcometext).toEqual('Please check your emails in order to activate your account new-user');
+    var welcometext = element(by.id('errors')).getText();
+    expect(welcometext).toEqual('You have entered an invalid email address');
   });
+
+  it('should register and show activation message afterwards', function() {
+    browser.get('http://localhost:8080/logout');
+
+    element(by.id('reg-email')).sendKeys('new-user@gmail.com');
+    element(by.id('reg-password')).sendKeys('password');
+
+    element(by.id('register-btn')).click();
+
+    var welcometext = element(by.id('errors')).getText();
+    expect(welcometext).toEqual('Please check your emails in order to activate your account new-user@gmail.com');
+  });
+  
 
   it('should login and make a sample guess', function() {
     browser.get('http://localhost:8080/logout');

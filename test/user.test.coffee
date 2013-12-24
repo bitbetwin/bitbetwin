@@ -1,7 +1,7 @@
 User = require "../app/models/user"
 should = require "should"
 async = require "async"
-
+validator = require("email-validator")
 
 restful = require 'node-restful'
 mongoose = restful.mongoose
@@ -58,3 +58,10 @@ describe "User", ->
       result1.should.be.true
       result2.should.be.fase
       done()  
+
+  it "should validate a email address" , (done) ->
+    valid = validator.validate("test@email.com")
+    valid.should.be.true
+    valid = validator.validate("test@emailcom")
+    valid.should.be.false
+    done()

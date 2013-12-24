@@ -3,6 +3,7 @@ User = require './models/user'
 EmailActivator = require './emailActivator'
 passport = require 'passport'
 bcrypt = require 'bcrypt'
+validator = require 'email-validator'
 
 class exports.Security
 
@@ -44,10 +45,17 @@ class exports.Security
 
     app.post "/register", (req, res) ->  
       # attach POST to user schema
+
+      if !validator.validate(req.body.email)
+        res.render "index",
+          message: "You have entered an invalid email address"
+        return
+
       user = new User(
         email: req.body.email
         password: req.body.password
       )      
+
       # save in Mongo
       user.save (err) ->
         if err
