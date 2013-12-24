@@ -14,7 +14,7 @@ switch process.env.NODE_ENV
   when "production"
     env = "production" 
   else
-    env = "development" # default development for now
+    env = "development"
 
 config = require("./app/config/config")[env]
 

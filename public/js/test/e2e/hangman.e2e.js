@@ -44,7 +44,7 @@ describe('HangmanCtrl', function() {
 
     element(by.id('register-btn')).click();
 
-    var welcometext = element(by.id('errors')).getText();
+    var welcometext = element(by.id('info')).getText();
     expect(welcometext).toEqual('Please check your emails in order to activate your account new-user@gmail.com');
   });
   

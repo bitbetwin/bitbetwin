@@ -5,10 +5,22 @@ passport = require 'passport'
 bcrypt = require 'bcrypt'
 validator = require 'email-validator'
 
+#settings
+switch process.env.NODE_ENV
+  when "development" 
+    env = "development"
+  when "production"
+    env = "production" 
+  else
+    env = "development"
+
+config = require("./config/config")[env]
+
+
 class exports.Security
 
   init: (app, callback) ->
-
+    DEBUG = config.debug
     self=@
     app.use passport.initialize()
     app.use passport.session()
@@ -28,7 +40,7 @@ class exports.Security
           unless user
             return done(null, false, message: "Incorrect username or password.")
           unless user.activated==true 
-           return done(null, false, message: "Please check your emails in order to activate your account #{user.email}")
+           return done(null, false, info: "Please check your emails in order to activate your account #{user.email}")
           user.comparePassword password, (err, isMatch) ->
             throw err if err
             done(null, false, message: "Incorrect password.") if !isMatch
@@ -62,12 +74,18 @@ class exports.Security
           console.log err
         else
           #sending activation email
-          emailActivator = new EmailActivator.EmailActivator
-          emailActivator.send user, (err) ->
-            console.error "error while sending activation link : #{err}" if err
-            console.log "activation email send succesfully"    
-          res.render "index",
-            message: "Please check your emails in order to activate your account #{user.email}"
+          emailActivator = new EmailActivator.EmailActivator  
+          if(!DEBUG)
+            emailActivator.send user, (err) ->
+              console.error "error while sending activation link : #{err}" if err
+              console.log "activation email send succesfully"
+            res.render "index",
+              info: "Please check your emails in order to activate your account #{user.email}"
+          else
+            res.render "index",
+              info: "Please activate localhost:8080/activate?token=#{user.token}"
+
+          
 
     app.get "/activate", (req, res) ->
       token = req.query["token"]
