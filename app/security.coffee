@@ -83,7 +83,8 @@ class exports.Security
               info: "Please check your emails in order to activate your account #{user.email}"
           else
             res.render "index",
-              info: "Please activate localhost:8080/activate?token=#{user.token}"
+              info: "Please check your emails in order to activate your account #{user.email}"
+              debug: "Please activate localhost:8080/activate?token=#{user.token}"
 
           
 
