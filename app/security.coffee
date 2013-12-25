@@ -31,16 +31,14 @@ class exports.Security
       usernameField: 'email',
       passwordField: 'password'
     , (email, password, done) ->
-
       process.nextTick ->
         condition = 
           email: email
         User.findOne condition, (err, user) ->
-          return done(err) if err
           unless user
             return done(null, false, message: "Incorrect username or password.")
           unless user.activated==true 
-           return done(null, false, info: "Please check your emails in order to activate your account #{user.email}")
+           return done(null, false, message: "Please check your emails in order to activate your account #{user.email}")
           user.comparePassword password, (err, isMatch) ->
             throw err if err
             done(null, false, message: "Incorrect password.") if !isMatch
@@ -60,7 +58,7 @@ class exports.Security
 
       if !validator.validate(req.body.email)
         res.render "index",
-          message: "You have entered an invalid email address"
+          error: "You have entered an invalid email address"
         return
 
       user = new User(
@@ -97,10 +95,11 @@ class exports.Security
         else
           _email = data.email
           if data.activated is true
-            res.send "Your account has already been activated. Just head to the login page."
+            res.render "index",
+              error: "Your account has already been activated. Just head to the login page."
           else
             data.activated = true
             data.save()
             res.render "index",
-              message: "Please sign in " + data.email
+              error: "Please sign in " + data.email
 
