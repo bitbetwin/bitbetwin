@@ -32,7 +32,7 @@ describe('HangmanCtrl', function() {
 
     element(by.id('register-btn')).click();
 
-    var welcometext = element(by.id('errors')).getText();
+    var welcometext = element(by.id('error')).getText();
     expect(welcometext).toEqual('You have entered an invalid email address');
   });
 
@@ -47,8 +47,20 @@ describe('HangmanCtrl', function() {
     var welcometext = element(by.id('info')).getText();
     expect(welcometext).toEqual('Please check your emails in order to activate your account new-user@gmail.com');
   });
-  
 
+
+  it('login with invalid username', function() {
+    browser.get('http://localhost:8080/logout');
+
+    element(by.id('email')).sendKeys('invalid@gmail.com');
+    element(by.id('password')).sendKeys('password');
+
+    element(by.id('login-btn')).click();
+
+    var welcometext = element(by.id('error')).getText();
+    expect(welcometext).toEqual('Incorrect username or password.');
+  });
+  
   it('should login and make a sample guess', function() {
     browser.get('http://localhost:8080/logout');
 
