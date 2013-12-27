@@ -9,15 +9,15 @@ describe('HangmanCtrl', function() {
   it('should login', function() {
     browser.get('http://localhost:8080/logout');
 
-    element(by.id('email')).sendKeys('user');
+    element(by.id('email')).sendKeys('user@gmail.com');
     element(by.id('password')).sendKeys('password');
 
     element(by.id('login-btn')).click();
 
     var welcometext = element(by.id('welcome')).getText();
-    expect(welcometext).toEqual('You are currently logged in as user');
+    expect(welcometext).toEqual('You are currently logged in as user@gmail.com');
     var greetingtext = element(by.id('greeting')).getText();
-    expect(greetingtext).toEqual('Bangman :) Hey: user');
+    expect(greetingtext).toEqual('Bangman :) Hey: user@gmail.com');
 
     var games = element.all(by.repeater('games'));
     expect(games.count()).toEqual(2);
@@ -64,13 +64,13 @@ describe('HangmanCtrl', function() {
   it('should login and make a sample guess', function() {
     browser.get('http://localhost:8080/logout');
 
-    element(by.id('email')).sendKeys('user');
+    element(by.id('email')).sendKeys('user@gmail.com');
     element(by.id('password')).sendKeys('password');
 
     element(by.id('login-btn')).click();
 
     var welcometext = element(by.id('welcome')).getText();
-    expect(welcometext).toEqual('You are currently logged in as user');
+    expect(welcometext).toEqual('You are currently logged in as user@gmail.com');
 
     var games = element.all(by.repeater('games'));
     expect(games.count()).toEqual(1);
