@@ -16,7 +16,7 @@ class exports.SocketHandler
 
     io.authorization (data, accept) ->
       if DEBUG 
-        console.log "authorization called with cookies:", data?.headers?.cookie
+        @.log.debug "authorization called with cookies:", data?.headers?.cookie
       if data.headers.cookie
         cookie = cook.parse(data.headers.cookie)
       else
@@ -48,18 +48,18 @@ class exports.SocketHandler
     
       io.on "connection", (socket) ->
         hs = socket.handshake
-        console.log "debug " + DEBUG
+        @.log.info "debug " + DEBUG
         if DEBUG
-          console.log "establishing connection"
-          console.log "trying to find user:", hs.user
+          @.log.info "establishing connection"
+          @.log.info "trying to find user:", hs.user
         User.findById hs.user, (err, user) =>
-          return console.log "Couldnt find user:", user if err || !user
+          return @.log.warn "Couldnt find user:", user if err || !user
           if DEBUG
-            console.log "found user by email:", user
+            @.log.debug "found user by email:", user
           socket.user = user
           user.socket = socket
           if DEBUG
-            console.log "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
+            @.log.debug "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
           data = { username: user.email, games: [ {name: game1.name }, {name: game2.name}] }
           socket.emit "loggedin", data
 
