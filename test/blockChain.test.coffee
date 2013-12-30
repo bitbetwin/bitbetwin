@@ -8,11 +8,12 @@ describe "Blockchain", ->
     @blockchainWallet.init()
     done()
 
-#  it 'tests blockchain api', (done) ->
-#    @blockchainWallet.list (err, data) ->
-#      throw err  if err
-#      #TODO verify result
-#      done()
+  it 'tests blockchain api', (done) ->
+    @blockchainWallet.list (err, data) ->
+      console.log "error here " + err
+      throw err  if err
+      #TODO verify result
+      done()
 
 #  it 'tests blockchain create wallet', (done) ->
 #    data =
@@ -20,4 +21,4 @@ describe "Blockchain", ->
 #    @blockchainWallet.newAddress data, (err, data) ->
 #      throw err  if err
 #      #TODO verify result
-#      done()
+#      done() 
