@@ -4,6 +4,7 @@ EmailActivator = require './emailActivator'
 passport = require 'passport'
 bcrypt = require 'bcrypt'
 validator = require 'email-validator'
+BlockchainWallet = require('../app/btc/blockchainWallet').BlockchainWallet
 DataAccess = require './dataaccess'
 
 class exports.Security
@@ -57,14 +58,17 @@ class exports.Security
       if !validator.validate(email)
         res.render "index",
           error: "You have entered an invalid email address"
-        return    
+        return
 
       # save in Mongo
       
+      email = req.body.email
+      password = req.body.password
       User.findOne email: email, (err, data) ->
         unless data 
           user.save (err) ->
             #sending activation email
+
             if(!DEBUG)
               emailActivator = new EmailActivator.EmailActivator  
               emailActivator.send user, (err) ->
@@ -79,24 +83,30 @@ class exports.Security
               res.render "index",
                 info: "Please check your emails in order to activate your account #{user.email}"
                 debug: "Please activate localhost:8080/activate?token=#{user.token}"
-
-          
+        else 
+          res.render "index",
+            message:  "Email already in use"        
 
 
     app.get "/activate", (req, res) ->
       token = req.query["token"]
-      User.findOne token: token, (err, data) ->
+      User.findOne token: token, (err, user) ->
         return next(err)  if err
-        unless data
-          res.send "Token not found. Where are u come from?"
+        unless user
+          res.render "index",
+            error: "Token not found. Where are u come from?"
         else
-          _email = data.email
-          if data.activated is true
+          if user.activated is true
             res.render "index",
               error: "Your account has already been activated. Just head to the login page."
           else
-            data.activated = true
-            data.save()
+            user.activated = true
+            if(!DEBUG)
+              blockchainWallet = new BlockchainWallet
+              blockchainWallet.init()              
+              user.save()
+            else  
+              user.save()
             res.render "index",
-              info: "Please sign in " + data.email
+              info: "Please sign in " + user.email
 
