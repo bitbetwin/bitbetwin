@@ -3,10 +3,10 @@ querystring = require("querystring")
 
 class exports.BlockchainWallet
   
-  constructor: ->
+  init: ->
     @guid = process.env.bitchainAdress
-    @pass1= process.env.bitchain1
-    @pass2= process.env.bitchain2
+    @mainPassword= process.env.bitchain1
+    @second_password= process.env.bitchain2
     @url = "https://blockchain.info/merchant/"
 
   makeRequest : (method, secondPasswordApplicable, params, callback) ->
@@ -14,6 +14,7 @@ class exports.BlockchainWallet
     params.second_password = @secondPassword  if secondPasswordApplicable and @secondPassword
     queryString = querystring.stringify(params)
     url = @url + @guid + "/" + method + "?" + queryString
+    console.log url
     request url, (err, response, body) ->
       if err or response.statusCode isnt 200
         callback (if err then err else response.statusCode)
