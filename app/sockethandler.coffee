@@ -44,49 +44,49 @@ class exports.SocketHandler
         data.user = session.passport.user
         accept null, true
 
-      User = require('./models/user')
+    User = require('./models/user')
     
-      io.on "connection", (socket) ->
-        hs = socket.handshake
-        @.log.info "debug " + DEBUG
+    io.on "connection", (socket) ->
+      hs = socket.handshake
+      @.log.info "debug " + DEBUG
+      if DEBUG
+        @.log.info "establishing connection"
+        @.log.info "trying to find user:", hs.user
+      User.findById hs.user, (err, user) =>
+        return @.log.warn "Couldnt find user:", user if err || !user
         if DEBUG
-          @.log.info "establishing connection"
-          @.log.info "trying to find user:", hs.user
-        User.findById hs.user, (err, user) =>
-          return @.log.warn "Couldnt find user:", user if err || !user
-          if DEBUG
-            @.log.debug "found user by email:", user
-          socket.user = user
-          user.socket = socket
-          if DEBUG
-            @.log.debug "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
-          data = { username: user.email, games: [ {name: game1.name }, {name: game2.name}] }
-          socket.emit "loggedin", data
+          @.log.debug "found user by email:", user
+        socket.user = user
+        user.socket = socket
+        if DEBUG
+          @.log.debug "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
+        data = { username: user.email, games: [ {name: game1.name }, {name: game2.name}] }
+        socket.emit "loggedin", data
 
-        #TODO: add generic handling of socket events
-        #TODO: handle game instance generic
-        socket.on 'guess', (data) ->
-          if (@.game.name == 'game1')
-            game1.check @, data
-          if (@.game.name == 'game2')
-            game2.check @, data
+      #TODO: add generic handling of socket events
+      #TODO: handle game instance generic
+      socket.on 'guess', (data) ->
+        if (@.game.name == 'game1')
+          game1.check @, data
+        if (@.game.name == 'game2')
+          game2.check @, data
 
-        socket.on 'join', (data) ->
-          if (data == 'game1')
-            game1.join @
-          if (data == 'game2')
-            game2.join @
+      socket.on 'join', (data) ->
+        if (data == 'game1')
+          game1.join @
+        if (data == 'game2')
+          game2.join @
 
-        socket.on 'leave', () ->
-          if (@.game.name == 'game1')
-            game1.leave @
-          if (@.game.name == 'game2')
-            game2.leave @
-          data = { username: @.user.email, games: [ {name: game1.name }, {name: game2.name}] }
-          socket.emit "loggedin", data
+      socket.on 'leave', () ->
+        if (@.game.name == 'game1')
+          game1.leave @
+        if (@.game.name == 'game2')
+          game2.leave @
+        data = { username: @.user.email, games: [ {name: game1.name }, {name: game2.name}] }
+        socket.emit "loggedin", data
 
-        socket.on 'report', (data) ->
-          if (@.game.name == 'game1')
-            game1.report @
-          if (@.game.name == 'game2')
-            game2.report @
+      socket.on 'report', (data) ->
+        if (@.game.name == 'game1')
+          game1.report @
+        if (@.game.name == 'game2')
+          game2.report @
