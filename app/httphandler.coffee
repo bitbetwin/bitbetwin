@@ -1,7 +1,10 @@
 class exports.HttpHandler
   init: (app) ->
     app.get '/', (req, res) ->
-      vars= user: req.user
+      vars = 
+        user: req.user
+        info: req.flash('info') 
+        error: req.flash('error') 
       res.render('index', vars)
 
     app.get '/partials/guess', (req, res) ->

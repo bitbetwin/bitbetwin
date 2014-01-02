@@ -7,29 +7,13 @@ ObjectId = require('mongoose').Types.ObjectId
 
 DataAccess = require './app/dataaccess'
 
-#settings
-switch process.env.NODE_ENV
-  when "development" 
-    env = "development"
-  when "production"
-    env = "production" 
-  else
-    env = "development" # default development for now
-
-config = require("./app/config/config")[env]
-
 class exports.Server
 
   constructor: (@port) ->
 
-    console.log env + " mode started"
-
     @SESSION_SECRET = "ci843tgbza11e"
-    @DEBUG = config.debug
 
-    flash = require 'connect-flash'
-
-    @sessionStore = new MongoStore url: config.db_address
+    @sessionStore = new MongoStore url: DataAccess.loadConfig().db_address
 
     @app = express()
 
@@ -48,6 +32,7 @@ class exports.Server
     @app.use express.session { secret :@SESSION_SECRET, store: @sessionStore, key: 'sessionID'}
 
     # error message handling
+    flash = require 'connect-flash'
     @app.use(flash())
     
     #security stuff, aka login, authentication
@@ -75,7 +60,7 @@ class exports.Server
 
 
   start: (callback) ->
-    console.log "DEBUG flag:", @DEBUG
+    console.log "DEBUG flag:", DataAccess.loadConfig().debug
 
     console.log 'Server starting on port ' + @port
     @http_server=@app.listen @port
@@ -93,7 +78,7 @@ class exports.Server
     socketHandler = new SocketHandler
     socketHandler.init @private, @sessionStore, @DEBUG, @SESSION_SECRET
 
-    DataAccess.startup config
+    DataAccess.startup()
 
     return callback() # finishes start function
         

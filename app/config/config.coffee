@@ -5,6 +5,12 @@ module.exports =
       name: "Bangman -- Dev"
     debug: true
 
+  testing:
+    db_address: "mongodb://localhost/bangmandb"
+    app:
+      name: "Bangman -- Test"
+    debug: true
+
   production:
     db: process.env.MONGOLAB_URI or process.env.MONGOHQ_URL
     db_address: process.env.MONGOLAB_URI or process.env.MONGOHQ_URL

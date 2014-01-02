@@ -1,7 +1,7 @@
 User = require "../app/models/user"
 should = require "should"
 async = require "async"
-
+validator = require("email-validator")
 
 restful = require 'node-restful'
 mongoose = restful.mongoose
@@ -45,10 +45,10 @@ describe "User", ->
       User.findOne email: "encypt@gmail.com", (err, user) ->
         throw err  if err
         callback err, user
-    , (arg1, callback) ->
-      arg1.comparePassword "compl1c4t3d", (err, isMatch) ->
+    , (user, callback) ->
+      user.comparePassword "compl1c4t3d", (err, isMatch) ->
         throw err  if err
-        callback null, arg1, isMatch
+        callback null, user, isMatch
     , (user, arg1, callback) ->
       user.comparePassword "123Password", (err, isMatch) ->
         throw err  if err
@@ -58,3 +58,10 @@ describe "User", ->
       result1.should.be.true
       result2.should.be.fase
       done()  
+
+  it "should validate a email address" , (done) ->
+    valid = validator.validate("test@email.com")
+    valid.should.be.true
+    valid = validator.validate("test@emailcom")
+    valid.should.be.false
+    done()
