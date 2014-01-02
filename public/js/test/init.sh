@@ -1,0 +1,1 @@
+mongo --host localhost bangmandbTest public/js/test/testdata.js
