@@ -11,15 +11,20 @@ class DataAccess
 		#settings
 		switch process.env.NODE_ENV
 		  when "development" 
-		    env = "development"
+		    @env = "development"
 		  when "production"
-		    env = "production" 
+		    @env = "production"
+		  when "testing"
+		  	@env = "testing" 
 		  else
-		    env = "development"
+		    @env = "development"
 
-		console.log env + " mode started."
+		console.log @env + " mode started."
 
-		@config = require("./config/config")[env]
+		@config = require("./config/config")[@env]
+
+	@isInTestingMode: () ->
+		return @env == 'testing'
 
 	@startup: () ->
 		mongoose.connect @loadConfig().db_address, (error) ->

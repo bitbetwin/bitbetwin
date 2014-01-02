@@ -78,10 +78,10 @@ describe('HangmanCtrl', function() {
     element(by.id('game1')).click();
 
     var matchtext = element(by.id('match')).getText();
-    expect(matchtext).toEqual('Guessed Word: _______________ ___ _______ ___ ________ _________');
-    element(by.model('letter')).sendKeys('C');
+    expect(matchtext).toEqual('Guessed Word: __________');
+    element(by.model('letter')).sendKeys('T');
     element(by.id('guess')).click();
     matchtext = element(by.id('match')).getText();
-    expect(matchtext).toEqual('Guessed Word: C______________ ___ _______ ___ ________ _________');
+    expect(matchtext).toEqual('Guessed Word: T_________');
   });
 });
