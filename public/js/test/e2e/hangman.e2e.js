@@ -73,7 +73,7 @@ describe('HangmanCtrl', function() {
     expect(welcometext).toEqual('You are currently logged in as user@gmail.com');
 
     var games = element.all(by.repeater('games'));
-    expect(games.count()).toEqual(1);
+    expect(games.count()).toEqual(2);
     expect(games.get(0).getText()).toEqual('Join game1');
     element(by.id('game1')).click();
 
