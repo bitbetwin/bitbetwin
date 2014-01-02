@@ -27,6 +27,7 @@ class DataAccess
 		return @env == 'testing'
 
 	@startup: () ->
+		console.log "connecting to " + @loadConfig().db_address
 		mongoose.connect @loadConfig().db_address, (error) ->
 		  console.log "could not connect because: " + error if error
 		db = mongoose.connection
@@ -35,19 +36,6 @@ class DataAccess
 
 		db.once 'open', (callback) ->
 		  console.log "connected with mongodb"
-
-		#TODO 
-		#create a user a new user    
-		testUser = new User email: "user", password: "password"
-		testUser.activated=true
-		User.findOne email: testUser.email , (err, user) ->
-		    console.log "no user found, creating new user" unless user
-		    throw err if err
-		    if !user? 
-		      testUser.save (err) -> 
-		        console.log "user saved" unless err            
-		        throw err if err          
-		        # fetch user and test password verification
 
 	@shutdown: () ->
     	mongoose.disconnect()
