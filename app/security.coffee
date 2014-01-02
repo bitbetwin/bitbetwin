@@ -4,23 +4,12 @@ EmailActivator = require './emailActivator'
 passport = require 'passport'
 bcrypt = require 'bcrypt'
 validator = require 'email-validator'
-
-#settings
-switch process.env.NODE_ENV
-  when "development" 
-    env = "development"
-  when "production"
-    env = "production" 
-  else
-    env = "development"
-
-config = require("./config/config")[env]
-
+DataAccess = require './dataaccess'
 
 class exports.Security
 
   init: (app, callback) ->
-    DEBUG = config.debug
+    DEBUG = DataAccess.loadConfig().debug
     self=@
     app.use passport.initialize()
     app.use passport.session()
