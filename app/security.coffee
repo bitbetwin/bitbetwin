@@ -102,5 +102,5 @@ class exports.Security
             data.activated = true
             data.save()
             res.render "index",
-              error: "Please sign in " + data.email
+              info: "Please sign in " + data.email
 
