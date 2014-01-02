@@ -1,6 +1,6 @@
 'use strict';
  
-describe('HangmanCtrl', function(){
+describe('GuessCtrl', function(){
     var scope, socket;
 
     beforeEach(angular.mock.module('bangman'));
@@ -10,7 +10,7 @@ describe('HangmanCtrl', function(){
         scope = $rootScope.$new();
         socket = _$socket_;
 
-        $controller('HangmanCtrl', {$scope: scope, $socket: socket});
+        $controller('GuessCtrl', {$scope: scope, $socket: socket});
     }));
 
     // tests start here
