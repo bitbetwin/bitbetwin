@@ -53,8 +53,6 @@ class exports.Security
       condition = 
           email: req.body.email
       User.findOne condition, (err, user) ->
-        console.log "found user " + user
-        console.log user?
         if user?
           if !user.activated
             res.render "index",
