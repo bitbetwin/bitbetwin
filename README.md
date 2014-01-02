@@ -35,4 +35,5 @@ testing:
       * webdriver-manager update
    * run tests
       * assure you started the server: coffee server.coffee
+      * assure you set testing mode: source test.env
       * protractor public/js/test/protractor.conf.js
