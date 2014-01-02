@@ -1,2 +1,2 @@
 ./public/js/test/init.sh
-protractor public/js/test/protractor.config.js
+protractor public/js/test/protractor.conf.js
