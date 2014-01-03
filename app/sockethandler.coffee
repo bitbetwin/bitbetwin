@@ -1,6 +1,7 @@
 connect = require 'connect'
 cook = require 'cookie'
 socketio = require 'socket.io'
+DataAccess = require './dataaccess'
 
 class exports.SocketHandler
 
@@ -37,15 +38,6 @@ class exports.SocketHandler
         accept null, true
 
     User = require('./models/user')
-    
-    #TODO: handle game instances generic
-    Game = require('./hangman/game').Game
-    game1 = new Game io, 'game1'
-    game1.start()
-    game2 = new Game io, 'game2'
-    game2.start()
-
-    io.log.info "initialised games"
 
     io.on "connection", (socket) ->
       hs = socket.handshake
@@ -61,10 +53,9 @@ class exports.SocketHandler
         user.socket = socket
         if DEBUG
           @.log.debug "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
-        data = { username: user.email, games: [ {name: game1.name }, {name: game2.name}] }
+        data = DataAccess.retrieveGames()
         socket.emit "loggedin", data
 
-      that = @
       x = socket.$emit
 
       socket.$emit = () ->
@@ -75,17 +66,17 @@ class exports.SocketHandler
 
         gameevent = false
 
-        if event == 'join' && that.commands[feed]? && ( event in that.commands[feed]['functions'] )
-          that.commands[feed]['instance'][event] @, feed
+        if event == 'join' && DataAccess.commands[feed]? && ( event in DataAccess.commands[feed]['functions'] )
+          result = DataAccess.commands[feed]['instance'][event] @, feed
           gameevent = true
         else
-          if that.commands[@.game?.name]? && ( event in that.commands[@.game?.name]['functions'] )
-            that.commands[@.game?.name]['instance'][event] @, feed
+          if DataAccess.commands[@.game?.name]? && ( event in DataAccess.commands[@.game?.name]['functions'] )
+            result = DataAccess.commands[@.game?.name]['instance'][event] @, feed
             gameevent = true
 
         if gameevent
           @.log.warn "game event"
-          callback()
+          callback result
         else
           @.log.warn "no game event"
           x.apply @, Array.prototype.slice.call arguments

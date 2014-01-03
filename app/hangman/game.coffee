@@ -35,6 +35,7 @@ class exports.Game
 	leave: (player) ->
 		@io.log.info player.user.email + " left " + @name
 		player.leave @name
+		return DataAccess.retrieveGames()
 
 	broadcast: (player) ->
 		player.game.guess = []
