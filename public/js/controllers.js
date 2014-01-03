@@ -85,24 +85,23 @@ bangmanControllers.controller('ReportCtrl', ['$scope', '$socket', '$log', '$loca
     });
 
     var countdown;
-    $socket.on('report', function(data) {
-      $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
-      $scope.time = data.time;
-      $scope.onTimeout = function() {
-        $scope.time--;
-        if ($scope.time <= 0) {
-          $log.info($scope.time);
-          $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
-        } else {
-          countdown = $timeout($scope.onTimeout,1000);
-        }
-      }
-      countdown = $timeout($scope.onTimeout,1000);
-    });
 
     $scope.$on('$routeChangeSuccess', function(next, current) { 
       $log.info('init report!');
-      $socket.emit('report');
+      $socket.emit('report', '', function(data) {
+      $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
+      $scope.time = data.time;
+      $scope.onTimeout = function() {
+          $scope.time--;
+          if ($scope.time <= 0) {
+            $log.info($scope.time);
+            $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
+          } else {
+            countdown = $timeout($scope.onTimeout,1000);
+          }
+        }
+        countdown = $timeout($scope.onTimeout,1000);
+      });
     });
 
     $scope.loggedIn = function() {
