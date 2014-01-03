@@ -7,7 +7,7 @@ class exports.Game
 		@simplePhraseGenerator = new SimplePhraseGenerator
 		@simpleDurationCalculator = new SimpleDurationCalculator
 
-	check: (player, guess) ->
+	guess: (player, guess) ->
 		@io.log.info player.user.email + " guessed " + guess
 		player.game.guess.push guess
 		that = @
@@ -30,7 +30,7 @@ class exports.Game
 
 	broadcast: (player) ->
 		player.game.guess = []
-		@check player, []
+		@guess player, ""
 
 	start: () ->
 		@io.log.info "starting " + @name
