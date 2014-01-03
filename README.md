@@ -1,6 +1,8 @@
 hangman
 =======
 
+Tests: [![Build Status](https://travis-ci.org/btcgames/hangman.png?branch=master)](https://travis-ci.org/btcgames/hangman)
+
 Linux: 
 
 * install mongodb for development mode
@@ -34,5 +36,7 @@ testing:
       * npm install -g protractor
       * webdriver-manager update
    * run tests
+      * assure you set testing mode: source test.env
       * assure you started the server: coffee server.coffee
-      * protractor public/js/test/protractor.conf.js
+      * ./runE2Etests.sh
+      

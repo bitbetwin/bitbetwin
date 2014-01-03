@@ -1,10 +1,18 @@
+DataAccess = require '../dataaccess'
+
 class exports.Game
 
 	constructor: (@io, @name) ->
-		@io.log.info "initialising simplePhraseGenerator"
-		SimplePhraseGenerator = require('./simplephrasegenerator').SimplePhraseGenerator
+		@io.log.info "initialising phraseGenerator"
 		SimpleDurationCalculator = require('./simpledurationcalculator').SimpleDurationCalculator
-		@simplePhraseGenerator = new SimplePhraseGenerator
+		
+		if DataAccess.isInTestingMode()
+			SinglePhraseGenerator = require('./phrasegenerator/singlephrasegenerator').SinglePhraseGenerator
+			@phraseGenerator = new SinglePhraseGenerator
+		else
+			SimplePhraseGenerator = require('./phrasegenerator/simplephrasegenerator').SimplePhraseGenerator 
+			@phraseGenerator = new SimplePhraseGenerator
+
 		@simpleDurationCalculator = new SimpleDurationCalculator
 
 	guess: (player, guess) ->
@@ -36,7 +44,7 @@ class exports.Game
 		@io.log.info "starting " + @name
 		
 		@io.log.info "generating phrase"
-		phrase = @simplePhraseGenerator.generate()
+		phrase = @phraseGenerator.generate()
 		
 		@io.log.info "initialising " + @name
 		Hangman = require('./hangman').Hangman
