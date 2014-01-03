@@ -3,7 +3,7 @@ should = require "should"
 describe "Hangman", ->
 
 	before (done) ->
-		Hangman = require('../app/hangman').Hangman
+		Hangman = require('../app/hangman/hangman').Hangman
 		@hangman = new Hangman 'guess word test'
 		done()
 
