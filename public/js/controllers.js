@@ -40,8 +40,6 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
     $socket.on('loggedin', function(variables) {
         loggedIn = true;
         complete = false;
-        $log.info(loggedIn);
-        $scope.username = variables.username;
         $scope.games = variables.games;
     });
 
@@ -60,7 +58,9 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
       started = false;
       $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
       $scope.time = '';
-      $socket.emit('leave');
+      $socket.emit('leave', '', function() {
+        $log.info('+++++++++++ callback!!!');
+      });
     };
 
     $scope.join = function(game) {

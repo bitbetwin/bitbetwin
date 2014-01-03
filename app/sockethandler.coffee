@@ -5,14 +5,6 @@ socketio = require 'socket.io'
 class exports.SocketHandler
 
 	init: (io, sessionStore, DEBUG, SESSION_SECRET) ->
-    #TODO: handle game instances generic
-    Game = require('./hangman/game').Game
-    game1 = new Game io, 'game1'
-    game1.start()
-    game2 = new Game io, 'game2'
-    game2.start()
-
-    io.log.info "initialised games"
 
     io.authorization (data, accept) ->
       if DEBUG 
@@ -46,6 +38,15 @@ class exports.SocketHandler
 
     User = require('./models/user')
     
+    #TODO: handle game instances generic
+    Game = require('./hangman/game').Game
+    game1 = new Game io, 'game1'
+    game1.start()
+    game2 = new Game io, 'game2'
+    game2.start()
+
+    io.log.info "initialised games"
+
     io.on "connection", (socket) ->
       hs = socket.handshake
       @.log.info "debug " + DEBUG
@@ -63,30 +64,28 @@ class exports.SocketHandler
         data = { username: user.email, games: [ {name: game1.name }, {name: game2.name}] }
         socket.emit "loggedin", data
 
-      #TODO: add generic handling of socket events
-      #TODO: handle game instance generic
-      socket.on 'guess', (data) ->
-        if (@.game.name == 'game1')
-          game1.check @, data
-        if (@.game.name == 'game2')
-          game2.check @, data
+      that = @
+      x = socket.$emit
 
-      socket.on 'join', (data) ->
-        if (data == 'game1')
-          game1.join @
-        if (data == 'game2')
-          game2.join @
+      socket.$emit = () ->
+        event = arguments[0]
+        feed  = arguments[1]
+        callback = arguments[2]
+        @.log.debug event + ":" + feed
 
-      socket.on 'leave', () ->
-        if (@.game.name == 'game1')
-          game1.leave @
-        if (@.game.name == 'game2')
-          game2.leave @
-        data = { username: @.user.email, games: [ {name: game1.name }, {name: game2.name}] }
-        socket.emit "loggedin", data
+        gameevent = false
 
-      socket.on 'report', (data) ->
-        if (@.game.name == 'game1')
-          game1.report @
-        if (@.game.name == 'game2')
-          game2.report @
+        if event == 'join' && that.commands[feed]? && ( event in that.commands[feed]['functions'] )
+          that.commands[feed]['instance'][event] @, feed
+          gameevent = true
+        else
+          if that.commands[@.game?.name]? && ( event in that.commands[@.game?.name]['functions'] )
+            that.commands[@.game?.name]['instance'][event] @, feed
+            gameevent = true
+
+        if gameevent
+          @.log.warn "game event"
+          callback()
+        else
+          @.log.warn "no game event"
+          x.apply @, Array.prototype.slice.call arguments
