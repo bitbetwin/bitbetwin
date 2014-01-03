@@ -14,6 +14,7 @@ class exports.Game
 			@phraseGenerator = new SimplePhraseGenerator
 
 		@simpleDurationCalculator = new SimpleDurationCalculator
+		@duration = 0
 
 	check: (player, guess) ->
 		@io.log.info player.user.email + " guessed " + guess
@@ -21,7 +22,14 @@ class exports.Game
 		that = @
 		@hangman.check player.game.guess, (match) ->
 			complete = (match == that.hangman.word)
-			player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
+			console.log that.duration
+			player.emit 'hangman', {
+				complete: complete, 
+				guesses: player.game.guess, 
+				time: that.countdown, 
+				duration: that.duration,
+				phrase: match }
+
 			if (complete)
 				that.io.log.info player.user.email + " guessed the whole word correctly!"
 
@@ -51,7 +59,8 @@ class exports.Game
 		@hangman = new Hangman phrase
 		
 		@io.log.info "calculating game duration"
-		@countdown = @simpleDurationCalculator.calculate phrase
+		@duration = @simpleDurationCalculator.calculate phrase
+		@countdown = @duration
 		
 		@io.log.info "broadcast game start"
 		for socket in @io.clients @name

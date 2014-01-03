@@ -2,7 +2,7 @@
 	.col-md-1
 	.col-md-10
 		h1(id="greeting") Bangman :) Hey: {{ username }}
-		p(id="countdown") {{ time }}
+		p(id="countdown") {{ duration}} {{ time }}
 		.jumbotron(ng-if="started()")
 			bm-timer(time='time', duration='100')
 			.well.well-lg
