@@ -4,6 +4,7 @@ EmailActivator = require './emailActivator'
 passport = require 'passport'
 bcrypt = require 'bcrypt'
 validator = require 'email-validator'
+BlockchainWallet = require('../app/btc/blockchainWallet').BlockchainWallet
 DataAccess = require './dataaccess'
 
 class exports.Security
@@ -45,62 +46,67 @@ class exports.Security
     app.post "/register", (req, res) ->  
       # attach POST to user schema
 
-      if !validator.validate(req.body.email)
+      
+      email = req.body.email
+      password = req.body.password
+
+      user = new User(
+        email: email
+        password: password
+      )   
+
+      if !validator.validate(email)
         res.render "index",
           error: "You have entered an invalid email address"
         return
 
-      condition = 
-          email: req.body.email
-      User.findOne condition, (err, user) ->
-        if user?
-          if !user.activated
-            res.render "index",
-              info: "Please check your emails in order to activate your account #{user.email}"
-          else 
-            res.render "index",
-              error: "The user #{user.email} is already registered. Forgot your password?"
-          return
-
-        user = new User(
-          email: req.body.email
-          password: req.body.password
-        )      
-
-        # save in Mongo
-        user.save (err) ->
-          if err
-            console.log err
-          else
+      # save in Mongo
+      
+      email = req.body.email
+      password = req.body.password
+      User.findOne email: email, (err, data) ->
+        unless data 
+          user.save (err) ->
             #sending activation email
-            emailActivator = new EmailActivator.EmailActivator  
+
             if(!DEBUG)
+              emailActivator = new EmailActivator.EmailActivator  
               emailActivator.send user, (err) ->
                 console.error "error while sending activation link : #{err}" if err
                 console.log "activation email send succesfully"
               res.render "index",
                 info: "Please check your emails in order to activate your account #{user.email}"
+            if err
+              console.log err
+              #todo render error message
             else
               res.render "index",
                 info: "Please check your emails in order to activate your account #{user.email}"
                 debug: "Please activate localhost:8080/activate?token=#{user.token}"
+        else 
+          res.render "index",
+            message:  "Email already in use"        
 
-          
 
     app.get "/activate", (req, res) ->
       token = req.query["token"]
-      User.findOne token: token, (err, data) ->
+      User.findOne token: token, (err, user) ->
         return next(err)  if err
-        unless data
-          res.send "Token not found. Where are u come from?"
+        unless user
+          res.render "index",
+            error: "Token not found. Where are u come from?"
         else
-          _email = data.email
-          if data.activated is true
+          if user.activated is true
             res.render "index",
               error: "Your account has already been activated. Just head to the login page."
           else
-            data.activated = true
-            data.save()
+            user.activated = true
+            if(!DEBUG)
+              blockchainWallet = new BlockchainWallet
+              blockchainWallet.init()              
+              user.save()
+            else  
+              user.save()
             res.render "index",
-              info: "Please sign in " + data.email
+              info: "Please sign in " + user.email
 
