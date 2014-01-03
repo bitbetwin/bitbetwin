@@ -15,7 +15,7 @@ class exports.Game
 
 		@simpleDurationCalculator = new SimpleDurationCalculator
 
-	check: (player, guess) ->
+	guess: (player, guess) ->
 		@io.log.info player.user.email + " guessed " + guess
 		player.game.guess.push guess
 		that = @
@@ -24,6 +24,7 @@ class exports.Game
 			player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
 			if (complete)
 				that.io.log.info player.user.email + " guessed the whole word correctly!"
+		return ""
 
 	join: (player) ->
 		@io.log.info player.user.email + " joined " + @name
@@ -31,14 +32,16 @@ class exports.Game
 		player.game = {}
 		player.game.name = @name
 		@broadcast player
+		return ""
 
 	leave: (player) ->
 		@io.log.info player.user.email + " left " + @name
 		player.leave @name
+		return DataAccess.retrieveGames()
 
 	broadcast: (player) ->
 		player.game.guess = []
-		@check player, []
+		@guess player, ""
 
 	start: () ->
 		@io.log.info "starting " + @name
@@ -78,4 +81,4 @@ class exports.Game
 
 	report: (player) ->
 		@io.log.info "sending report to " + player.user.email
-		player.emit 'report', {'time': 10 + @countdown - 1 }
+		return {'time': 10 + @countdown - 1 }

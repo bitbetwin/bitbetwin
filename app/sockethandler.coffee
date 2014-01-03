@@ -1,18 +1,11 @@
 connect = require 'connect'
 cook = require 'cookie'
 socketio = require 'socket.io'
+DataAccess = require './dataaccess'
 
 class exports.SocketHandler
 
 	init: (io, sessionStore, DEBUG, SESSION_SECRET) ->
-    #TODO: handle game instances generic
-    Game = require('./hangman/game').Game
-    game1 = new Game io, 'game1'
-    game1.start()
-    game2 = new Game io, 'game2'
-    game2.start()
-
-    io.log.info "initialised games"
 
     io.authorization (data, accept) ->
       if DEBUG 
@@ -45,7 +38,7 @@ class exports.SocketHandler
         accept null, true
 
     User = require('./models/user')
-    
+
     io.on "connection", (socket) ->
       hs = socket.handshake
       @.log.info "debug " + DEBUG
@@ -60,33 +53,30 @@ class exports.SocketHandler
         user.socket = socket
         if DEBUG
           @.log.debug "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
-        data = { username: user.email, games: [ {name: game1.name }, {name: game2.name}] }
+        data = DataAccess.retrieveGames()
         socket.emit "loggedin", data
 
-      #TODO: add generic handling of socket events
-      #TODO: handle game instance generic
-      socket.on 'guess', (data) ->
-        if (@.game.name == 'game1')
-          game1.check @, data
-        if (@.game.name == 'game2')
-          game2.check @, data
+      x = socket.$emit
 
-      socket.on 'join', (data) ->
-        if (data == 'game1')
-          game1.join @
-        if (data == 'game2')
-          game2.join @
+      socket.$emit = () ->
+        event = arguments[0]
+        feed  = arguments[1]
+        callback = arguments[2]
+        @.log.debug event + ":" + feed
 
-      socket.on 'leave', () ->
-        if (@.game.name == 'game1')
-          game1.leave @
-        if (@.game.name == 'game2')
-          game2.leave @
-        data = { username: @.user.email, games: [ {name: game1.name }, {name: game2.name}] }
-        socket.emit "loggedin", data
+        gameevent = false
 
-      socket.on 'report', (data) ->
-        if (@.game.name == 'game1')
-          game1.report @
-        if (@.game.name == 'game2')
-          game2.report @
+        if event == 'join' && DataAccess.commands[feed]? && ( event in DataAccess.commands[feed]['functions'] )
+          result = DataAccess.commands[feed]['instance'][event] @, feed
+          gameevent = true
+        else
+          if DataAccess.commands[@.game?.name]? && ( event in DataAccess.commands[@.game?.name]['functions'] )
+            result = DataAccess.commands[@.game?.name]['instance'][event] @, feed
+            gameevent = true
+
+        if gameevent
+          @.log.warn "game event"
+          callback result
+        else
+          @.log.warn "no game event"
+          x.apply @, Array.prototype.slice.call arguments

@@ -37,12 +37,10 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
       countdown = $timeout($scope.onTimeout,1000);
   	});
 
-    $socket.on('loggedin', function(variables) {
+    $socket.on('loggedin', function(data) {
         loggedIn = true;
         complete = false;
-        $log.info(loggedIn);
-        $scope.username = variables.username;
-        $scope.games = variables.games;
+        $scope.games = data.games;
     });
 
     $socket.on('stop', function() {
@@ -57,10 +55,12 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
   	};
 
     $scope.leave = function() {
-      started = false;
-      $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
-      $scope.time = '';
-      $socket.emit('leave');
+      $socket.emit('leave', '', function(data) {
+        $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
+        $scope.time = '';
+        started = false;
+        $scope.games = data.games;
+      });
     };
 
     $scope.join = function(game) {
@@ -85,24 +85,23 @@ bangmanControllers.controller('ReportCtrl', ['$scope', '$socket', '$log', '$loca
     });
 
     var countdown;
-    $socket.on('report', function(data) {
-      $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
-      $scope.time = data.time;
-      $scope.onTimeout = function() {
-        $scope.time--;
-        if ($scope.time <= 0) {
-          $log.info($scope.time);
-          $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
-        } else {
-          countdown = $timeout($scope.onTimeout,1000);
-        }
-      }
-      countdown = $timeout($scope.onTimeout,1000);
-    });
 
     $scope.$on('$routeChangeSuccess', function(next, current) { 
       $log.info('init report!');
-      $socket.emit('report');
+      $socket.emit('report', '', function(data) {
+      $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
+      $scope.time = data.time;
+      $scope.onTimeout = function() {
+          $scope.time--;
+          if ($scope.time <= 0) {
+            $log.info($scope.time);
+            $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
+          } else {
+            countdown = $timeout($scope.onTimeout,1000);
+          }
+        }
+        countdown = $timeout($scope.onTimeout,1000);
+      });
     });
 
     $scope.loggedIn = function() {

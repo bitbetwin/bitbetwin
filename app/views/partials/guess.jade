@@ -1,7 +1,8 @@
 .row(ng-if="loggedIn()")
 	.col-md-1
 	.col-md-10
-		h1(id="greeting") Bangman :) Hey: {{ username }}
+		if (user)
+			h1(id="greeting") Bangman :) Hey: #{user.email}
 		p(id="countdown") {{ time }}
 		.jumbotron(ng-if="started()")
 			.well.well-lg
