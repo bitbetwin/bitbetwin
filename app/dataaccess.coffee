@@ -26,6 +26,9 @@ class DataAccess
 	@isInTestingMode: () ->
 		return @env == 'testing'
 
+	@isInDevMode: () ->
+		return @env == 'testing' || @env == 'development'
+
 	@startup: () ->
 		console.log "connecting to " + @loadConfig().db_address
 		mongoose.connect @loadConfig().db_address, (error) ->
