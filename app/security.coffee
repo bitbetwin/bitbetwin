@@ -50,28 +50,40 @@ class exports.Security
           error: "You have entered an invalid email address"
         return
 
-      user = new User(
-        email: req.body.email
-        password: req.body.password
-      )      
+      condition = 
+          email: req.body.email
+      User.findOne condition, (err, user) ->
+        if user?
+          if !user.activated
+            res.render "index",
+              info: "Please check your emails in order to activate your account #{user.email}"
+          else 
+            res.render "index",
+              error: "The user #{user.email} is already registered. Forgot your password?"
+          return
 
-      # save in Mongo
-      user.save (err) ->
-        if err
-          console.log err
-        else
-          #sending activation email
-          emailActivator = new EmailActivator.EmailActivator  
-          if(!DEBUG)
-            emailActivator.send user, (err) ->
-              console.error "error while sending activation link : #{err}" if err
-              console.log "activation email send succesfully"
-            res.render "index",
-              info: "Please check your emails in order to activate your account #{user.email}"
+        user = new User(
+          email: req.body.email
+          password: req.body.password
+        )      
+
+        # save in Mongo
+        user.save (err) ->
+          if err
+            console.log err
           else
-            res.render "index",
-              info: "Please check your emails in order to activate your account #{user.email}"
-              debug: "Please activate localhost:8080/activate?token=#{user.token}"
+            #sending activation email
+            emailActivator = new EmailActivator.EmailActivator  
+            if(!DEBUG)
+              emailActivator.send user, (err) ->
+                console.error "error while sending activation link : #{err}" if err
+                console.log "activation email send succesfully"
+              res.render "index",
+                info: "Please check your emails in order to activate your account #{user.email}"
+            else
+              res.render "index",
+                info: "Please check your emails in order to activate your account #{user.email}"
+                debug: "Please activate localhost:8080/activate?token=#{user.token}"
 
           
 
@@ -90,5 +102,5 @@ class exports.Security
             data.activated = true
             data.save()
             res.render "index",
-              error: "Please sign in " + data.email
+              info: "Please sign in " + data.email
 

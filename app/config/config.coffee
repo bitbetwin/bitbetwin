@@ -6,7 +6,7 @@ module.exports =
     debug: true
 
   testing:
-    db_address: "mongodb://localhost/bangmandb"
+    db_address: "mongodb://localhost/bangmandbTest"
     app:
       name: "Bangman -- Test"
     debug: true
