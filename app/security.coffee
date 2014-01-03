@@ -45,36 +45,28 @@ class exports.Security
     app.post "/register", (req, res) ->  
       # attach POST to user schema
 
-      if !validator.validate(req.body.email)
+      
+      email = req.body.email
+      password = req.body.password
+
+      user = new User(
+        email: email
+        password: password
+      )   
+
+      if !validator.validate(email)
         res.render "index",
           error: "You have entered an invalid email address"
-        return
+        return    
 
-      condition = 
-          email: req.body.email
-      User.findOne condition, (err, user) ->
-        if user?
-          if !user.activated
-            res.render "index",
-              info: "Please check your emails in order to activate your account #{user.email}"
-          else 
-            res.render "index",
-              error: "The user #{user.email} is already registered. Forgot your password?"
-          return
-
-        user = new User(
-          email: req.body.email
-          password: req.body.password
-        )      
-
-        # save in Mongo
-        user.save (err) ->
-          if err
-            console.log err
-          else
+      # save in Mongo
+      
+      User.findOne email: email, (err, data) ->
+        unless data 
+          user.save (err) ->
             #sending activation email
-            emailActivator = new EmailActivator.EmailActivator  
             if(!DEBUG)
+              emailActivator = new EmailActivator.EmailActivator  
               emailActivator.send user, (err) ->
                 console.error "error while sending activation link : #{err}" if err
                 console.log "activation email send succesfully"
