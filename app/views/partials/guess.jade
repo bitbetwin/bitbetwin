@@ -4,7 +4,7 @@
 		h1(id="greeting") Bangman :) Hey: {{ username }}
 		p(id="countdown") {{ duration}} {{ time }}
 		.jumbotron(ng-if="started()")
-			bm-timer(time='time', duration='100')
+			bm-timer(time='time', duration='duration')
 			.well.well-lg
 				span(id='match') Guessed Word: {{ word }}
 			form(role='form', ng-submit="guess()")
