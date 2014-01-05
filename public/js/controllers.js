@@ -94,7 +94,6 @@ bangmanControllers.controller('ReportCtrl', ['$scope', '$socket', '$log', '$loca
       $scope.onTimeout = function() {
           $scope.time--;
           if ($scope.time <= 0) {
-            $log.info($scope.time);
             $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
           } else {
             countdown = $timeout($scope.onTimeout,1000);
