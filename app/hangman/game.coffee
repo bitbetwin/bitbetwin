@@ -15,6 +15,7 @@ class exports.Game
 			@phraseGenerator = new SimplePhraseGenerator
 
 		@simpleDurationCalculator = new SimpleDurationCalculator
+		@reporttime = 10
 
 	guess: (player, guess) ->
 		@io.log.info player.user.email + " guessed " + guess
@@ -51,6 +52,7 @@ class exports.Game
 	start: () ->
 		@io.log.info "starting " + @name
 		@started = true
+		@reporttime = 10
 
 		@io.log.info "generating phrase"
 		phrase = @phraseGenerator.generate()
@@ -75,17 +77,22 @@ class exports.Game
 			game.stop()
 			game.started = false
 			clearInterval interval
+			interval = setInterval (game) ->
+				game.reporttime = game.reporttime - 1
+			, 1000, game
 			setTimeout (game) ->
+				clearInterval interval
 				game.start() 
-			, 10 * 1000, game
+			, game.reporttime * 1000, game
 		, @countdown * 1000, @
 
 	stop: () ->
 		@io.log.info "stopping " + @name
+		@countdown = 0
 		for socket in @io.clients @name
 			socket.game.guess.length = 0
 			socket.emit 'stop'
 
 	report: (player) ->
-		@io.log.info "sending report to " + player.user.email
-		return {'time': 10 + @countdown - 1 }
+		@io.log.info "sending report to " + player.user.email + "; time: " + (@countdown + @reporttime)
+		return {'time': @countdown + @reporttime }
