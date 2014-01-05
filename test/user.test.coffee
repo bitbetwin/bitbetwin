@@ -52,11 +52,11 @@ describe "User", ->
     , (user, arg1, callback) ->
       user.comparePassword "123Password", (err, isMatch) ->
         throw err  if err
-        isMatch.should.be.fase
+        isMatch.should.be.false
         callback null, arg1, isMatch
     ], (err, result1, result2) ->      
       result1.should.be.true
-      result2.should.be.fase
+      result2.should.be.false
       done()  
 
   it "should validate a email address" , (done) ->
