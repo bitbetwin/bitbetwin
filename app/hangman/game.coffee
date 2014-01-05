@@ -4,6 +4,7 @@ class exports.Game
 
 	constructor: (@io, @name) ->
 		@io.log.info "initialising phraseGenerator"
+		@started = false
 		SimpleDurationCalculator = require('./simpledurationcalculator').SimpleDurationCalculator
 		
 		if DataAccess.isInTestingMode()
@@ -31,7 +32,11 @@ class exports.Game
 		player.join @name
 		player.game = {}
 		player.game.name = @name
-		@broadcast player
+		if @started
+			@broadcast player
+		else
+			player.game.guess = []
+			player.emit "stop"
 		return ""
 
 	leave: (player) ->
@@ -45,7 +50,8 @@ class exports.Game
 
 	start: () ->
 		@io.log.info "starting " + @name
-		
+		@started = true
+
 		@io.log.info "generating phrase"
 		phrase = @phraseGenerator.generate()
 		
@@ -67,6 +73,7 @@ class exports.Game
 
 		setTimeout (game) ->
 			game.stop()
+			game.started = false
 			clearInterval interval
 			setTimeout (game) ->
 				game.start() 
