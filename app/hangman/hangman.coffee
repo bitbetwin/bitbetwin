@@ -1,7 +1,7 @@
 class exports.Hangman
 
 	constructor: (@word) ->
-
+		@word=@word.toLowerCase()
 	# replaces each occurrence of a guess in the seeked
 	# word. in case a match has been found the guess is
 	# consumed.
@@ -24,12 +24,12 @@ class exports.Hangman
 			else
 				guessedword += '_'
 				
-		success guessedword
+		success	 guessedword
 
 	match: (letter, indicies) ->
 		index = -1
 		for i in [0...@word.length]
-			if letter != @word[i]
+			if letter.toLowerCase() != @word[i].toLowerCase()
 				continue
 			if (indicies.filter (x) -> x == i).length > 0
 				# the letter has already been added
