@@ -20,8 +20,9 @@ class exports.Game
   guess: (player, guess) ->
     @io.log.info player.user.email + " guessed " + guess
     player.game.guess.push guess
+
     that = @
-    @hangman.check player.game.guess, (match) ->
+    @hangman.check player.game.guess.join(""), (match) ->
       complete = (match == that.hangman.word)
       player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
       if (complete)
