@@ -75,6 +75,10 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
     $scope.started = function() {
       return started;
     };
+
+    $scope.handleKey = function(key) {
+        $log.info("got: " + key);
+    };
 }]);
 
 bangmanControllers.controller('ReportCtrl', ['$scope', '$socket', '$log', '$location', '$timeout',

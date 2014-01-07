@@ -10,7 +10,7 @@
 			form(role='form', ng-submit="guess()")
 				.form-group
 					label(for='letter') Submit your guess
-					input.form-control#letter(ng-model="letter", type="text", placeholder="Enter a letter!")
+					input.form-control#letter(ng-model="letter", type="text", placeholder="Enter a letter!", key-listener="handleKey")
 				div(ng-if="!complete()")
 					input.btn.btn-primary(id="guess", type="submit", value="Guess!")
 					input.btn.btn-primary(ng-click="leave()", id="leave", type="button", value="Leave")
