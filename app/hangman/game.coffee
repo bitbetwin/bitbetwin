@@ -69,8 +69,12 @@ class exports.Game
       socket.emit 'start'
       @broadcast socket
 
+    starttime = new Date().getTime()
     interval = setInterval (game) ->
-      game.countdown = game.countdown - 1
+      intervaltime = new Date().getTime()
+      time = intervaltime - starttime
+      game.countdown = Math.round(game.countdown - ( time / 1000 ))
+      starttime = intervaltime
     , 1000, @
 
     setTimeout (game) ->
