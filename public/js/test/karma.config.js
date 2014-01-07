@@ -14,7 +14,8 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      '../lib/*.js',
+      '../../../bower_components/angular/angular.min.js',
+      '../../../bower_components/angular-route/angular-route.min.js',
       'lib/*.js',
       'unit/*.js',
       '../*.js'
