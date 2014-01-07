@@ -1,16 +1,17 @@
 html(ng-app='bangman')
-block head
-    title Bangman
-    link(href='/components/bootstrap/dist/css/bootstrap.min.css', rel='stylesheet')
-    script(src='/components/jquery/jquery.min.js')
-    script(src='/components/bootstrap/dist/js/bootstrap.min.js')
-    script(src='/socket.io/socket.io.js')
-    script(src='/components/angular/angular.min.js')
-    script(src='/components/angular-route/angular-route.min.js')
-    script(src='/js/app.js')
-    script(src='/js/services.js')
-    script(src='/js/controllers.js')
+    block head
+        title Bangman
+        link(href='/components/bootstrap/dist/css/bootstrap.min.css', rel='stylesheet')
+        script(src='/components/jquery/jquery.min.js')
+        script(src='/components/bootstrap/dist/js/bootstrap.min.js')
+        script(src='/socket.io/socket.io.js')
+        script(src='/components/angular/angular.min.js')
+        script(src='/components/angular-route/angular-route.min.js')
+        script(src='/js/app.js')
+        script(src='/js/services.js')
+        script(src='/js/controllers.js')
+
     block body
-        include userpanel/main      
+        include userpanel/main
 
         div(ng-view='ng-view')
