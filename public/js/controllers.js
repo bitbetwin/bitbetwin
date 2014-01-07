@@ -77,7 +77,22 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
     };
 
     $scope.handleKey = function(key) {
-        $log.info("got: " + key);
+        if (key.keyCode == '13') {
+          $log.info('got enter!');
+          if (typeof(this.letter) != 'undefined' && this.letter.length > 0) {
+            $log.info('guessing ' + this.letter);
+            $socket.emit('guess', this.letter);
+            this.letter = '';
+          }
+        } else {
+          var sign = String.fromCharCode(key.keyCode);
+          if (typeof(this.letter) != 'undefined') {
+            this.letter = this.letter + sign;
+          } else {
+            this.letter = sign;
+          }
+        }
+        key.preventDefault();
     };
 }]);
 
