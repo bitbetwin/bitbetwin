@@ -27,7 +27,12 @@ describe('HangmanCtrl', function() {
     element(by.model('letter')).sendKeys('T');
     element(by.id('guess')).click();
     matchtext = element(by.id('match')).getText();
-    expect(matchtext).toEqual('Guessed Word: T_________');
+    expect(matchtext).toEqual('Guessed Word: t_________');
+
+    element(by.model('letter')).sendKeys('pHrAsE');
+    element(by.id('guess')).click();
+    matchtext = element(by.id('match')).getText();
+    expect(matchtext).toEqual('Guessed Word: tes_phra__');
   });
 
   it('should register, activate account and sign in afterwards', function() {
