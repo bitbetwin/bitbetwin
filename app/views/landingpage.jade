@@ -15,14 +15,13 @@ html(ng-app='landingpage')
     script(src='/components/holderjs/holder.js')
   body
     section.header.jumbotron(ng-controller='LandingpageCtrl')
+      p.text-center.logo
+        img(src='/landingpage/img/bitbetwin_logo_white.png')
       .container
         .row
           .col-md-5
             h1 Welcome!
             p.lead Fill out the form below and apply for the beta program.
-            .response(ng-show='response.msg')
-              .alert.alert-success(ng-if='!response.err') {{ response.msg }}
-              .alert.alert-danger(ng-if='response.err') {{ response.msg }}
             form.form-signin(role='form', ng-submit='subscribe()', name='subscribe_form', novalidate)
               .form-group(ng-class='{\'has-error\': subscribe_form.name.$dirty && subscribe_form.name.$invalid}')
                 input.form-control.input-lg(ng-model='name', type='text', name='name', placeholder='Name', required)
@@ -33,25 +32,29 @@ html(ng-app='landingpage')
                 span.help-block(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.email') Please enter a valid email
               button.btn.btn-primary.btn-lg.btn-block(type='submit', ng-disabled="subscribe_form.$invalid") Sign Up!
           .col-md-7
-            img.img-rounded(src='holder.js/100%x300/vine')
+            img.img-rounded(src='holder.js/100%x300/grey')
+        .row(ng-show='response.msg')
+          .col-md-12
+            .alert.alert-success(ng-if='!response.err') {{ response.msg }}
+            .alert.alert-danger(ng-if='response.err') {{ response.msg }}
       p.text-center.bottom 
         a.btn.btn-default.btn-lg(href='#more') More Information?
     section.container.info#more
       .row
         .col-md-4
           p.text-center
-            img.img-circle(src='holder.js/200x200/vine')
-          h2.text-center Heading
+            img.img-circle(src='holder.js/200x200/grey')
+          h2.text-center Bitcoins
           p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
         .col-md-4
           p.text-center
-            img.img-circle(src='holder.js/200x200/vine')
-          h2.text-center Heading
+            img.img-circle(src='holder.js/200x200/grey')
+          h2.text-center Time
           p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
         .col-md-4
           p.text-center
-            img.img-circle(src='holder.js/200x200/vine')
-          h2.text-center Heading
+            img.img-circle(src='holder.js/200x200/grey')
+          h2.text-center Fair
           p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
     section.callout.jumbotron
       .vert-text
@@ -62,10 +65,10 @@ html(ng-app='landingpage')
           h2 Heading
           p.lead Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
         .col-md-5
-          img.img-rounded(src='holder.js/100%x200/vine')
+          img.img-rounded(src='holder.js/100%x200/grey')
       .row
         .col-md-5
-          img.img-rounded(src='holder.js/100%x200/vine')
+          img.img-rounded(src='holder.js/100%x200/grey')
         .col-md-7
           h2 Heading
           p.lead Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
@@ -89,5 +92,6 @@ html(ng-app='landingpage')
           }
         });
       });
+    script(src='/components/retina.js/src/retina.js')
   // Images from href='http://designmodo.com/blurred-backgrounds/ and http://deathtothestockphoto.com
   // Theme based on http://startbootstrap.com/stylish-portfolio

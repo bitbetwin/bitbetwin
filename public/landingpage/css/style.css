@@ -18,6 +18,10 @@ body {
   padding: 50px 0;
 }
 
+.logo {
+  padding-bottom: 40px;
+}
+
 /* HEADER */
 .header {
   background: url(/landingpage/img/header.jpg) no-repeat center center fixed; 
@@ -27,7 +31,7 @@ body {
   background-size: cover;
   color: #ffffff;
   height: 100%;
-  padding: 100px 0 150px 0;
+  padding-top: 10px;
   position: relative;
   width: 100%;
 }
