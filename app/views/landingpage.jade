@@ -12,11 +12,12 @@ html(ng-app='landingpage')
     script(src='/js/app.js')
     script(src='/js/services.js')
     script(src='/js/controllers.js')
+    script(src='/components/holderjs/holder.js')
   body
-    section.header(ng-controller='LandingpageCtrl')
+    section.header.jumbotron(ng-controller='LandingpageCtrl')
       .container
         .row
-          .col-sm-5
+          .col-md-5
             h1 Welcome!
             p.lead Fill out the form below and apply for the beta program.
             .response(ng-show='response.msg')
@@ -31,30 +32,41 @@ html(ng-app='landingpage')
                 span.help-block.has-error(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.required') Please enter your email
                 span.help-block(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.email') Please enter a valid email
               button.btn.btn-primary.btn-lg.btn-block(type='submit', ng-disabled="subscribe_form.$invalid") Sign Up!
-          .col-sm-7
+          .col-md-7
+            img.img-rounded(src='holder.js/400x300/vine')
       p.text-center.bottom 
         a.btn.btn-default.btn-lg(href='#more') More Information?
     section.container.info#more
       .row
-        .col-sm-4
+        .col-md-4
+          p.text-center
+            img.img-circle(src='holder.js/200x200/vine')
           h2.text-center Heading
           p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
-        .col-sm-4
+        .col-md-4
+          p.text-center
+            img.img-circle(src='holder.js/200x200/vine')
           h2.text-center Heading
           p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
-        .col-sm-4
+        .col-md-4
+          p.text-center
+            img.img-circle(src='holder.js/200x200/vine')
           h2.text-center Heading
           p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
-    section.callout
-    section.container
+    section.callout.jumbotron
+      .vert-text
+        h1 Our Vision
+    section.container.description
       .row
-        .col-sm-7
+        .col-md-7
           h2 Heading
           p.lead Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
-        .col-sm-5
+        .col-md-5
+          img.img-rounded(src='holder.js/300x200/vine')
       .row
-        .col-sm-5
-        .col-sm-7
+        .col-md-5
+          img.img-rounded(src='holder.js/300x200/vine')
+        .col-md-7
           h2 Heading
           p.lead Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
     footer.container

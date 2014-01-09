@@ -1,13 +1,17 @@
-/* Full size?
-
 html,
 body {
   height: 100%;
   width: 100%;
-}*/
+}
 
 .container {
-  max-width: 730px;
+  max-width: 730px !important;
+}
+
+.vert-text {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
 }
 
 .info {
@@ -42,8 +46,14 @@ body {
   -o-background-size: cover;
   background-size: cover;
   color: #ffffff;
+  display: table;
   height: 200px;
   width: 100%;
+}
+
+.header img,
+.description img {
+  margin-top: 20px;
 }
 
 /* FOOTER */
