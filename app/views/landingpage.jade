@@ -7,7 +7,6 @@ html(ng-app='landingpage')
     link(href='/landingpage/css/style.css', rel='stylesheet')
     script(src='/components/jquery/jquery.min.js')
     script(src='/components/bootstrap/dist/js/bootstrap.min.js')
-    script(src='/socket.io/socket.io.js')
     script(src='/components/angular/angular.min.js')
     script(src='/components/angular-route/angular-route.min.js')
     script(src='/js/app.js')
@@ -20,13 +19,18 @@ html(ng-app='landingpage')
           .col-sm-5
             h1 Welcome!
             p.lead Fill out the form below and apply for the beta program.
-            .alert.alert-success.alert-dismissable(ng-show='response') {{ response.msg }}
-            form.form-signin(role='form')
-              .form-group
-                input.form-control.input-lg(ng-model='name', type='text', name='name', placeholder='Name')
-              .form-group
-                input.form-control.input-lg(ng-model='email', type='text', name='email', placeholder='Email')
-              button.btn.btn-primary.btn-lg.btn-block(ng-click='signup()', type='submit') Sign Up!
+            .response(ng-show='response.msg')
+              .alert.alert-success(ng-if='!response.err') {{ response.msg }}
+              .alert.alert-danger(ng-if='response.err') {{ response.msg }}
+            form.form-signin(role='form', ng-submit='subscribe()', name='subscribe_form', novalidate)
+              .form-group(ng-class='{\'has-error\': subscribe_form.name.$dirty && subscribe_form.name.$invalid}')
+                input.form-control.input-lg(ng-model='name', type='text', name='name', placeholder='Name', required)
+                span.help-block(ng-show='subscribe_form.name.$dirty && subscribe_form.name.$error.required') Please enter your name
+              .form-group(ng-class='{\'has-error\': subscribe_form.email.$dirty && subscribe_form.email.$invalid}')
+                input.form-control.input-lg(ng-model='email', type='email', name='email', placeholder='Email', required)
+                span.help-block.has-error(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.required') Please enter your email
+                span.help-block(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.email') Please enter a valid email
+              button.btn.btn-primary.btn-lg.btn-block(type='submit', ng-disabled="subscribe_form.$invalid") Sign Up!
           .col-sm-7
       p.text-center.bottom 
         a.btn.btn-default.btn-lg(href='#more') More Information?
@@ -57,6 +61,7 @@ html(ng-app='landingpage')
       p &copy; 2014 bitbetwin.co
     script
       $(function() {
+        // Smooth scrolling
         $('a[href*=#]:not([href=#])').click(function() {
           if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') 
             || location.hostname == this.hostname) {
