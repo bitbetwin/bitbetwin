@@ -4,6 +4,7 @@ html(ng-app='landingpage')
     title Welcome to bitbetwin.co
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(href='/components/bootstrap/dist/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/components/font-awesome/css/font-awesome.min.css', rel='stylesheet')
     link(href='/landingpage/css/style.css', rel='stylesheet')
     script(src='/components/jquery/jquery.min.js')
     script(src='/components/bootstrap/dist/js/bootstrap.min.js')
@@ -43,17 +44,17 @@ html(ng-app='landingpage')
       .row
         .col-md-4
           p.text-center
-            img.img-circle(src='holder.js/200x200/grey')
+            i.fa.fa-btc.fa-5x
           h2.text-center Bitcoins
           p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
         .col-md-4
           p.text-center
-            img.img-circle(src='holder.js/200x200/grey')
+            i.fa.fa-clock-o.fa-5x
           h2.text-center Time
           p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
         .col-md-4
           p.text-center
-            img.img-circle(src='holder.js/200x200/grey')
+            i.fa.fa-check.fa-5x
           h2.text-center Fair
           p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
     section.callout.jumbotron
@@ -73,7 +74,7 @@ html(ng-app='landingpage')
           h2 Heading
           p.lead Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
     footer.container
-      p &copy; 2014 bitbetwin.co
+      p &copy; 2014 bitbetwin.co | Images provided by <a href="http://designmodo.com">http://designmodo.com</a>
     script
       $(function() {
         // Smooth scrolling
@@ -93,5 +94,4 @@ html(ng-app='landingpage')
         });
       });
     script(src='/components/retina.js/src/retina.js')
-  // Images from href='http://designmodo.com/blurred-backgrounds/ and http://deathtothestockphoto.com
   // Theme based on http://startbootstrap.com/stylish-portfolio
