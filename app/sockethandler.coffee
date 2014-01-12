@@ -56,7 +56,7 @@ class exports.SocketHandler
         data = DataAccess.retrieveGames()
         socket.emit "loggedin", data
 
-      x = socket.$emit
+      origemit = socket.$emit
 
       socket.$emit = () ->
         event = arguments[0]
@@ -79,4 +79,4 @@ class exports.SocketHandler
           callback result
         else
           @.log.warn "no game event"
-          x.apply @, Array.prototype.slice.call arguments
+          origemit.apply @, Array.prototype.slice.call arguments
