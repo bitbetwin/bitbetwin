@@ -1,71 +1,97 @@
 !!! 5
 html(ng-app='landingpage')
-head
-    title Overflow by HTML5 UP
-    meta(http-equiv='content-type', content='text/html; charset=utf-8')
-    meta(name='description', content='')
-    meta(name='keywords', content='')
-    link(href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic', rel='stylesheet', type='text/css')
-    //if lte IE 8
-      script(src='/landingpage/css/ie/html5shiv.js')
-    script(src='/landingpage/js/jquery.min.js')
-    script(src='/landingpage/js/jquery.poptrox.min.js')
-    script(src='/landingpage/js/skel.min.js')
-    script(src='/landingpage/js/init.js')
-    noscript
-      link(rel='stylesheet', href='/landingpage/css/skel-noscript.css')
-      link(rel='stylesheet', href='/landingpage/css/style.css')
-    //if lte IE 8
-      link(rel='stylesheet', href='/landingpage/css/ie/v8.css')
-    script(src='http://code.angularjs.org/1.2.1/angular.min.js')
+  head
+    title Welcome to bitbetwin.co
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(href='/components/bootstrap/dist/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/components/font-awesome/css/font-awesome.min.css', rel='stylesheet')
+    link(href='/landingpage/css/style.css', rel='stylesheet')
+    script(src='/components/jquery/jquery.min.js')
+    script(src='/components/bootstrap/dist/js/bootstrap.min.js')
+    script(src='/components/angular/angular.min.js')
+    script(src='/components/angular-route/angular-route.min.js')
     script(src='/js/app.js')
+    script(src='/js/services.js')
     script(src='/js/controllers.js')
+    script(src='/components/holderjs/holder.js')
   body
-    // Header 
-    section#header
-      header
-        h1 Bangman
-        p by Team Awesome
-      footer
-        a.button.style2.scrolly(href='#banner') Read more
-    // Intro 
-    section#banner
-      header
-        h2 This is Bangman
-      p Got some spare time? You like to play hangman?
-      p Soon you can play with others worldwide and win a bitload of Bitcoins!
-      footer
-        a.button.style2.scrolly(href='#signup') Interessted?
-    // Contact 
-    article#signup.container.box.style3(ng-controller='LandingpageCtrl')
-      header
-        h2 Sign up!
-        p Leave your email address if you want to be notified!
-        p(ng-show='response') {{ response.msg }}
-      form
-        .row.half
-          .12u
-            input.text(ng-model='name', type='text', name='name', placeholder='Name')
-        .row.half
-          .12u
-            input.text(ng-model='email', type='text', name='email', placeholder='Email')
+    section.header.jumbotron(ng-controller='LandingpageCtrl')
+      p.text-center.logo
+        img(src='/landingpage/img/bitbetwin_logo_white.png')
+      .container
         .row
-          .12u
-            ul.actions
-              li
-                a.button.form(ng-click='signup()', href='') Submit
-    // Footer 
-    section#footer
-      ul.icons
-        li
-          a.fa.fa-twitter.solo(href='#')
-            span Twitter
-        li
-          a.fa.fa-facebook.solo(href='#')
-            span Facebook
-      .copyright
-        ul.menu
-          li © Untitled. All rights reserved.
-          li
-            | Design:
-            a(href='http://html5up.net/') HTML5 UP
+          .col-md-5
+            h1 Welcome!
+            p.lead Fill out the form below and apply for the beta program.
+            form.form-signin(role='form', ng-submit='subscribe()', name='subscribe_form', novalidate)
+              .form-group(ng-class='{\'has-error\': subscribe_form.name.$dirty && subscribe_form.name.$invalid}')
+                input.form-control.input-lg(ng-model='name', type='text', name='name', placeholder='Name', required)
+                span.help-block(ng-show='subscribe_form.name.$dirty && subscribe_form.name.$error.required') Please enter your name
+              .form-group(ng-class='{\'has-error\': subscribe_form.email.$dirty && subscribe_form.email.$invalid}')
+                input.form-control.input-lg(ng-model='email', type='email', name='email', placeholder='Email', required)
+                span.help-block.has-error(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.required') Please enter your email
+                span.help-block(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.email') Please enter a valid email
+              button.btn.btn-primary.btn-lg.btn-block(type='submit', ng-disabled="subscribe_form.$invalid") Sign Up!
+          .col-md-7
+            img.img-rounded(src='holder.js/100%x300/grey')
+        .row(ng-show='response.msg')
+          .col-md-12
+            .alert.alert-success(ng-if='!response.err') {{ response.msg }}
+            .alert.alert-danger(ng-if='response.err') {{ response.msg }}
+      p.text-center.bottom 
+        a.btn.btn-outline-inverse.btn-lg(href='#more') More Information?
+    section.container.info#more
+      .row
+        .col-md-4
+          p.text-center
+            i.fa.fa-btc.fa-5x
+          h2.text-center Bitcoins
+          p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
+        .col-md-4
+          p.text-center
+            i.fa.fa-clock-o.fa-5x
+          h2.text-center Time
+          p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
+        .col-md-4
+          p.text-center
+            i.fa.fa-check.fa-5x
+          h2.text-center Fair
+          p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
+    section.callout.jumbotron
+      .vert-text
+        h1 Our Vision
+    section.container.description
+      .row
+        .col-md-7
+          h2 Heading
+          p.lead Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
+        .col-md-5
+          img.img-rounded(src='holder.js/100%x200/grey')
+      .row
+        .col-md-5
+          img.img-rounded(src='holder.js/100%x200/grey')
+        .col-md-7
+          h2 Heading
+          p.lead Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
+    footer.container
+      p &copy; 2014 bitbetwin.co | Images provided by <a href="http://designmodo.com">http://designmodo.com</a>
+    script
+      $(function() {
+        // Smooth scrolling
+        $('a[href*=#]:not([href=#])').click(function() {
+          if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') 
+            || location.hostname == this.hostname) {
+
+            var target = $(this.hash);
+            target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+            if (target.length) {
+              $('html,body').animate({
+                scrollTop: target.offset().top
+              }, 1000);
+              return false;
+            }
+          }
+        });
+      });
+    script(src='/components/retina.js/src/retina.js')
+  // Theme based on http://startbootstrap.com/stylish-portfolio
