@@ -7,39 +7,43 @@ html(ng-app='landingpage')
     link(href='/components/font-awesome/css/font-awesome.min.css', rel='stylesheet')
     link(href='/landingpage/css/style.css', rel='stylesheet')
     script(src='/components/jquery/jquery.min.js')
-    script(src='/components/bootstrap/dist/js/bootstrap.min.js')
     script(src='/components/angular/angular.min.js')
     script(src='/components/angular-route/angular-route.min.js')
+    script(src='/components/retina.js/src/retina.js')
     script(src='/js/app.js')
-    script(src='/js/services.js')
     script(src='/js/controllers.js')
     script(src='/components/holderjs/holder.js')
-  body
-    section.header.jumbotron(ng-controller='LandingpageCtrl')
+    
+  body(ng-controller='LandingpageCtrl')
+    section.header.jumbotron
       p.text-center.logo
         img(src='/landingpage/img/bitbetwin_logo_white.png')
       .container
+        .row(ng-show='response.msg')
+          .col-md-12
+            .alert.alert-success(ng-if='!response.err') {{ response.msg }}
+            .alert.alert-danger(ng-if='response.err') {{ response.msg }}
         .row
           .col-md-5
             h1 Welcome!
             p.lead Fill out the form below and apply for the beta program.
             form.form-signin(role='form', ng-submit='subscribe()', name='subscribe_form', novalidate)
               .form-group(ng-class='{\'has-error\': subscribe_form.name.$dirty && subscribe_form.name.$invalid}')
-                input.form-control.input-lg(ng-model='name', type='text', name='name', placeholder='Name', required)
-                span.help-block(ng-show='subscribe_form.name.$dirty && subscribe_form.name.$error.required') Please enter your name
+                input.form-control.input-lg(ng-model='name', type='text', name='name', placeholder='Name', required, bs-tooltip='tooltip', data-placement='right', data-type='right', data-trigger='manual')
+                span.help-block.has-error(ng-show='subscribe_form.name.$dirty && subscribe_form.name.$error.required') Please enter your name
               .form-group(ng-class='{\'has-error\': subscribe_form.email.$dirty && subscribe_form.email.$invalid}')
                 input.form-control.input-lg(ng-model='email', type='email', name='email', placeholder='Email', required)
                 span.help-block.has-error(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.required') Please enter your email
-                span.help-block(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.email') Please enter a valid email
+                span.help-block.has-error(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.email') Please enter a valid email
               button.btn.btn-primary.btn-lg.btn-block(type='submit', ng-disabled="subscribe_form.$invalid") Sign Up!
+
           .col-md-7
             img.img-rounded(src='holder.js/100%x300/grey')
-        .row(ng-show='response.msg')
-          .col-md-12
-            .alert.alert-success(ng-if='!response.err') {{ response.msg }}
-            .alert.alert-danger(ng-if='response.err') {{ response.msg }}
-      p.text-center.bottom 
-        a.btn.btn-outline-inverse.btn-lg(href='#more') More Information?
+        .row
+          .col-md-4
+          .col-md-4
+            a.btn.btn-outline-inverse.btn-lg.center-block.more(href='#more') More Information?
+          .col-md-4
     section.container.info#more
       .row
         .col-md-4
@@ -93,5 +97,4 @@ html(ng-app='landingpage')
           }
         });
       });
-    script(src='/components/retina.js/src/retina.js')
   // Theme based on http://startbootstrap.com/stylish-portfolio

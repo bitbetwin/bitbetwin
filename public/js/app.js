@@ -3,9 +3,9 @@
 /* App Module */
 
 var bangman = angular.module('bangman', [
-	'ngRoute',
-	'bangmanControllers',
-	'bangmanServices'
+  'ngRoute',
+  'bangmanControllers',
+  'bangmanServices'
 ]);
 
 bangman.config(['$routeProvider',
@@ -50,4 +50,6 @@ bangman.directive('keyListener', [
   }
 ]);
 
-var landingpage = angular.module('landingpage', ['landingpageControllers']);
+var landingpage = angular.module('landingpage', [
+  'landingpageControllers'
+]);
