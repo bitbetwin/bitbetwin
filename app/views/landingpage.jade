@@ -16,9 +16,11 @@ html(ng-app='landingpage')
     
   body(ng-controller='LandingpageCtrl')
     section.header.jumbotron
-      p.text-center.logo
-        img(src='/landingpage/img/bitbetwin_logo_white.png')
       .container
+        .row
+          .col-md-12
+            p.text-center.logo
+              img(src='/landingpage/img/bitbetwin_logo_white.png')
         .row(ng-show='response.msg')
           .col-md-12
             .alert.alert-success(ng-if='!response.err') {{ response.msg }}
@@ -96,5 +98,19 @@ html(ng-app='landingpage')
             }
           }
         });
+
+        // Header effect
+        //- var $window = $(window);
+        //- var $header = $('.header');
+        //- var $headerContainer = $('.header .container');
+        //- $window.scroll(function() {
+        //-   var headerHeight =$header.height();
+        //-   var offsetTop = $window.scrollTop();
+        //-   if (offsetTop > headerHeight * 0.2) {
+        //-     $headerContainer.css('opacity', 1.0 - (offsetTop / headerHeight) );
+        //-   } else {
+        //-     $headerContainer.css('opacity', 1.0);
+        //-   }
+        //- });
       });
   // Theme based on http://startbootstrap.com/stylish-portfolio
