@@ -26,10 +26,21 @@ html(ng-app='landingpage')
             .alert.alert-success(ng-if='!response.err') {{ response.msg }}
             .alert.alert-danger(ng-if='response.err') {{ response.msg }}
         .row
+          .col-md-7.teaser
+            h1 Real-time Bitcoin Games 
+            p Bitbetwin is a platform allowing you to play <strong>real-time games</strong> against other players and <strong>win Bitcoins</strong> in each round!
+            p
+              small
+                |At the moment we are developing our first game and want to invite you to our beta program, to get early feedback from our future participants.
+                |Fill out the form to apply for the beta program!
+            //- img.img-rounded(src='holder.js/100%x300/grey')
+            //- ul.lead
+            //-   li Lorem ipsum
+            //-   li Lorem ipsum
+            //-   li Lorem ipsum
           .col-md-5
-            h1 Welcome!
-            p.lead Fill out the form below and apply for the beta program.
-            form.form-signin(role='form', ng-submit='subscribe()', name='subscribe_form', novalidate)
+            form.form-subscribe.well(role='form', ng-submit='subscribe()', name='subscribe_form', novalidate)
+              p Apply for the beta program!
               .form-group(ng-class='{\'has-error\': subscribe_form.name.$dirty && subscribe_form.name.$invalid}')
                 input.form-control.input-lg(ng-model='name', type='text', name='name', placeholder='Name', required, bs-tooltip='tooltip', data-placement='right', data-type='right', data-trigger='manual')
                 span.help-block.has-error(ng-show='subscribe_form.name.$dirty && subscribe_form.name.$error.required') Please enter your name
@@ -38,9 +49,6 @@ html(ng-app='landingpage')
                 span.help-block.has-error(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.required') Please enter your email
                 span.help-block.has-error(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.email') Please enter a valid email
               button.btn.btn-primary.btn-lg.btn-block(type='submit', ng-disabled="subscribe_form.$invalid") Sign Up!
-
-          .col-md-7
-            img.img-rounded(src='holder.js/100%x300/grey')
         .row
           .col-md-4
           .col-md-4
