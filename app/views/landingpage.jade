@@ -34,7 +34,7 @@ html(ng-app='landingpage')
                 |Apply for the beta program and shape the first game with us!
           .col-md-5
             form.form-subscribe.well(role='form', ng-submit='subscribe()', name='subscribe_form', novalidate)
-              p Apply for the beta program!
+              h2 Apply for the beta program!
               .form-group(ng-class='{\'has-error\': subscribe_form.name.$dirty && subscribe_form.name.$invalid}')
                 input.form-control.input-lg(ng-model='name', type='text', name='name', placeholder='Name', required, bs-tooltip='tooltip', data-placement='right', data-type='right', data-trigger='manual')
                 span.help-block.has-error(ng-show='subscribe_form.name.$dirty && subscribe_form.name.$error.required') Please enter your name
@@ -42,6 +42,10 @@ html(ng-app='landingpage')
                 input.form-control.input-lg(ng-model='email', type='email', name='email', placeholder='Email', required)
                 span.help-block.has-error(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.required') Please enter your email
                 span.help-block.has-error(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.email') Please enter a valid email
+              .checkbox.input-lg
+                label
+                  input(ng-model='newsletter', type='checkbox', name='newsletter')
+                  |Keep me up to date
               button.btn.btn-primary.btn-lg.btn-block(type='submit', ng-disabled="subscribe_form.$invalid") Sign Up!
         .row
           .col-md-4

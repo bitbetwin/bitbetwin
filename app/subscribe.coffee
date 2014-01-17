@@ -15,6 +15,7 @@ class exports.Subscribe
 
       email = req.body.email
       name = req.body.name
+      newsletter = req.body.newsletter
 
       ret =
         err: false
@@ -35,6 +36,7 @@ class exports.Subscribe
           s = new Subscriber
             email: email
             name: name
+            has_newsletter: newsletter
           
           s.save (err) ->
             if err
