@@ -7,75 +7,111 @@ html(ng-app='landingpage')
     link(href='/components/font-awesome/css/font-awesome.min.css', rel='stylesheet')
     link(href='/landingpage/css/style.css', rel='stylesheet')
     script(src='/components/jquery/jquery.min.js')
-    script(src='/components/bootstrap/dist/js/bootstrap.min.js')
     script(src='/components/angular/angular.min.js')
     script(src='/components/angular-route/angular-route.min.js')
+    script(src='/components/retina.js/src/retina.js')
     script(src='/js/app.js')
-    script(src='/js/services.js')
     script(src='/js/controllers.js')
-    script(src='/components/holderjs/holder.js')
-  body
-    section.header.jumbotron(ng-controller='LandingpageCtrl')
-      p.text-center.logo
-        img(src='/landingpage/img/bitbetwin_logo_white.png')
+    
+  body(ng-controller='LandingpageCtrl')
+    section.header.jumbotron
       .container
         .row
-          .col-md-5
-            h1 Welcome!
-            p.lead Fill out the form below and apply for the beta program.
-            form.form-signin(role='form', ng-submit='subscribe()', name='subscribe_form', novalidate)
-              .form-group(ng-class='{\'has-error\': subscribe_form.name.$dirty && subscribe_form.name.$invalid}')
-                input.form-control.input-lg(ng-model='name', type='text', name='name', placeholder='Name', required)
-                span.help-block(ng-show='subscribe_form.name.$dirty && subscribe_form.name.$error.required') Please enter your name
-              .form-group(ng-class='{\'has-error\': subscribe_form.email.$dirty && subscribe_form.email.$invalid}')
-                input.form-control.input-lg(ng-model='email', type='email', name='email', placeholder='Email', required)
-                span.help-block.has-error(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.required') Please enter your email
-                span.help-block(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.email') Please enter a valid email
-              button.btn.btn-primary.btn-lg.btn-block(type='submit', ng-disabled="subscribe_form.$invalid") Sign Up!
-          .col-md-7
-            img.img-rounded(src='holder.js/100%x300/grey')
+          .col-md-12
+            p.text-center.logo
+              img(src='/landingpage/img/bitbetwin_logo_white.png', alt='Bitbetwin.co logo')
         .row(ng-show='response.msg')
           .col-md-12
             .alert.alert-success(ng-if='!response.err') {{ response.msg }}
             .alert.alert-danger(ng-if='response.err') {{ response.msg }}
-      p.text-center.bottom 
-        a.btn.btn-outline-inverse.btn-lg(href='#more') More Information?
+        .row
+          .col-md-7.teaser
+            h1 Real-time Bitcoin Games 
+            p Bitbetwin is a platform allowing you to play <strong>real-time games</strong> against other players and <strong>win Bitcoins</strong> in each round!
+            p
+              small
+                |At the moment we are developing our first game and want to invite you to our beta program, to get early feedback from our future participants.
+                |Apply for the beta program and shape the first game with us!
+          .col-md-5
+            form.form-subscribe.well(role='form', ng-submit='subscribe()', name='subscribe_form', novalidate)
+              p Apply for the beta program!
+              .form-group(ng-class='{\'has-error\': subscribe_form.name.$dirty && subscribe_form.name.$invalid}')
+                input.form-control.input-lg(ng-model='name', type='text', name='name', placeholder='Name', required, bs-tooltip='tooltip', data-placement='right', data-type='right', data-trigger='manual')
+                span.help-block.has-error(ng-show='subscribe_form.name.$dirty && subscribe_form.name.$error.required') Please enter your name
+              .form-group(ng-class='{\'has-error\': subscribe_form.email.$dirty && subscribe_form.email.$invalid}')
+                input.form-control.input-lg(ng-model='email', type='email', name='email', placeholder='Email', required)
+                span.help-block.has-error(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.required') Please enter your email
+                span.help-block.has-error(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.email') Please enter a valid email
+              button.btn.btn-primary.btn-lg.btn-block(type='submit', ng-disabled="subscribe_form.$invalid") Sign Up!
+        .row
+          .col-md-4
+          .col-md-4
+            a.btn.btn-outline-inverse.btn-lg.center-block.more(href='#more') More Information?
+          .col-md-4
     section.container.info#more
       .row
         .col-md-4
           p.text-center
-            i.fa.fa-btc.fa-5x
+            span.fa-stack.fa-5x
+              i.fa.fa-circle.fa-stack-2x
+              i.fa.fa-btc.fa-inverse.fa-stack-1x
           h2.text-center Bitcoins
-          p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
+          p.text-center.lead
+            |Play against the community and bet with Bitcoins.
+            |The pot will be payed among all winners!
+
         .col-md-4
           p.text-center
-            i.fa.fa-clock-o.fa-5x
+            span.fa-stack.fa-5x
+              i.fa.fa-circle.fa-stack-2x
+              i.fa.fa-clock-o.fa-inverse.fa-stack-1x
           h2.text-center Time
-          p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
+          p.text-center.lead
+            |The games a round based and have a limited time span.
+            |Be prepared to bet on time!
         .col-md-4
           p.text-center
-            i.fa.fa-check.fa-5x
+            span.fa-stack.fa-5x
+              i.fa.fa-circle.fa-stack-2x
+              i.fa.fa-check.fa-inverse.fa-stack-1x
           h2.text-center Fair
-          p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
+          p.text-center.lead
+            |We'll provide statistical data about the game.
+            |You'll always aware what's going on!
     section.callout.jumbotron
       .vert-text
         h1 Our Vision
     section.container.description
       .row
         .col-md-7
-          h2 Heading
-          p.lead Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
+          h2 Hangman
+          p.lead
+            |Our first game is an adaption of the game <em>hangman</em>.
+            |You'll need to guess the right word within the time limit to win.
+            |You can buy a letter with Bitcoins and this money will go into the pot.
+            |After the round, the pot will be shared among the winners and you'll directly receive your share! 
         .col-md-5
-          img.img-rounded(src='holder.js/100%x200/grey')
+          img.img-rounded(src='/landingpage/img/teaser_hangman.png', alt='Teaser hangman', style='width: 100%')
       .row
         .col-md-5
-          img.img-rounded(src='holder.js/100%x200/grey')
+          img.img-rounded(src='/landingpage/img/teaser_feedback.png', alt='Teaser feedback', style='width: 100%')
         .col-md-7
-          h2 Heading
-          p.lead Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
-    footer.container
+          h2 Feedback
+          p.lead
+            |We are highly encouraged to provide you with meaningful real time feedback on the game allowing you to develop stragies.
+            |You'll always be aware how much money is in the pot, how many players are participating etc., and we are still figuring out how to optimize the game play.
+      .row
+        .col-md-12
+           .well.text-center.call-for-action
+              p.lead
+                strong So take the chance and participate in our beta phase!
+              p For further information feel free to contact us at 
+                script
+                  document.write('<'+'a'+' '+'h'+'r'+'e'+'f'+'='+"'"+'m'+'a'+'i'+'l'+'&'+'#'+'1'+'1'+'6'+';'+'o'+'&'+'#'+'5'+'8'+';'+'b'+'&'+'#'+'1'+'0'+'1'+';'+'%'+'&'+'#'+'5'+'5'+';'+'4'+'a'+'&'+'#'+'6'+'4'+';'+'b'+'i'+'%'+'7'+'4'+'b'+'&'+'#'+'3'+'7'+';'+'6'+'5'+'&'+'#'+'1'+'1'+'6'+';'+'&'+'#'+'1'+'1'+'9'+';'+'&'+'#'+'1'+'0'+'5'+';'+'%'+'6'+'&'+'#'+'6'+'9'+';'+'&'+'#'+'4'+'6'+';'+'c'+'o'+"'"+'>'+'&'+'#'+'9'+'8'+';'+'e'+'t'+'a'+'&'+'#'+'6'+'4'+';'+'b'+'i'+'&'+'#'+'1'+'1'+'6'+';'+'b'+'e'+'t'+'w'+'i'+'&'+'#'+'1'+'1'+'0'+';'+'&'+'#'+'4'+'6'+';'+'&'+'#'+'9'+'9'+';'+'o'+'<'+'/'+'a'+'>'); 
+                |.    
+  footer.container
       p &copy; 2014 bitbetwin.co | Images provided by <a href="http://designmodo.com">http://designmodo.com</a>
-    script
+    script.
       $(function() {
         // Smooth scrolling
         $('a[href*=#]:not([href=#])').click(function() {
@@ -93,5 +129,12 @@ html(ng-app='landingpage')
           }
         });
       });
-    script(src='/components/retina.js/src/retina.js')
-  // Theme based on http://startbootstrap.com/stylish-portfolio
+    if google_analytics_id
+      script.
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', '#{google_analytics_id}', 'bitbetwin.co');
+        ga('send', 'pageview');

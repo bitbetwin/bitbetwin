@@ -14,6 +14,7 @@ module.exports =
   production:
     db: process.env.MONGOLAB_URI or process.env.MONGOHQ_URL
     db_address: process.env.MONGOLAB_URI or process.env.MONGOHQ_URL
+    google_alaytics_id: "UA-47266449-1"
     app:
       name: "Just Banging arround"
     debug: false
