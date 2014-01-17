@@ -30,7 +30,7 @@
 
 /* HEADER */
 .header {
-  background: url(/landingpage/img/bg_blurred_05.jpg) no-repeat center center fixed; 
+  background: url(/landingpage/img/bg_blurred_06.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -59,7 +59,7 @@
 
 /* CALLOUT */
 .callout {
-  background: url(/landingpage/img/bg_blurred_05.jpg) no-repeat center center fixed; 
+  background: url(/landingpage/img/bg_blurred_06.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -94,6 +94,6 @@ footer.container {
 /* Responsive */
 @media (max-width: 768px) {
   .header {
-	   background: url(/landingpage/img/bg_blurred_05.jpg) no-repeat center center scroll; 
+	   background: url(/landingpage/img/bg_blurred_06.jpg) no-repeat center center scroll; 
   }
 }
