@@ -53,6 +53,10 @@
   margin-top: 2em;
 }
 
+.call-for-action {
+  margin-top: 20px;
+}
+
 /* CALLOUT */
 .callout {
   background: url(/landingpage/img/bg_blurred_05.jpg) no-repeat center center fixed; 

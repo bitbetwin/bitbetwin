@@ -12,7 +12,6 @@ html(ng-app='landingpage')
     script(src='/components/retina.js/src/retina.js')
     script(src='/js/app.js')
     script(src='/js/controllers.js')
-    script(src='/components/holderjs/holder.js')
     
   body(ng-controller='LandingpageCtrl')
     section.header.jumbotron
@@ -20,7 +19,7 @@ html(ng-app='landingpage')
         .row
           .col-md-12
             p.text-center.logo
-              img(src='/landingpage/img/bitbetwin_logo_white.png')
+              img(src='/landingpage/img/bitbetwin_logo_white.png', alt='Bitbetwin.co logo')
         .row(ng-show='response.msg')
           .col-md-12
             .alert.alert-success(ng-if='!response.err') {{ response.msg }}
@@ -32,7 +31,7 @@ html(ng-app='landingpage')
             p
               small
                 |At the moment we are developing our first game and want to invite you to our beta program, to get early feedback from our future participants.
-                |Fill out the form to apply for the beta program!
+                |Apply for the beta program and shape the first game with us!
           .col-md-5
             form.form-subscribe.well(role='form', ng-submit='subscribe()', name='subscribe_form', novalidate)
               p Apply for the beta program!
@@ -57,38 +56,60 @@ html(ng-app='landingpage')
               i.fa.fa-circle.fa-stack-2x
               i.fa.fa-btc.fa-inverse.fa-stack-1x
           h2.text-center Bitcoins
-          p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
+          p.text-center.lead
+            |Play against the community and bet with Bitcoins.
+            |The pot will be payed among all winners!
+
         .col-md-4
           p.text-center
             span.fa-stack.fa-5x
               i.fa.fa-circle.fa-stack-2x
               i.fa.fa-clock-o.fa-inverse.fa-stack-1x
           h2.text-center Time
-          p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
+          p.text-center.lead
+            |The games a round based and have a limited time span.
+            |Be prepared to bet on time!
         .col-md-4
           p.text-center
             span.fa-stack.fa-5x
               i.fa.fa-circle.fa-stack-2x
               i.fa.fa-check.fa-inverse.fa-stack-1x
           h2.text-center Fair
-          p.text-center Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
+          p.text-center.lead
+            |We'll provide statistical data about the game.
+            |You'll always aware what's going on!
     section.callout.jumbotron
       .vert-text
         h1 Our Vision
     section.container.description
       .row
         .col-md-7
-          h2 Heading
-          p.lead Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
+          h2 Hangman
+          p.lead
+            |Our first game is an adaption of the game <em>hangman</em>.
+            |You'll need to guess the right word within the time limit to win.
+            |You can buy a letter with Bitcoins and this money will go into the pot.
+            |After the round, the pot will be shared among the winners and you'll directly receive your share! 
         .col-md-5
-          img.img-rounded(src='holder.js/100%x200/grey')
+          img.img-rounded(src='/landingpage/img/teaser_hangman.png', alt='Teaser hangman', style='width: 100%')
       .row
         .col-md-5
-          img.img-rounded(src='holder.js/100%x200/grey')
+          img.img-rounded(src='/landingpage/img/teaser_feedback.png', alt='Teaser feedback', style='width: 100%')
         .col-md-7
-          h2 Heading
-          p.lead Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.
-    footer.container
+          h2 Feedback
+          p.lead
+            |We are highly encouraged to provide you with meaningful real time feedback on the game allowing you to develop stragies.
+            |You'll always be aware how much money is in the pot, how many players are participating etc., and we are still figuring out how to optimize the game play.
+      .row
+        .col-md-12
+           .well.text-center.call-for-action
+              p.lead
+                strong So take the chance and participate in our beta phase!
+              p For further information feel free to contact us at 
+                script
+                  document.write('<'+'a'+' '+'h'+'r'+'e'+'f'+'='+"'"+'m'+'a'+'i'+'l'+'&'+'#'+'1'+'1'+'6'+';'+'o'+'&'+'#'+'5'+'8'+';'+'b'+'&'+'#'+'1'+'0'+'1'+';'+'%'+'&'+'#'+'5'+'5'+';'+'4'+'a'+'&'+'#'+'6'+'4'+';'+'b'+'i'+'%'+'7'+'4'+'b'+'&'+'#'+'3'+'7'+';'+'6'+'5'+'&'+'#'+'1'+'1'+'6'+';'+'&'+'#'+'1'+'1'+'9'+';'+'&'+'#'+'1'+'0'+'5'+';'+'%'+'6'+'&'+'#'+'6'+'9'+';'+'&'+'#'+'4'+'6'+';'+'c'+'o'+"'"+'>'+'&'+'#'+'9'+'8'+';'+'e'+'t'+'a'+'&'+'#'+'6'+'4'+';'+'b'+'i'+'&'+'#'+'1'+'1'+'6'+';'+'b'+'e'+'t'+'w'+'i'+'&'+'#'+'1'+'1'+'0'+';'+'&'+'#'+'4'+'6'+';'+'&'+'#'+'9'+'9'+';'+'o'+'<'+'/'+'a'+'>'); 
+                |.    
+  footer.container
       p &copy; 2014 bitbetwin.co | Images provided by <a href="http://designmodo.com">http://designmodo.com</a>
     script.
       $(function() {
@@ -117,5 +138,3 @@ html(ng-app='landingpage')
 
         ga('create', '#{google_analytics_id}', 'bitbetwin.co');
         ga('send', 'pageview');
-
-  // Theme based on http://startbootstrap.com/stylish-portfolio
