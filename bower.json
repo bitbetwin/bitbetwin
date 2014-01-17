@@ -18,6 +18,11 @@
   ],
   "dependencies": {
     "bootstrap": "3.0.x",
-    "d3": "3.3.x"
+    "angular": "1.2.x",
+    "angular-route": "1.2.x",
+    "d3": "3.3.x",
+    "font-awesome": "4.0.x",
+    "holderjs": "2.3.x",
+    "retina.js": "1.1.x"
   }
 }

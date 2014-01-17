@@ -10,7 +10,6 @@ DataAccess = require './app/dataaccess'
 class exports.Server
 
   constructor: (@port) ->
-
     @SESSION_SECRET = "ci843tgbza11e"
 
     @sessionStore = new MongoStore url: DataAccess.loadConfig().db_address
@@ -72,6 +71,8 @@ class exports.Server
     # Socket IO
     @public=(socketio.listen @http_server)
     @private = @public.of "/auth"
+
+    DataAccess.init @private
 
     @private.log.info "initialising socketHandler"
     SocketHandler = require('./app/sockethandler').SocketHandler

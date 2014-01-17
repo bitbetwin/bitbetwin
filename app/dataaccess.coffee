@@ -5,6 +5,33 @@ User = require './models/user'
 
 class DataAccess
 
+	@init: (@io) ->
+		Game = require('./hangman/game').Game
+		game1 = new Game io, 'game1'
+		game1.start()
+		game2 = new Game io, 'game2'
+		game2.start()
+
+		@logger().info "initialised games"
+
+		#TODO: move games to db
+		@commands = new Array()
+		@commands['game1'] = new Array()
+		@commands['game1']['instance'] = game1
+		@commands['game1']['functions'] = ['join', 'leave', 'guess', 'report']
+		@commands['game2'] = new Array()
+		@commands['game2']['instance'] = game2
+		@commands['game2']['functions'] = ['join', 'leave', 'guess', 'report']
+
+		@loadConfig()
+
+	@retrieveGames: () ->
+		#TODO: move to db
+		return { games: [ {name: 'game1' }, {name: 'game2'}] }
+
+	@logger: () ->
+		@io.log
+
 	@loadConfig: () ->
 		return @config if @config?
 		
@@ -25,6 +52,9 @@ class DataAccess
 
 	@isInTestingMode: () ->
 		return @env == 'testing'
+
+	@isInDevMode: () ->
+		return @env == 'testing' || @env == 'development'
 
 	@startup: () ->
 		console.log "connecting to " + @loadConfig().db_address

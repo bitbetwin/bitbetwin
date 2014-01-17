@@ -1,26 +1,22 @@
 should = require "should"
+DataAccess = require "../app/dataaccess"
 
 describe "Blockchain", ->
 
   before (done) ->
-    BlockchainWallet = require('../app/blockchainWallet').BlockchainWallet
-    guid = process.env.bitchainAdress
-    pass1= process.env.bitchain1
-    pass2= process.env.bitchain2
-    @blockchainWallet = new BlockchainWallet
-    @blockchainWallet.init guid, pass1, pass2
+    DataAccess.loadConfig()
+    PaymentAPI = require("../app/btc/paymentAPI")
+    @blockchainWallet = PaymentAPI.getInstance()
     done()
 
   it 'tests blockchain api', (done) ->
+    console.log "running test"
     @blockchainWallet.list (err, data) ->
-      throw err  if err
-      #TODO verify result
-      done()
-
-  it 'tests blockchain create wallet', (done) ->
-    data =
-      label : 'testWallet'
-    @blockchainWallet.newAddress data, (err, data) ->
-      throw err  if err
+      addresses = data.addresses 
+      addresses.should.be.instanceof(Array)
+      adress= addresses[0]
+      adress.should.have.property('balance')
+      balance = adress.balance
+      balance.should.be.equal(1400938800)
       #TODO verify result
       done()

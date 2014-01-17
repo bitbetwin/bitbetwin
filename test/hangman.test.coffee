@@ -4,7 +4,7 @@ describe "Hangman", ->
 
 	before (done) ->
 		Hangman = require('../app/hangman/hangman').Hangman
-		@hangman = new Hangman 'guess word test'
+		@hangman = new Hangman 'Guess word test'
 		done()
 
 	it 'tests a guess with multiple matches', (done) ->
@@ -25,4 +25,9 @@ describe "Hangman", ->
 	it 'tests a guess with complete match in divers order', (done) ->
 		@hangman.check 'seuotssgrdwte', (guessedword) ->
 			guessedword.should.be.equal 'guess word test'
+			done()
+
+	it 'test case insensitive words', (done) ->
+		@hangman.check 'GuEss', (guessedword) ->
+			guessedword.should.be.equal 'guess ____ ____'
 			done()

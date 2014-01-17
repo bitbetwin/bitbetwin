@@ -27,7 +27,12 @@ describe('HangmanCtrl', function() {
     element(by.model('letter')).sendKeys('T');
     element(by.id('guess')).click();
     matchtext = element(by.id('match')).getText();
-    expect(matchtext).toEqual('Guessed Word: T_________');
+    expect(matchtext).toEqual('Guessed Word: t_________');
+
+    element(by.model('letter')).sendKeys('pHrAsE');
+    element(by.id('guess')).click();
+    matchtext = element(by.id('match')).getText();
+    expect(matchtext).toEqual('Guessed Word: tes_phra__');
   });
 
   it('should register, activate account and sign in afterwards', function() {
@@ -47,8 +52,7 @@ describe('HangmanCtrl', function() {
 
     element(by.id('debug')).getText().then(function(text) {
       activationurl = "http://" + text.split(" ")[2];
-
-      console.log(activationurl);
+      
       browser.get(activationurl);
 
       var signintext = element(by.id('info')).getText();
@@ -76,10 +80,6 @@ describe('HangmanCtrl', function() {
     expect(welcometext).toEqual('You are currently logged in as user@gmail.com');
     var greetingtext = element(by.id('greeting')).getText();
     expect(greetingtext).toEqual('Bangman :) Hey: user@gmail.com');
-
-    var games = element.all(by.repeater('games'));
-    expect(games.count()).toEqual(2);
-    expect(games.get(0).getText()).toEqual('Join game1');
   });
 
   it('registering should fail', function() {
