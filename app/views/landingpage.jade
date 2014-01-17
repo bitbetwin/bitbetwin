@@ -107,19 +107,15 @@ html(ng-app='landingpage')
             }
           }
         });
-
-        // Header effect
-        //- var $window = $(window);
-        //- var $header = $('.header');
-        //- var $headerContainer = $('.header .container');
-        //- $window.scroll(function() {
-        //-   var headerHeight =$header.height();
-        //-   var offsetTop = $window.scrollTop();
-        //-   if (offsetTop > headerHeight * 0.2) {
-        //-     $headerContainer.css('opacity', 1.0 - (offsetTop / headerHeight) );
-        //-   } else {
-        //-     $headerContainer.css('opacity', 1.0);
-        //-   }
-        //- });
       });
+    if google_analytics_id
+      script
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', '#{google_analytics_id}', 'bitbetwin.co');
+        ga('send', 'pageview');
+
   // Theme based on http://startbootstrap.com/stylish-portfolio

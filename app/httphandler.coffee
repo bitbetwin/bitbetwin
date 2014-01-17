@@ -1,3 +1,5 @@
+DataAccess = require './dataaccess'
+
 class exports.HttpHandler
   init: (app) ->
     app.get '/', (req, res) ->
@@ -16,8 +18,9 @@ class exports.HttpHandler
         user: req.user)
 
     # Landingpage route
-    app.get '/landingpage', (req, res) -> 
-      res.render('landingpage')
+    app.get '/landingpage', (req, res) ->
+      res.render('landingpage',
+        google_analytics_id: DataAccess.loadConfig().google_alaytics_id)
 
     app.get '/logout', (req, res) ->
       req.logOut()
