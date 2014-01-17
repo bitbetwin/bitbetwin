@@ -73,9 +73,8 @@ class exports.Subscribe
             (e) ->
               console.error "a mandrill error occurred: #{e.name} - #{e.message}"
         else
-          console.info "#{email} already subscribed"
           ret.err = true
-          ret.msg = "You are already subscribed!"
+          ret.msg = "You are already subscribed with this email address!"
           res.format
             json: ->
               res.json ret

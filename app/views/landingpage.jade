@@ -22,8 +22,8 @@ html(ng-app='landingpage')
               img(src='/landingpage/img/bitbetwin_logo_white.png', alt='Bitbetwin.co logo')
         .row(ng-show='response.msg')
           .col-md-12
-            .alert.alert-success(ng-if='!response.err') {{ response.msg }}
-            .alert.alert-danger(ng-if='response.err') {{ response.msg }}
+            .alert.text-center.alert-success(ng-if='!response.err') {{ response.msg }}
+            .alert.text-center.alert-danger(ng-if='response.err') {{ response.msg }}
         .row
           .col-md-7.teaser
             h1 Real-time Bitcoin Games 
