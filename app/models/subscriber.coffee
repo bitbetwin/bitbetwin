@@ -4,9 +4,9 @@ Schema = mongoose.Schema;
 
 SubscriberScheme = new Schema(
   name: String
-	email: String
+  email: String
   confirmation_sent:
-    type: Number
+    type: Boolean
     default: no
 )
 
