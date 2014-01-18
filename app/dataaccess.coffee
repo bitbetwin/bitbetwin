@@ -18,7 +18,7 @@ class DataAccess
         that.commands[game.name]['instance'] = engine
         that.commands[game.name]['functions'] = ['join', 'leave', 'guess', 'report']
         engine.start()
-    @logger().info "initialised games"
+      that.logger().info "initialised games"
 
     @loadConfig()
 
