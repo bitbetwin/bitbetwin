@@ -6,22 +6,18 @@ User = require './models/user'
 class DataAccess
 
 	@init: (@io) ->
-		Game = require('./hangman/game').Game
-		game1 = new Game io, 'game1'
-		game1.start()
-		game2 = new Game io, 'game2'
-		game2.start()
+		GameEngine = require('./hangman/gameengine').GameEngine
+
+		@commands = new Array()
+		result = @retrieveGames()
+		for game in result.games
+			engine = new GameEngine io, game
+			@commands[game.name] = new Array()
+			@commands[game.name]['instance'] = engine
+			@commands[game.name]['functions'] = ['join', 'leave', 'guess', 'report']
+			engine.start()
 
 		@logger().info "initialised games"
-
-		#TODO: move games to db
-		@commands = new Array()
-		@commands['game1'] = new Array()
-		@commands['game1']['instance'] = game1
-		@commands['game1']['functions'] = ['join', 'leave', 'guess', 'report']
-		@commands['game2'] = new Array()
-		@commands['game2']['instance'] = game2
-		@commands['game2']['functions'] = ['join', 'leave', 'guess', 'report']
 
 		@loadConfig()
 

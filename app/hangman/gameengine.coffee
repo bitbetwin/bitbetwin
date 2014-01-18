@@ -1,8 +1,8 @@
 DataAccess = require '../dataaccess'
 
-class exports.Game
+class exports.GameEngine
 
-  constructor: (@io, @name) ->
+  constructor: (@io, @game) ->
     @io.log.info "initialising phraseGenerator"
     @started = false
     SimpleDurationCalculator = require('./simpledurationcalculator').SimpleDurationCalculator
@@ -30,10 +30,10 @@ class exports.Game
     return ""
 
   join: (player) ->
-    @io.log.info player.user.email + " joined " + @name
-    player.join @name
+    @io.log.info player.user.email + " joined " + @game.name
+    player.join @game.name
     player.game = {}
-    player.game.name = @name
+    player.game.name = @game.name
     if @started
       @broadcast player
     else
@@ -42,8 +42,8 @@ class exports.Game
     return ""
 
   leave: (player) ->
-    @io.log.info player.user.email + " left " + @name
-    player.leave @name
+    @io.log.info player.user.email + " left " + @game.name
+    player.leave @game.name
     return DataAccess.retrieveGames()
 
   broadcast: (player) ->
@@ -51,14 +51,14 @@ class exports.Game
     @guess player, ""
 
   start: () ->
-    @io.log.info "starting " + @name
+    @io.log.info "starting " + @game.name
     @started = true
     @reporttime = 10
 
     @io.log.info "generating phrase"
     phrase = @phraseGenerator.generate()
     
-    @io.log.info "initialising " + @name
+    @io.log.info "initialising " + @game.name
     Hangman = require('./hangman').Hangman
     @hangman = new Hangman phrase
     
@@ -66,35 +66,35 @@ class exports.Game
     @countdown = @simpleDurationCalculator.calculate phrase
     
     @io.log.info "broadcast game start"
-    for socket in @io.clients @name
+    for socket in @io.clients @game.name
       socket.emit 'start'
       @broadcast socket
 
     starttime = new Date().getTime()
-    interval = setInterval (game) ->
+    interval = setInterval (engine) ->
       intervaltime = new Date().getTime()
       time = intervaltime - starttime
-      game.countdown = Math.round(game.countdown - ( time / 1000 ))
+      engine.countdown = Math.round(engine.countdown - ( time / 1000 ))
       starttime = intervaltime
     , 1000, @
 
-    setTimeout (game) ->
-      game.stop()
-      game.started = false
+    setTimeout (engine) ->
+      engine.stop()
+      engine.started = false
       clearInterval interval
-      interval = setInterval (game) ->
-        game.reporttime = game.reporttime - 1
-      , 1000, game
-      setTimeout (game) ->
+      interval = setInterval (engine) ->
+        engine.reporttime = engine.reporttime - 1
+      , 1000, engine
+      setTimeout (engine) ->
         clearInterval interval
-        game.start() 
-      , game.reporttime * 1000, game
+        engine.start() 
+      , engine.reporttime * 1000, engine
     , @countdown * 1000, @
 
   stop: () ->
-    @io.log.info "stopping " + @name
+    @io.log.info "stopping " + @game.name
     @countdown = 0
-    for socket in @io.clients @name
+    for socket in @io.clients @game.name
       socket.game.guess.length = 0
       socket.emit 'stop'
 
