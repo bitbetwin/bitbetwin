@@ -2,6 +2,7 @@ restful = require 'node-restful'
 mongoose = restful.mongoose
 
 Game = require './models/game'
+Credit = require './models/credit'
 
 class DataAccess
 
@@ -24,7 +25,13 @@ class DataAccess
 
   @retrieveGames: (callback) ->
     Game.find {}, (err, games) ->
+      throw err if err
       callback err, games
+
+  @retrieveCredits: (userid, callback) ->
+    Credit.find owner: userid, (err, credits) ->
+      throw err if err
+      callback err, credits
 
   @logger: () ->
     @io.log
