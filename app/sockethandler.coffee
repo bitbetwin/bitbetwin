@@ -53,8 +53,8 @@ class exports.SocketHandler
         user.socket = socket
         if DEBUG
           @.log.debug "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
-        data = DataAccess.retrieveGames()
-        socket.emit "loggedin", data
+        DataAccess.retrieveGames (err, games) ->
+          socket.emit "loggedin", games
 
       origemit = socket.$emit
 
@@ -67,16 +67,13 @@ class exports.SocketHandler
         gameevent = false
 
         if event == 'join' && DataAccess.commands[feed]? && ( event in DataAccess.commands[feed]['functions'] )
-          result = DataAccess.commands[feed]['instance'][event] @, feed
+          result = DataAccess.commands[feed]['instance'][event] @, feed, callback
           gameevent = true
         else
           if DataAccess.commands[@.game?.name]? && ( event in DataAccess.commands[@.game?.name]['functions'] )
-            result = DataAccess.commands[@.game?.name]['instance'][event] @, feed
+            result = DataAccess.commands[@.game?.name]['instance'][event] @, feed, callback
             gameevent = true
 
-        if gameevent
-          @.log.warn "game event"
-          callback result
-        else
+        if !gameevent
           @.log.warn "no game event"
           origemit.apply @, Array.prototype.slice.call arguments

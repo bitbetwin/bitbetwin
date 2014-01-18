@@ -27,7 +27,6 @@ class exports.GameEngine
       player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
       if (complete)
         that.io.log.info player.user.email + " guessed the whole word correctly!"
-    return ""
 
   join: (player) ->
     @io.log.info player.user.email + " joined " + @game.name
@@ -39,12 +38,12 @@ class exports.GameEngine
     else
       player.game.guess = []
       player.emit "stop"
-    return ""
 
-  leave: (player) ->
+  leave: (player, feed, callback) ->
     @io.log.info player.user.email + " left " + @game.name
     player.leave @game.name
-    return DataAccess.retrieveGames()
+    DataAccess.retrieveGames (err, games) ->
+      callback games
 
   broadcast: (player) ->
     player.game.guess = []
@@ -98,6 +97,6 @@ class exports.GameEngine
       socket.game.guess.length = 0
       socket.emit 'stop'
 
-  report: (player) ->
+  report: (player, callback) ->
     @io.log.info "sending report to " + player.user.email + "; time: " + (@countdown + @reporttime)
-    return {'time': @countdown + @reporttime }
+    callback {'time': @countdown + @reporttime }

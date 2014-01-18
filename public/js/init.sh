@@ -1,0 +1,1 @@
+mongo --host localhost bangmandb initdata.js
