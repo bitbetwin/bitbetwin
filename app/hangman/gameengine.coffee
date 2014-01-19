@@ -1,20 +1,23 @@
 DataAccess = require '../dataaccess'
+SimpleDurationCalculator = require('./simpledurationcalculator').SimpleDurationCalculator
+SinglePhraseGenerator = require('./phrasegenerator/singlephrasegenerator').SinglePhraseGenerator
+SimplePhraseGenerator = require('./phrasegenerator/simplephrasegenerator').SimplePhraseGenerator
 
 class exports.GameEngine
 
   constructor: (@io, @game) ->
     @io.log.info "initialising phraseGenerator"
     @started = false
-    SimpleDurationCalculator = require('./simpledurationcalculator').SimpleDurationCalculator
-    
-    if DataAccess.isInTestingMode()
-      SinglePhraseGenerator = require('./phrasegenerator/singlephrasegenerator').SinglePhraseGenerator
-      @phraseGenerator = new SinglePhraseGenerator
-    else
-      SimplePhraseGenerator = require('./phrasegenerator/simplephrasegenerator').SimplePhraseGenerator 
-      @phraseGenerator = new SimplePhraseGenerator
 
-    @simpleDurationCalculator = new SimpleDurationCalculator
+    switch @game.durationcalculator
+      when "durationcalculator" then @durationCalculator = new SimpleDurationCalculator
+      else @durationCalculator = new SimpleDurationCalculator
+
+    switch @game.phrasegenerator
+      when "singlephrasegenerator" then @phraseGenerator = new SinglePhraseGenerator
+      when "simplephrasegenerator" then @phraseGenerator = new SimplePhraseGenerator
+      else @phraseGenerator = new SinglePhraseGenerator
+
     @reporttime = 10
 
   guess: (player, guess) ->
@@ -62,7 +65,7 @@ class exports.GameEngine
     @hangman = new Hangman phrase
     
     @io.log.info "calculating game duration"
-    @countdown = @simpleDurationCalculator.calculate phrase
+    @countdown = @durationCalculator.calculate phrase
     
     @io.log.info "broadcast game start"
     for socket in @io.clients @game.name
