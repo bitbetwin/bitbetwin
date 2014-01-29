@@ -1,7 +1,7 @@
-hangman
+BitBetWin
 =======
 
-Tests: [![Build Status](https://travis-ci.org/btcgames/hangman.png?branch=master)](https://travis-ci.org/btcgames/hangman)
+Tests: [![Build Status](https://travis-ci.org/bitbetwin/bitbetwin.png?branch=master)](https://travis-ci.org/bitbetwin/bitbetwin)
 
 Linux: 
 
