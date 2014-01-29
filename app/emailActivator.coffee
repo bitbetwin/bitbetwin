@@ -2,11 +2,11 @@ Subscriber = require './models/subscriber'
 Mandrill = require 'mandrill-api/mandrill'
 
 email_message =
-  html: "<p>Thanks for your registration!<br/><br/><em>Your Team Awesome</em></p>"
-  text: "Thanks for your interest! Your Team Awesome"
-  subject: "Bangman-activation"
-  from_email: "no-reply@example.com"
-  from_name: "Team Awesome"
+  html: "<p>Thanks for your registration!<br/><br/><em>Your BitBetWin Team</em></p>"
+  text: "Thanks for your interest! Your BitBetWin Team"
+  subject: "bitbetwin-activation"
+  from_email: "beta@bitbetwin.co"
+  from_name: "bitbetwin.co"
 
 class exports.EmailActivator
   send: (user, callback) ->
