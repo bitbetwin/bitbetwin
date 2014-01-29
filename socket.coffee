@@ -57,7 +57,6 @@ class exports.Server
 
     @app.use logger
 
-
   start: (callback) ->
     console.log "DEBUG flag:", DataAccess.loadConfig().debug
 
