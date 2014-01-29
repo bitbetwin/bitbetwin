@@ -12,6 +12,7 @@
   "dependencies": {
     "async": "0.2.x",
     "bcrypt":"0.7.x",
+    "bower":"1.2.x",
     "express" : "3.3.x",
     "coffee-script": "1.6.x",
     "connect": "2.8.x",
