@@ -3,7 +3,7 @@
   "name": "bitbetwin",
   "description": "Real-time Bitcoin Games",
   "keywords": ["get rich fast","tool"],
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "socket.coffee",
   "engines": {
     "node": "0.10.x",
