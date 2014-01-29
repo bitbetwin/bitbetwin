@@ -5,8 +5,6 @@ class exports.HttpHandler
     # Landingpage route
     switch DataAccess.loadConfig().mode
       when "beta"
-        console.log "gog here motho " + DataAccess.loadConfig().mode
-        console.log "gogo here 2 " + DataAccess.loadConfig().google_alaytics_id
         app.get '*', (req, res) ->
           res.render('landingpage',
             google_analytics_id: DataAccess.loadConfig().google_alaytics_id)
