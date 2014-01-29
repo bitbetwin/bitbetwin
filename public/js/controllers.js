@@ -134,12 +134,13 @@ bangmanControllers.controller('ReportCtrl', ['$scope', '$socket', '$log', '$loca
 var landingpageControllers = angular.module('landingpageControllers', []);
 landingpageControllers.controller('LandingpageCtrl', function($scope, $http) {
 	$scope.subscribe = function() {
-		$http.put('/subscribe', {name: $scope.name, email: $scope.email}).success(function (data, status) {
+		$http.put('/subscribe', {name: $scope.name, email: $scope.email, newsletter: $scope.newsletter}).success(function (data, status) {
 		 	$scope.response = data;
       if (!data.err) {
         $scope.subscribe_form.$setPristine();
         $scope.name = '';
         $scope.email = '';
+        $scope.newsletter = false;
       }
 		});
 	}

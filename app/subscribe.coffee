@@ -5,7 +5,7 @@ Validator = require 'email-validator'
 email_message =
   html: "Hi [[NAME]]!<br /><br />Thanks for your interest in <a href=\"http://www.bitbetwin.co\">bitbetwin.co</a>!<br />We will notify as soon as we are ready to roll out the beta platform.<br /><br />Best,<br /><em>bitbetwin.co</em>"
   text: "Hi [[NAME]]!\n\nThanks for your interest in http://www.bitbetwin.co!\nWe will notify as soon as we are ready to roll out the beta platform.\n\nBest,\nbitbetwin.co"
-  subject: "Bitbetwin.co Beta Registrations"
+  subject: "Bitbetwin.co Beta Registration"
   from_email: "beta@bitbetwin.co"
   from_name: "BTC Games"
 
@@ -15,6 +15,7 @@ class exports.Subscribe
 
       email = req.body.email
       name = req.body.name
+      newsletter = req.body.newsletter
 
       ret =
         err: false
@@ -35,6 +36,7 @@ class exports.Subscribe
           s = new Subscriber
             email: email
             name: name
+            has_newsletter: newsletter
           
           s.save (err) ->
             if err
@@ -73,9 +75,8 @@ class exports.Subscribe
             (e) ->
               console.error "a mandrill error occurred: #{e.name} - #{e.message}"
         else
-          console.info "#{email} already subscribed"
           ret.err = true
-          ret.msg = "You are already subscribed!"
+          ret.msg = "You are already subscribed with this email address!"
           res.format
             json: ->
               res.json ret

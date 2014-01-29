@@ -22,8 +22,8 @@ html(ng-app='landingpage')
               img(src='/landingpage/img/bitbetwin_logo_white.png', alt='Bitbetwin.co logo')
         .row(ng-show='response.msg')
           .col-md-12
-            .alert.alert-success(ng-if='!response.err') {{ response.msg }}
-            .alert.alert-danger(ng-if='response.err') {{ response.msg }}
+            .alert.text-center.alert-success(ng-if='!response.err') {{ response.msg }}
+            .alert.text-center.alert-danger(ng-if='response.err') {{ response.msg }}
         .row
           .col-md-7.teaser
             h1 Real-time Bitcoin Games 
@@ -31,10 +31,10 @@ html(ng-app='landingpage')
             p
               small
                 |At the moment we are developing our first game and want to invite you to our beta program, to get early feedback from our future participants.
-                |Apply for the beta program and shape the first game with us!
+                |<strong>Take the chance and shape the first games with us!</strong>
           .col-md-5
             form.form-subscribe.well(role='form', ng-submit='subscribe()', name='subscribe_form', novalidate)
-              p Apply for the beta program!
+              h2 Apply for the beta program!
               .form-group(ng-class='{\'has-error\': subscribe_form.name.$dirty && subscribe_form.name.$invalid}')
                 input.form-control.input-lg(ng-model='name', type='text', name='name', placeholder='Name', required, bs-tooltip='tooltip', data-placement='right', data-type='right', data-trigger='manual')
                 span.help-block.has-error(ng-show='subscribe_form.name.$dirty && subscribe_form.name.$error.required') Please enter your name
@@ -42,6 +42,10 @@ html(ng-app='landingpage')
                 input.form-control.input-lg(ng-model='email', type='email', name='email', placeholder='Email', required)
                 span.help-block.has-error(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.required') Please enter your email
                 span.help-block.has-error(ng-show='subscribe_form.email.$dirty && subscribe_form.email.$error.email') Please enter a valid email
+              .checkbox.input-lg
+                label
+                  input(ng-model='newsletter', type='checkbox', name='newsletter')
+                  |Keep me up to date
               button.btn.btn-primary.btn-lg.btn-block(type='submit', ng-disabled="subscribe_form.$invalid") Sign Up!
         .row
           .col-md-4
@@ -58,7 +62,9 @@ html(ng-app='landingpage')
           h2.text-center Bitcoins
           p.text-center.lead
             |Play against the community and bet with Bitcoins.
+
             |The pot will be shared among all winners!
+
 
         .col-md-4
           p.text-center
@@ -76,7 +82,7 @@ html(ng-app='landingpage')
               i.fa.fa-check.fa-inverse.fa-stack-1x
           h2.text-center Fair
           p.text-center.lead
-            |We'll provide statistical data about the game.
+            |We provide statistical data about the game.
             |You'll always aware what's going on!
     section.callout.jumbotron
       .vert-text
@@ -86,7 +92,7 @@ html(ng-app='landingpage')
         .col-md-7
           h2 Hangman
           p.lead
-            |Our first game is an adaption of the game <em>hangman</em>.
+            |Our first game is an adaption of the popular game <em>hangman</em>.
             |You'll need to guess the right word within the time limit to win.
             |You can buy a letter with Bitcoins and this money will go into the pot.
             |After the round, the pot will be shared among the winners and you'll directly receive your share! 
@@ -103,16 +109,20 @@ html(ng-app='landingpage')
       .row
         .col-md-12
            .well.text-center.call-for-action
-              p.lead
-                strong So take the chance and participate in our beta phase!
-              p For further information feel free to contact us at 
-                script
+              p.h1 So take the chance and participate in our beta program!
+              p.lead For further information or feedback feel free to contact us at 
+                script.
                   document.write('<'+'a'+' '+'h'+'r'+'e'+'f'+'='+"'"+'m'+'a'+'i'+'l'+'&'+'#'+'1'+'1'+'6'+';'+'o'+'&'+'#'+'5'+'8'+';'+'b'+'&'+'#'+'1'+'0'+'1'+';'+'%'+'&'+'#'+'5'+'5'+';'+'4'+'a'+'&'+'#'+'6'+'4'+';'+'b'+'i'+'%'+'7'+'4'+'b'+'&'+'#'+'3'+'7'+';'+'6'+'5'+'&'+'#'+'1'+'1'+'6'+';'+'&'+'#'+'1'+'1'+'9'+';'+'&'+'#'+'1'+'0'+'5'+';'+'%'+'6'+'&'+'#'+'6'+'9'+';'+'&'+'#'+'4'+'6'+';'+'c'+'o'+"'"+'>'+'&'+'#'+'9'+'8'+';'+'e'+'t'+'a'+'&'+'#'+'6'+'4'+';'+'b'+'i'+'&'+'#'+'1'+'1'+'6'+';'+'b'+'e'+'t'+'w'+'i'+'&'+'#'+'1'+'1'+'0'+';'+'&'+'#'+'4'+'6'+';'+'&'+'#'+'9'+'9'+';'+'o'+'<'+'/'+'a'+'>'); 
                 |.    
+              p
+                a(href='https://github.com/btcgames/hangman', target='_blank')
+                  i.fa.fa-github.fa-3x
+                  br
+                  |Follow us on Github!
               p Support us: 1A8CP5STBExW38rKXmUfhFNToCJGNuPKkG
               iframe#coinbase_button_iframe_0ef405599b08e57484b34435d1863d45(src='https://coinbase.com/buttons/0ef405599b08e57484b34435d1863d45?code=0ef405599b08e57484b34435d1863d45&buttonStyle=donation_small&referrer=html2jade.org', name='coinbase_button_iframe_0ef405599b08e57484b34435d1863d45', style='width: 148px; height: 46px; border: none; overflow: hidden;', scrolling='no', allowtransparency='true', frameborder='0')
-script(src='https://coinbase.com/assets/button.js', type='text/javascript')
-iframe#coinbase_modal_iframe_0ef405599b08e57484b34435d1863d45(src='https://coinbase.com/buttons/0ef405599b08e57484b34435d1863d45/widget?code=0ef405599b08e57484b34435d1863d45&buttonStyle=donation_small&referrer=html2jade.org', name='coinbase_modal_iframe_0ef405599b08e57484b34435d1863d45', style='background-color: transparent; border: 0px none transparent; overflow: hidden; display: none; position: fixed; visibility: visible; margin: 0px; padding: 0px; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 9999;', scrolling='no', allowtransparency='true', frameborder='0')
+              script(src='https://coinbase.com/assets/button.js', type='text/javascript')
+              iframe#coinbase_modal_iframe_0ef405599b08e57484b34435d1863d45(src='https://coinbase.com/buttons/0ef405599b08e57484b34435d1863d45/widget?code=0ef405599b08e57484b34435d1863d45&buttonStyle=donation_small&referrer=html2jade.org', name='coinbase_modal_iframe_0ef405599b08e57484b34435d1863d45', style='background-color: transparent; border: 0px none transparent; overflow: hidden; display: none; position: fixed; visibility: visible; margin: 0px; padding: 0px; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 9999;', scrolling='no', allowtransparency='true', frameborder='0')
 
 
   footer.container
