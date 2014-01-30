@@ -100,6 +100,6 @@ class exports.GameEngine
       socket.game.guess.length = 0
       socket.emit 'stop'
 
-  report: (player, callback) ->
+  report: (player, feed, callback) ->
     @io.log.info "sending report to " + player.user.email + "; time: " + (@countdown + @reporttime)
     callback {'time': @countdown + @reporttime }
