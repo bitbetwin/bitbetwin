@@ -1,1 +1,1 @@
-mongo --host localhost bangmandb initdata.js
+mongo --host localhost bitbetwindb initdata.js

@@ -9,7 +9,7 @@ mongoose = restful.mongoose
 describe "Game", ->
 
   before (done)->
-    mongoose.connect "mongodb://localhost/bangmandbTest"
+    mongoose.connect "mongodb://localhost/bitbetwinTest"
     db = mongoose.connection
     db.on 'error', done
     db.once 'open', done

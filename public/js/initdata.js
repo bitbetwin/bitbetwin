@@ -23,7 +23,7 @@ db.users.save({
 
 for (var i = 1; i <= 25; i++) {
 	db.credits.save({
-		owner: db.users.find()[0]._id
+		owner: db.users.find()[0]._id,
 		value: 1
 	});
 }
