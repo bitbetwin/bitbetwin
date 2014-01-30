@@ -56,6 +56,12 @@ class exports.SocketHandler
         DataAccess.retrieveGames (err, games) ->
           socket.emit "loggedin", games
 
+        DataAccess.retrieveCredits user._id, (err, credits) ->
+          amount = 0
+          for credit in credits
+            amount += credit.value
+          socket.emit "credit", amount
+
       origemit = socket.$emit
 
       socket.$emit = () ->

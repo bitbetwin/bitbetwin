@@ -96,6 +96,17 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
     };
 }]);
 
+
+bangmanControllers.controller('MainCtrl', ['$scope', '$socket', '$log',
+  function($scope, $socket, $log) {
+
+    $socket.on('credit', function(credits) {
+      $log.warn("credits: " + credits);
+      $scope.credits = credits;
+    })
+}]);
+
+
 bangmanControllers.controller('ReportCtrl', ['$scope', '$socket', '$log', '$location', '$timeout',
   function($scope, $socket, $log, $location, $timeout) {
 

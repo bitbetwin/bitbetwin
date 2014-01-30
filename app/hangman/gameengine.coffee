@@ -28,6 +28,15 @@ class exports.GameEngine
     @hangman.check player.game.guess.join(""), (match) ->
       complete = (match == that.hangman.word)
       player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
+
+      # TODO: introduce caching for credit amount
+      DataAccess.retrieveCredits player.user._id, (err, credits) ->
+        amount = 0
+        console.log credits
+        for credit in credits
+          amount += credit.value
+        player.emit "credit", amount
+
       if (complete)
         that.io.log.info player.user.email + " guessed the whole word correctly!"
 
