@@ -25,12 +25,10 @@ class DataAccess
 
   @retrieveGames: (callback) ->
     Game.find {}, (err, games) ->
-      throw err if err
       callback err, games
 
   @retrieveCredits: (userid, callback) ->
     Credit.find owner: userid, (err, credits) ->
-      throw err if err
       callback err, credits
 
   @logger: () ->
