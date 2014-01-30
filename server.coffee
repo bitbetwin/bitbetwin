@@ -1,6 +1,7 @@
 http = require('http')
 io = require('socket.io')
 express = require('express')
+require('newrelic')
 
 Server = require('./socket').Server
 
