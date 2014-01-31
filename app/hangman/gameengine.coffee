@@ -1,23 +1,20 @@
 DataAccess = require '../dataaccess'
-SimpleDurationCalculator = require('./simpledurationcalculator').SimpleDurationCalculator
-SinglePhraseGenerator = require('./phrasegenerator/singlephrasegenerator').SinglePhraseGenerator
-SimplePhraseGenerator = require('./phrasegenerator/simplephrasegenerator').SimplePhraseGenerator
 
 class exports.GameEngine
 
   constructor: (@io, @game) ->
     @io.log.info "initialising phraseGenerator"
     @started = false
+    SimpleDurationCalculator = require('./simpledurationcalculator').SimpleDurationCalculator
+    
+    if DataAccess.isInTestingMode()
+      SinglePhraseGenerator = require('./phrasegenerator/singlephrasegenerator').SinglePhraseGenerator
+      @phraseGenerator = new SinglePhraseGenerator
+    else
+      SimplePhraseGenerator = require('./phrasegenerator/simplephrasegenerator').SimplePhraseGenerator 
+      @phraseGenerator = new SimplePhraseGenerator
 
-    switch @game.durationcalculator
-      when "durationcalculator" then @durationCalculator = new SimpleDurationCalculator
-      else @durationCalculator = new SimpleDurationCalculator
-
-    switch @game.phrasegenerator
-      when "singlephrasegenerator" then @phraseGenerator = new SinglePhraseGenerator
-      when "simplephrasegenerator" then @phraseGenerator = new SimplePhraseGenerator
-      else @phraseGenerator = new SinglePhraseGenerator
-
+    @simpleDurationCalculator = new SimpleDurationCalculator
     @reporttime = 10
 
   guess: (player, guess) ->
@@ -28,15 +25,6 @@ class exports.GameEngine
     @hangman.check player.game.guess.join(""), (match) ->
       complete = (match == that.hangman.word)
       player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
-
-      # TODO: introduce caching for credit amount
-      DataAccess.retrieveCredits player.user._id, (err, credits) ->
-        amount = 0
-        console.log credits
-        for credit in credits
-          amount += credit.value
-        player.emit "credit", amount
-
       if (complete)
         that.io.log.info player.user.email + " guessed the whole word correctly!"
 
@@ -74,7 +62,7 @@ class exports.GameEngine
     @hangman = new Hangman phrase
     
     @io.log.info "calculating game duration"
-    @countdown = @durationCalculator.calculate phrase
+    @countdown = @simpleDurationCalculator.calculate phrase
     
     @io.log.info "broadcast game start"
     for socket in @io.clients @game.name
@@ -109,6 +97,6 @@ class exports.GameEngine
       socket.game.guess.length = 0
       socket.emit 'stop'
 
-  report: (player, feed, callback) ->
+  report: (player, callback) ->
     @io.log.info "sending report to " + player.user.email + "; time: " + (@countdown + @reporttime)
     callback {'time': @countdown + @reporttime }
