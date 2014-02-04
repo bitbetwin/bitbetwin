@@ -27,6 +27,8 @@ describe "Credit", ->
         Game.remove {}, callback
     , (callback) ->
         Credit.remove {}, callback
+    , (callback) ->
+        User.remove {}, callback
     ], done 
 
   it "should create a user with credits", (done) ->
@@ -45,6 +47,11 @@ describe "Credit", ->
 
   it "should charge a credit to a game", (done) ->
     async.waterfall [(callback) ->
+      @bank = new User email: "mail@bitbetwin.co", password: "compl1c4t3d"
+      @bank.save (err, item) ->
+        throw err if err
+        callback null
+    , (callback) ->
       @game = new Game name: "testgame1", phrasegenerator: "singlephrasegenerator", durationcalculator: "simpledurationcalculator"   
       @game.save (err, item) ->
         throw err if err
@@ -59,8 +66,13 @@ describe "Credit", ->
       @credit.save (err) ->
         throw err if err
         callback null, game, user
+    , (game, user, callback) ->
+      @credit = new Credit owner: user._id, value: 1
+      @credit.save (err) ->
+        throw err if err
+        callback null, game, user
     ], (err, game, user) ->
-      DataAccess.chargeCredits user, game, 1, (err) ->
+      DataAccess.chargeCredits user, game, 2, (err) ->
         defined = err?
         defined.should.be.false 
         done()
@@ -77,7 +89,7 @@ describe "Credit", ->
         throw err if err
         callback null, game, item
     ], (err, game, user) ->
-      DataAccess.chargeCredits user, game, 1, (err) ->
+      DataAccess.chargeCredits user, game, 2, (err) ->
         defined = err?
         defined.should.be.true
         err.should.be.equal "Not enough credits"
@@ -99,9 +111,48 @@ describe "Credit", ->
       @credit.save (err) ->
         throw err if err
         callback null, game, user
+    , (game, user, callback) ->
+      @credit = new Credit owner: user._id, value: 1
+      @credit.save (err) ->
+        throw err if err
+        callback null, game, user
     ], (err, game, user) ->
-      DataAccess.chargeCredits user, game, 2, (err) ->
+      DataAccess.chargeCredits user, game, 3, (err) ->
         defined = err?
         defined.should.be.true
         err.should.be.equal "Not enough credits"
+        done()
+
+
+  it "should fail to charge a credit to a game because of to small bet", (done) ->
+    async.waterfall [(callback) ->
+      @bank = new User email: "mail@bitbetwin.co", password: "compl1c4t3d"
+      @bank.save (err, item) ->
+        throw err if err
+        callback null
+    , (callback) ->
+      @game = new Game name: "testgame1", phrasegenerator: "singlephrasegenerator", durationcalculator: "simpledurationcalculator"   
+      @game.save (err, item) ->
+        throw err if err
+        callback null, item
+    , (game, callback) ->
+      @testUser = new User email: "encypt@gmail.com", password: "compl1c4t3d"
+      @testUser.save (err, item) ->
+        throw err if err
+        callback null, game, item
+    , (game, user, callback) ->
+      @credit = new Credit owner: user._id, value: 1
+      @credit.save (err) ->
+        throw err if err
+        callback null, game, user
+    , (game, user, callback) ->
+      @credit = new Credit owner: user._id, value: 1
+      @credit.save (err) ->
+        throw err if err
+        callback null, game, user
+    ], (err, game, user) ->
+      DataAccess.chargeCredits user, game, 1, (err) ->
+        defined = err?
+        defined.should.be.true
+        err.should.be.equal "Too small bet"
         done()

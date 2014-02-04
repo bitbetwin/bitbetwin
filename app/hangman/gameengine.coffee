@@ -18,10 +18,10 @@ class exports.GameEngine
     @reporttime = 10
 
   guess: (player, guess) ->
-    @io.log.info "charging 1 credits from " + user.email + " to " + game.name
+    @io.log.info "charging 2 credits from " + user.email + " to " + game.name
     logger = @io.log
     that = @
-    DataAccess.chargeCredits player.user._id, @game._id, 1, (err) ->
+    DataAccess.chargeCredits player.user._id, @game._id, 2, (err) ->
       if err
         # todo report warning to user
         logger.warn err
@@ -33,6 +33,7 @@ class exports.GameEngine
         complete = (match == that.hangman.word)
         player.emit('hangman', { complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
         if (complete)
+          player.game.complete = true
           logger.info player.user.email + " guessed the whole word correctly!"
 
   join: (player) ->
@@ -100,8 +101,10 @@ class exports.GameEngine
   stop: () ->
     @io.log.info "stopping " + @game.name
     @countdown = 0
+
     for socket in @io.clients @game.name
       socket.game.guess.length = 0
+
       socket.emit 'stop'
 
   report: (player, callback) ->

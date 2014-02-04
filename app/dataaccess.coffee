@@ -3,6 +3,7 @@ mongoose = restful.mongoose
 
 Game = require './models/game'
 Credit = require './models/credit'
+User = require './models/user'
 
 class DataAccess
 
@@ -31,7 +32,18 @@ class DataAccess
     Credit.find owner: userid, (err, credits) ->
       callback err, credits
 
+  @drawCommission: (credit, callback) ->
+    User.findOne email: "mail@bitbetwin.co", (err, bank) ->
+      return callback err if err
+      credit.game = null
+      credit.owner = bank._id
+      credit.save (err) ->
+        callback err
+
   @chargeCredits: (userid, gameid, amount, callback) ->
+    if amount < 2
+      callback "Too small bet"
+    that = @
     Credit.find owner: userid, game: { $exists: false }, (err, credits) ->
       callback err if err
       if credits.length == 0
@@ -42,15 +54,17 @@ class DataAccess
       if values < amount
         return callback "Not enough credits"
 
-      #todo knapsack problem for choosing the best fitting credits
-      i = 0
-      while i < amount
-        credits[i].game = gameid
-        credits[i].save (err) ->
-          return callback err if err
-        i++
+      that.drawCommission credits[0], (err) ->
+        throw err if err
+        #todo knapsack problem for choosing the best fitting credits
+        i = 1
+        while i < amount
+          credits[i].game = gameid
+          credits[i].save (err) ->
+            return callback err if err
+          i++
 
-      callback null
+        callback null
 
   @logger: () ->
     @io.log
