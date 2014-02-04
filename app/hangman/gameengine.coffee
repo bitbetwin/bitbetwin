@@ -18,15 +18,22 @@ class exports.GameEngine
     @reporttime = 10
 
   guess: (player, guess) ->
-    @io.log.info player.user.email + " guessed " + guess
-    player.game.guess.push guess
-
+    @io.log.info "charging 1 credits from " + user.email + " to " + game.name
+    logger = @io.log
     that = @
-    @hangman.check player.game.guess.join(""), (match) ->
-      complete = (match == that.hangman.word)
-      player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
-      if (complete)
-        that.io.log.info player.user.email + " guessed the whole word correctly!"
+    DataAccess.chargeCredits player.user._id, @game._id, 1, (err) ->
+      if err
+        # todo report warning to user
+        logger.warn err
+        return
+      logger.info player.user.email + " guessed " + guess
+      player.game.guess.push guess
+
+      that.hangman.check player.game.guess.join(""), (match) ->
+        complete = (match == that.hangman.word)
+        player.emit('hangman', { complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
+        if (complete)
+          logger.info player.user.email + " guessed the whole word correctly!"
 
   join: (player) ->
     @io.log.info player.user.email + " joined " + @game.name

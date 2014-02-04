@@ -31,6 +31,27 @@ class DataAccess
     Credit.find owner: userid, (err, credits) ->
       callback err, credits
 
+  @chargeCredits: (userid, gameid, amount, callback) ->
+    Credit.find owner: userid, game: { $exists: false }, (err, credits) ->
+      callback err if err
+      if credits.length == 0
+        return callback "Not enough credits"
+      values = 0
+      for credit in credits
+        values += credit.value
+      if values < amount
+        return callback "Not enough credits"
+
+      #todo knapsack problem for choosing the best fitting credits
+      i = 0
+      while i < amount
+        credits[i].game = gameid
+        credits[i].save (err) ->
+          return callback err if err
+        i++
+
+      callback null
+
   @logger: () ->
     @io.log
 
