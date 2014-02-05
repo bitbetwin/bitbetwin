@@ -104,5 +104,6 @@ class exports.SocketHandler
           @.log.warn "no game event"
           x.apply @, Array.prototype.slice.call arguments
       socket.on "disconnect", () ->
+        socket.user.sockets.splice(socket)
         @.log.debug "A socket with sessionID " + hs.sessionID + " disconnected!"
       
