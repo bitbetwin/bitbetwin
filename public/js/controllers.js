@@ -19,7 +19,6 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
   		$scope.word = hangman.phrase;
       $scope.guesses = hangman.guesses;
       $scope.time = hangman.time;
-      $scope.money = hangman.money
       complete = hangman.complete;
       if (complete) {
         $log.info('complete');
@@ -47,6 +46,10 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
     $socket.on('stop', function() {
         $log.info('incomplete');
         $location.path('/report'); 
+    });
+
+    $socket.on('credits', function(data) {
+      $scope.money = data.money
     });
 
     $scope.guess = function() {

@@ -25,7 +25,9 @@ class exports.Game
     that = @
     @hangman.check player.game.guess.join(""), (match) ->
       complete = (match == that.hangman.word)
-      player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match, money: player.user.money })
+      player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match})
+
+      socket.emit('credits', { money: player.user.money }) for socket in player.user.sockets
       if (complete)
         that.io.log.info player.user.email + " guessed the whole word correctly!"
     return ""

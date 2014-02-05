@@ -60,7 +60,7 @@ class exports.SocketHandler
       user = connectedUsers[hs.user]
       sendLoginData= (user) => 
         socket.user = user
-        user.socket = socket
+        user.sockets.push socket
         if DEBUG
           @.log.debug "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
         connectedUsers[hs.user] = user
@@ -76,6 +76,7 @@ class exports.SocketHandler
           return @.log.warn "Couldnt find user:", user if err || !user
           if DEBUG
             @.log.debug "found user by email:", user
+          user.sockets = []
           sendLoginData(user)
 
       x = socket.$emit
