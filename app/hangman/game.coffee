@@ -18,13 +18,14 @@ class exports.Game
     @reporttime = 10
 
   guess: (player, guess) ->
+
     @io.log.info player.user.email + " guessed " + guess
     player.game.guess.push guess
-
+    player.user.money-- ##TODO use real user money account
     that = @
     @hangman.check player.game.guess.join(""), (match) ->
       complete = (match == that.hangman.word)
-      player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
+      player.emit('hangman', {complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match, money: player.user.money })
       if (complete)
         that.io.log.info player.user.email + " guessed the whole word correctly!"
     return ""

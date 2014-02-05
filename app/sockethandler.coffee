@@ -7,8 +7,9 @@ class exports.SocketHandler
 
 	init: (io, sessionStore, DEBUG, SESSION_SECRET) ->
 
-    connectedUsers = []
+    connectedUserIds = []
     userSessions = {}
+    connectedUsers= {}
     io.authorization (data, accept) ->
       if DEBUG 
         @.log.debug "authorization called with cookies:", data?.headers?.cookie
@@ -35,16 +36,15 @@ class exports.SocketHandler
           return accept("NO User in session found.", false)
         
         # success! we're authenticated with a known session.
-        if session.passport.user in connectedUsers
-          @.log.debug "user reconnected from different window"
+        if session.passport.user in connectedUserIds
+          console.info "user reconnected from different window"
           session = userSessions[session.passport.user]
         else 
-          connectedUsers.push session.passport.user
+          console.info "user first time login "
+          connectedUserIds.push session.passport.user
           userSessions[session.passport.user]=session
         data.session = session
         data.user = session.passport.user
-        console.log cookie
-        console.log data.cookie
         accept null, true
 
     User = require('./models/user')
@@ -55,16 +55,28 @@ class exports.SocketHandler
       if DEBUG
         @.log.info "establishing connection"
         @.log.info "trying to find user:", hs.user
-      User.findById hs.user, (err, user) =>
-        return @.log.warn "Couldnt find user:", user if err || !user
-        if DEBUG
-          @.log.debug "found user by email:", user
+
+      
+      user = connectedUsers[hs.user]
+      sendLoginData= (user) => 
         socket.user = user
         user.socket = socket
         if DEBUG
           @.log.debug "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
+        connectedUsers[hs.user] = user
         data = DataAccess.retrieveGames()
-        socket.emit "loggedin", data
+        socket.emit "loggedin", data        
+
+      if user
+        console.log "user reused " + user
+        sendLoginData(user)
+      else 
+        console.log "get user from db"
+        User.findById hs.user, (err, user) =>
+          return @.log.warn "Couldnt find user:", user if err || !user
+          if DEBUG
+            @.log.debug "found user by email:", user
+          sendLoginData(user)
 
       x = socket.$emit
 

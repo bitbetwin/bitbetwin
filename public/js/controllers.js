@@ -19,6 +19,7 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
   		$scope.word = hangman.phrase;
       $scope.guesses = hangman.guesses;
       $scope.time = hangman.time;
+      $scope.money = hangman.money
       complete = hangman.complete;
       if (complete) {
         $log.info('complete');
