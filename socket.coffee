@@ -28,7 +28,7 @@ class exports.Server
     @app.use '/components', express.static(__dirname + '/bower_components');
     @app.use express.cookieParser('guess')
 
-    @app.use express.session { secret :@SESSION_SECRET, store: @sessionStore, key: 'sessionID'}
+    @app.use express.session { secret: @SESSION_SECRET, store: @sessionStore, key: 'sessionID', cookie: { maxAge: 60*60*1000 }}
 
     # error message handling
     flash = require 'connect-flash'
