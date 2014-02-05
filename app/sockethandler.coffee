@@ -7,6 +7,8 @@ class exports.SocketHandler
 
 	init: (io, sessionStore, DEBUG, SESSION_SECRET) ->
 
+    connectedUsers = []
+    userSessions = {}
     io.authorization (data, accept) ->
       if DEBUG 
         @.log.debug "authorization called with cookies:", data?.headers?.cookie
@@ -33,8 +35,16 @@ class exports.SocketHandler
           return accept("NO User in session found.", false)
         
         # success! we're authenticated with a known session.
+        if session.passport.user in connectedUsers
+          @.log.debug "user reconnected from different window"
+          session = userSessions[session.passport.user]
+        else 
+          connectedUsers.push session.passport.user
+          userSessions[session.passport.user]=session
         data.session = session
         data.user = session.passport.user
+        console.log cookie
+        console.log data.cookie
         accept null, true
 
     User = require('./models/user')
@@ -80,3 +90,6 @@ class exports.SocketHandler
         else
           @.log.warn "no game event"
           x.apply @, Array.prototype.slice.call arguments
+      socket.on "disconnect", () ->
+        @.log.debug "A socket with sessionID " + hs.sessionID + " disconnected!"
+      
