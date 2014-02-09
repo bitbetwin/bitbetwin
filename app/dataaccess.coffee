@@ -79,15 +79,12 @@ class DataAccess
       if credits.length < winners.length
         return callback "Less credits than winners is not possible."
 
-      if winners.length == 0
-        return callback()
-
       share = Math.floor(credits.length / winners.length)
 
       promises = []
 
       # split credits by equal shares
-      index = 0
+      index = -1
       winnum = 0
       for winner in winners
         deal = 0
