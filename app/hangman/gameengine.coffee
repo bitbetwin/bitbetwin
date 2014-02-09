@@ -41,14 +41,14 @@ class exports.GameEngine
         complete = (match == that.hangman.word)
         player.emit('hangman', { complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
 
+        # TODO: introduce caching
+        DataAccess.retrieveCredits player.user._id, (err, credits) ->
+          throw err if err
+          player.emit "credit", credits.length
+
         if (complete)
           player.game.complete = true
           logger.info player.user.email + " guessed the whole word correctly!"
-        else
-          # TODO: introduce caching
-          DataAccess.retrieveCredits player.user._id, (err, credits) ->
-            throw err if err
-            player.emit "credit", credits.length
 
   join: (player) ->
     @io.log.info player.user.email + " joined " + @game.name
