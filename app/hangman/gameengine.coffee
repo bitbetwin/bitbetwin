@@ -123,8 +123,9 @@ class exports.GameEngine
       player.game.guess.length = 0
       player.emit 'stop'
 
+    logger = @io.log
     DataAccess.payWinners winners, @game._id, (err) ->
-      throw err if err
+      logger.warn if err
 
 
   report: (player, feed, callback) ->
