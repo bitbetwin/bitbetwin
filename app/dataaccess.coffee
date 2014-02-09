@@ -60,16 +60,16 @@ class DataAccess
 
       promises = []
       for credit in credits when credits.indexOf(credit) < pot
-        promises.push DataAccess.drawCommission credit, (err) ->
-          return callback err if err
-
-      for credit in credits when credits.indexOf(credit) >= pot && credits.indexOf(credit) < (pot + commission)
-        console.log credit._id
         credit.game = gameid
         promises.push credit.save (err) ->
           return callback err if err
 
+      for credit in credits when credits.indexOf(credit) >= pot && credits.indexOf(credit) < (pot + commission)
+        promises.push DataAccess.drawCommission credit, (err) ->
+          return callback err if err
+
       Promise.all( promises ).then () ->
+        console.log "finished charging"
         callback null
 
   @payWinners: (winners, gameid, callback) ->
