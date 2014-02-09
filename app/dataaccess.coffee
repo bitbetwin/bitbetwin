@@ -34,7 +34,7 @@ class DataAccess
     ####
 
   @retrieveCredits: (userid, callback) ->
-    Credit.find owner: userid, (err, credits) ->
+    Credit.find owner: userid, game: null, (err, credits) ->
       callback err, credits
 
   @drawCommission: (credit, callback) ->
@@ -52,11 +52,9 @@ class DataAccess
 
     return callback() if bet == 0
 
-    Credit.find owner: userid, game: null, (err, credits) ->
+    DataAccess.retrieveCredits userid, (err, credits) ->
       return callback err if err
-      console.log "pot: " + pot
-      console.log "commission: " + commission
-      console.log "credits: " + credits.length
+
       if credits.length < (pot + commission)
         return callback "Not enough credits"
 

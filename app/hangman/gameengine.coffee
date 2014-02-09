@@ -31,19 +31,24 @@ class exports.GameEngine
 
     that = @
     DataAccess.chargeCredits player.user._id, @game._id, pot, commission, (err) ->
-      if err
-        # todo report warning to user
-        logger.warn err
-        return
+      # todo report warning to user
+      return logger.warn err if err
+
       logger.info player.user.email + " guessed " + guess
       player.game.guess.push guess
 
       that.hangman.check player.game.guess.join(""), (match) ->
         complete = (match == that.hangman.word)
         player.emit('hangman', { complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
+
         if (complete)
           player.game.complete = true
           logger.info player.user.email + " guessed the whole word correctly!"
+        else
+          # TODO: introduce caching
+          DataAccess.retrieveCredits player.user._id, (err, credits) ->
+            throw err if err
+            player.emit "credit", credits.length
 
   join: (player) ->
     @io.log.info player.user.email + " joined " + @game.name
@@ -111,10 +116,16 @@ class exports.GameEngine
     @io.log.info "stopping " + @game.name
     @countdown = 0
 
-    for socket in @io.clients @game.name
-      socket.game.guess.length = 0
+    winners = []
+    for player in @io.clients @game.name
+      if player.game.complete
+        winners.push player.user
+      player.game.guess.length = 0
+      player.emit 'stop'
 
-      socket.emit 'stop'
+    DataAccess.payWinners winners, @game._id, (err) ->
+      throw err if err
+
 
   report: (player, feed, callback) ->
     @io.log.info "sending report to " + player.user.email + "; time: " + (@countdown + @reporttime)

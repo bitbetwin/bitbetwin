@@ -40,7 +40,7 @@ describe "Credit", ->
     @testUser.save (err) ->
       User.findOne email: "encypt@gmail.com", (err, user) ->
         throw err  if err
-        @credit = new Credit owner: user._id, value: 1
+        @credit = new Credit owner: user._id, game: null, value: 1
         @credit.save (err) ->
           DataAccess.retrieveCredits user._id, (err, credits) ->
             throw err if err
@@ -66,12 +66,12 @@ describe "Credit", ->
         throw err if err
         callback null, game, item
     , (game, user, callback) ->
-      @credit = new Credit owner: user._id, value: 1
+      @credit = new Credit owner: user._id, game: null, value: 1
       @credit.save (err) ->
         throw err if err
         callback null, game, user
     , (game, user, callback) ->
-      @credit = new Credit owner: user._id, value: 1
+      @credit = new Credit owner: user._id, game: null, value: 1
       @credit.save (err) ->
         throw err if err
         callback null, game, user
@@ -111,12 +111,12 @@ describe "Credit", ->
         throw err if err
         callback null, game, item
     , (game, user, callback) ->
-      @credit = new Credit owner: user._id, value: 1
+      @credit = new Credit owner: user._id, game: null, value: 1
       @credit.save (err) ->
         throw err if err
         callback null, game, user
     , (game, user, callback) ->
-      @credit = new Credit owner: user._id, value: 1
+      @credit = new Credit owner: user._id, game: null, value: 1
       @credit.save (err) ->
         throw err if err
         callback null, game, user
@@ -301,12 +301,12 @@ describe "Credit", ->
         throw err if err
         callback null, game, item
     , (game, user, callback) ->
-      @credit = new Credit owner: user._id, value: 1
+      @credit = new Credit owner: user._id, game: null, value: 1
       @credit.save (err) ->
         throw err if err
         callback null, game, user
     , (game, user, callback) ->
-      @credit = new Credit owner: user._id, value: 1
+      @credit = new Credit owner: user._id, game: null, value: 1
       @credit.save (err) ->
         throw err if err
         callback null, game, user
