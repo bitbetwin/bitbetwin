@@ -15,7 +15,7 @@ describe('HangmanCtrl', function() {
     element(by.id('login-btn')).click();
 
     var welcometext = element(by.id('welcome')).getText();
-    expect(welcometext).toEqual('You are currently logged in as user@gmail.com, Credits: 0');
+    expect(welcometext).toEqual('You are currently logged in as user@gmail.com, Credits: 25');
 
     var games = element.all(by.repeater('games'));
     expect(games.count()).toEqual(2);
@@ -77,7 +77,7 @@ describe('HangmanCtrl', function() {
     element(by.id('login-btn')).click();
 
     var welcometext = element(by.id('welcome')).getText();
-    expect(welcometext).toEqual('You are currently logged in as user@gmail.com, Credits: 0');
+    expect(welcometext).toEqual('You are currently logged in as user@gmail.com, Credits: 13');
     var greetingtext = element(by.id('greeting')).getText();
     expect(greetingtext).toEqual('Bangman :) Hey: user@gmail.com');
   });

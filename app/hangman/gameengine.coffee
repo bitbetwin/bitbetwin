@@ -1,11 +1,14 @@
 DataAccess = require '../dataaccess'
 
+Promise = require 'promise'
+
 class exports.GameEngine
 
   constructor: (@io, @game) ->
     @io.log.info "initialising phraseGenerator"
     @started = false
     SimpleDurationCalculator = require('./simpledurationcalculator').SimpleDurationCalculator
+    SimpleChargeCalculator = require('./simplechargecalculator').SimpleChargeCalculator
     
     if DataAccess.isInTestingMode()
       SinglePhraseGenerator = require('./phrasegenerator/singlephrasegenerator').SinglePhraseGenerator
@@ -15,13 +18,19 @@ class exports.GameEngine
       @phraseGenerator = new SimplePhraseGenerator
 
     @simpleDurationCalculator = new SimpleDurationCalculator
+    @simpleChargeCalculator = new SimpleChargeCalculator
     @reporttime = 10
 
   guess: (player, guess) ->
-    @io.log.info "charging 2 credits from " + user.email + " to " + game.name
+    pot = @simpleChargeCalculator.pot guess
+    commission = @simpleChargeCalculator.commission guess
+
+    @io.log.info "charging " + commission + " credit from " + player.user.email + " to bank: mail@bitbetwin.co"
+    @io.log.info "charging " + pot + " credit from " + player.user.email + " to " + @game.name
     logger = @io.log
+
     that = @
-    DataAccess.chargeCredits player.user._id, @game._id, 2, (err) ->
+    DataAccess.chargeCredits player.user._id, @game._id, pot, commission, (err) ->
       if err
         # todo report warning to user
         logger.warn err
@@ -107,6 +116,6 @@ class exports.GameEngine
 
       socket.emit 'stop'
 
-  report: (player, callback) ->
+  report: (player, feed, callback) ->
     @io.log.info "sending report to " + player.user.email + "; time: " + (@countdown + @reporttime)
     callback {'time': @countdown + @reporttime }

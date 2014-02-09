@@ -1,9 +1,16 @@
 db.users.drop();
 db.subscribers.drop();
 db.games.drop();
+db.credits.drop();
 
 db.users.save({
 	email: "user@gmail.com", 
+	password: "$2a$10$C0kXk9XgrSLdmeVjqSjYN.EoMnrUpkoig5C5Yl1BswkgWdO/og3wO",
+	activated: true
+});
+
+db.users.save({
+	email: "mail@bitbetwin.co", 
 	password: "$2a$10$C0kXk9XgrSLdmeVjqSjYN.EoMnrUpkoig5C5Yl1BswkgWdO/og3wO",
 	activated: true
 });
@@ -19,3 +26,11 @@ db.games.save({
 	phrasegenerator: "simplephrasegenerator", 
 	durationcalculator: "simpledurationcalculator"
 });
+
+for (var i = 1; i <= 25; i++) {
+	db.credits.save({
+		owner: db.users.findOne({ email: "user@gmail.com" })._id,
+		game: null,
+		value: 1
+	});
+}

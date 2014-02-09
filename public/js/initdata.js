@@ -29,7 +29,8 @@ db.users.save({
 
 for (var i = 1; i <= 25; i++) {
 	db.credits.save({
-		owner: db.users.find()[0]._id,
+		owner: db.users.findOne({ email: "user@gmail.com" })._id,
+		game: null,
 		value: 1
 	});
 }

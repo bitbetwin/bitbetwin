@@ -4,6 +4,7 @@ mongoose = restful.mongoose
 Game = require './models/game'
 Credit = require './models/credit'
 User = require './models/user'
+Promise = require 'promise'
 
 class DataAccess
 
@@ -28,6 +29,10 @@ class DataAccess
     Game.find {}, (err, games) ->
       callback err, games
 
+    ####
+    # TODO: extract to Credit DAO class
+    ####
+
   @retrieveCredits: (userid, callback) ->
     Credit.find owner: userid, (err, credits) ->
       callback err, credits
@@ -40,31 +45,72 @@ class DataAccess
       credit.save (err) ->
         callback err
 
-  @chargeCredits: (userid, gameid, amount, callback) ->
-    if amount < 2
+  @chargeCredits: (userid, gameid, pot, commission, callback) ->
+    bet = pot + commission
+    if bet < 0
       callback "Too small bet"
-    that = @
-    Credit.find owner: userid, game: { $exists: false }, (err, credits) ->
-      callback err if err
-      if credits.length == 0
-        return callback "Not enough credits"
-      values = 0
-      for credit in credits
-        values += credit.value
-      if values < amount
+
+    return callback() if bet == 0
+
+    Credit.find owner: userid, game: null, (err, credits) ->
+      return callback err if err
+      console.log "pot: " + pot
+      console.log "commission: " + commission
+      console.log "credits: " + credits.length
+      if credits.length < (pot + commission)
         return callback "Not enough credits"
 
-      that.drawCommission credits[0], (err) ->
-        throw err if err
-        #todo knapsack problem for choosing the best fitting credits
-        i = 1
-        while i < amount
-          credits[i].game = gameid
-          credits[i].save (err) ->
-            return callback err if err
-          i++
+      promises = []
+      for credit in credits when credits.indexOf(credit) < pot
+        promises.push DataAccess.drawCommission credit, (err) ->
+          return callback err if err
 
+      for credit in credits when credits.indexOf(credit) >= pot && credits.indexOf(credit) < (pot + commission)
+        console.log credit._id
+        credit.game = gameid
+        promises.push credit.save (err) ->
+          return callback err if err
+
+      Promise.all( promises ).then () ->
         callback null
+
+  @payWinners: (winners, gameid, callback) ->
+    Credit.find game: gameid, (err, credits) ->
+      return callback err if err
+
+      if credits.length < winners.length
+        return callback "Less credits than winners is not possible."
+
+      if winners.length == 0
+        return callback()
+
+      share = Math.floor(credits.length / winners.length)
+
+      promises = []
+
+      # split credits by equal shares
+      index = 0
+      winnum = 0
+      for winner in winners
+        deal = 0
+        while deal < share
+          index = winnum + deal
+          console.log credits[index]._id + ", index: " + index + " -> " + winner._id
+          credits[index].owner = winner._id
+          credits[index].game = null
+          promises.push credits[index].save (err) ->
+            throw err if err
+          deal++
+        winnum += share
+
+      # handle remaining credits, which could not be split equally.
+      # for now we just move them to the bank
+      for credit in credits when credits.indexOf(credit) > index
+          promises.push DataAccess.drawCommission credit, (err) ->
+            throw err if err
+
+      Promise.all( promises ).then () ->
+        callback()
 
   @logger: () ->
     @io.log
