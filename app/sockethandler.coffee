@@ -1,7 +1,8 @@
 connect = require 'connect'
 cook = require 'cookie'
 socketio = require 'socket.io'
-DataAccess = require './dataaccess'
+CreditDao = require './dao/creditdao'
+GameDao = require './dao/gamedao'
 
 class exports.SocketHandler
 
@@ -53,10 +54,10 @@ class exports.SocketHandler
         user.socket = socket
         if DEBUG
           @.log.debug "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
-        DataAccess.retrieveGames (err, games) ->
+        GameDao.retrieveGames (err, games) ->
           socket.emit "loggedin", games
 
-        DataAccess.retrieveCredits user._id, (err, credits) ->
+        CreditDao.retrieveCredits user._id, (err, credits) ->
           socket.emit "credit", credits.length
 
       origemit = socket.$emit
@@ -69,12 +70,12 @@ class exports.SocketHandler
 
         gameevent = false
 
-        if event == 'join' && DataAccess.commands[feed]? && ( event in DataAccess.commands[feed]['functions'] )
-          result = DataAccess.commands[feed]['instance'][event] @, feed, callback
+        if event == 'join' && GameDao.commands[feed]? && ( event in GameDao.commands[feed]['functions'] )
+          result = GameDao.commands[feed]['instance'][event] @, feed, callback
           gameevent = true
         else
-          if DataAccess.commands[@.game?.name]? && ( event in DataAccess.commands[@.game?.name]['functions'] )
-            result = DataAccess.commands[@.game?.name]['instance'][event] @, feed, callback
+          if GameDao.commands[@.game?.name]? && ( event in GameDao.commands[@.game?.name]['functions'] )
+            result = GameDao.commands[@.game?.name]['instance'][event] @, feed, callback
             gameevent = true
 
         if !gameevent

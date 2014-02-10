@@ -3,7 +3,7 @@ User = require "../app/models/user"
 Game = require "../app/models/game"
 
 should = require "should"
-DataAccess = require "../app/dataaccess"
+CreditDao = require "../app/dao/creditdao"
 async = require "async"
 
 restful = require 'node-restful'
@@ -12,8 +12,6 @@ mongoose = restful.mongoose
 Promise = require 'promise'
 
 describe "Credit", ->
-  
-  @timeout 15000
 
   before (done)->
     mongoose.connect "mongodb://localhost/bitbetwinTest"
@@ -42,7 +40,7 @@ describe "Credit", ->
         throw err  if err
         @credit = new Credit owner: user._id, game: null, value: 1
         @credit.save (err) ->
-          DataAccess.retrieveCredits user._id, (err, credits) ->
+          CreditDao.retrieveCredits user._id, (err, credits) ->
             throw err if err
             credits.length.should.be.equal 1
             credits[0].owner.equals(user._id).should.be.true
@@ -76,7 +74,7 @@ describe "Credit", ->
         throw err if err
         callback null, game, user
     ], (err, game, user) ->
-      DataAccess.chargeCredits user, game, 1, 1, (err) ->
+      CreditDao.chargeCredits user, game, 1, 1, (err) ->
         defined = err?
         defined.should.be.false 
         done()
@@ -93,7 +91,7 @@ describe "Credit", ->
         throw err if err
         callback null, game, item
     ], (err, game, user) ->
-      DataAccess.chargeCredits user, game, 1, 1, (err) ->
+      CreditDao.chargeCredits user, game, 1, 1, (err) ->
         defined = err?
         defined.should.be.true
         err.should.be.equal "Not enough credits"
@@ -121,7 +119,7 @@ describe "Credit", ->
         throw err if err
         callback null, game, user
     ], (err, game, user) ->
-      DataAccess.chargeCredits user, game, 2, 1, (err) ->
+      CreditDao.chargeCredits user, game, 2, 1, (err) ->
         defined = err?
         defined.should.be.true
         err.should.be.equal "Not enough credits"
@@ -141,7 +139,7 @@ describe "Credit", ->
           
     ], (err, bank, game, user1, user2) ->
       throw err if err
-      DataAccess.payWinners [], game._id, (err) ->
+      CreditDao.payWinners [], game._id, (err) ->
         defined = err?
         defined.should.be.false
         done()
@@ -170,7 +168,7 @@ describe "Credit", ->
           
     ], (err, bank, game, user1, user2) ->
       throw err if err
-      DataAccess.payWinners [user1, user2], game._id, (err) ->
+      CreditDao.payWinners [user1, user2], game._id, (err) ->
         defined = err?
         defined.should.be.true
         err.should.be.equal "Less credits than winners is not possible."
@@ -212,19 +210,19 @@ describe "Credit", ->
           
     ], (err, bank, game, user1, user2) ->
       throw err if err
-      DataAccess.payWinners [user1, user2], game._id, (err) ->
+      CreditDao.payWinners [user1, user2], game._id, (err) ->
         defined = err?
         defined.should.be.false
 
-        DataAccess.retrieveCredits user1._id, (err, credits) ->
+        CreditDao.retrieveCredits user1._id, (err, credits) ->
           defined = err?
           defined.should.be.false
           credits.length.should.be.equal 2
-          DataAccess.retrieveCredits user2._id, (err, credits) ->
+          CreditDao.retrieveCredits user2._id, (err, credits) ->
             defined = err?
             defined.should.be.false
             credits.length.should.be.equal 2
-            DataAccess.retrieveCredits bank._id, (err, credits) ->
+            CreditDao.retrieveCredits bank._id, (err, credits) ->
               defined = err?
               defined.should.be.false
               credits.length.should.be.equal 0
@@ -266,19 +264,19 @@ describe "Credit", ->
           
     ], (err, bank, game, user1, user2) ->
       throw err if err
-      DataAccess.payWinners [user1, user2], game._id, (err) ->
+      CreditDao.payWinners [user1, user2], game._id, (err) ->
         defined = err?
         defined.should.be.false
 
-        DataAccess.retrieveCredits user1._id, (err, credits) ->
+        CreditDao.retrieveCredits user1._id, (err, credits) ->
           defined = err?
           defined.should.be.false
           credits.length.should.be.equal 10
-          DataAccess.retrieveCredits user2._id, (err, credits) ->
+          CreditDao.retrieveCredits user2._id, (err, credits) ->
             defined = err?
             defined.should.be.false
             credits.length.should.be.equal 10
-            DataAccess.retrieveCredits bank._id, (err, credits) ->
+            CreditDao.retrieveCredits bank._id, (err, credits) ->
               defined = err?
               defined.should.be.false
               credits.length.should.be.equal 1
@@ -311,7 +309,7 @@ describe "Credit", ->
         throw err if err
         callback null, game, user
     ], (err, game, user) ->
-      DataAccess.chargeCredits user._id, game._id, -1, -1, (err) ->
+      CreditDao.chargeCredits user._id, game._id, -1, -1, (err) ->
         defined = err?
         defined.should.be.true
         err.should.be.equal "Too small bet"

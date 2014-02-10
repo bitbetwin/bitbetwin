@@ -1,6 +1,6 @@
 Game = require "../app/models/game"
 should = require "should"
-DataAccess = require "../app/dataaccess"
+GameDao = require "../app/dao/gamedao"
 async = require "async"
 
 restful = require 'node-restful'
@@ -43,7 +43,7 @@ describe "Game", ->
         callback err
     ], (err) ->
       throw err  if err
-      DataAccess.retrieveGames (err, games) ->
+      GameDao.retrieveGames (err, games) ->
         throw err if err
         games.length.should.be.equal 2
         done()

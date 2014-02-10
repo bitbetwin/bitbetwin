@@ -1,4 +1,6 @@
 DataAccess = require '../dataaccess'
+CreditDao = require '../dao/creditdao'
+GameDao = require '../dao/gamedao'
 
 Promise = require 'promise'
 
@@ -30,7 +32,7 @@ class exports.GameEngine
     logger = @io.log
 
     that = @
-    DataAccess.chargeCredits player.user._id, @game._id, pot, commission, (err) ->
+    CreditDao.chargeCredits player.user._id, @game._id, pot, commission, (err) ->
       # todo report warning to user
       return logger.warn err if err
 
@@ -42,7 +44,7 @@ class exports.GameEngine
         player.emit('hangman', { complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
 
         # TODO: introduce caching
-        DataAccess.retrieveCredits player.user._id, (err, credits) ->
+        CreditDao.retrieveCredits player.user._id, (err, credits) ->
           throw err if err
           player.emit "credit", credits.length
 
@@ -64,7 +66,7 @@ class exports.GameEngine
   leave: (player, feed, callback) ->
     @io.log.info player.user.email + " left " + @game.name
     player.leave @game.name
-    DataAccess.retrieveGames (err, games) ->
+    GameDao.retrieveGames (err, games) ->
       callback games
 
   broadcast: (player) ->
@@ -124,7 +126,7 @@ class exports.GameEngine
       player.emit 'stop'
 
     logger = @io.log
-    DataAccess.payWinners winners, @game._id, (err) ->
+    CreditDao.payWinners winners, @game._id, (err) ->
       logger.warn if err
 
 
