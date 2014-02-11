@@ -15,6 +15,9 @@ UserSchema = new Schema(
   salt: String
   hash: String
   btc_id: String
+  money: 
+    type: Number 
+    default: 100
   activated: 
       type: Boolean
       default: false

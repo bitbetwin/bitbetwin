@@ -49,6 +49,10 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
         $location.path('/report'); 
     });
 
+    $socket.on('credits', function(data) {
+      $scope.money = data.money
+    });
+
     $scope.guess = function() {
       $log.info('guessing ' + this.letter);
     	$socket.emit('guess', this.letter);

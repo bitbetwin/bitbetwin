@@ -6,8 +6,11 @@ GameDao = require './dao/gamedao'
 
 class exports.SocketHandler
 
-	init: (io, sessionStore, DEBUG, SESSION_SECRET) ->
+  init: (io, sessionStore, DEBUG, SESSION_SECRET) ->
 
+    connectedUserIds = []
+    userSessions = {}
+    connectedUsers= {}
     io.authorization (data, accept) ->
       if DEBUG 
         @.log.debug "authorization called with cookies:", data?.headers?.cookie
@@ -34,6 +37,13 @@ class exports.SocketHandler
           return accept("NO User in session found.", false)
         
         # success! we're authenticated with a known session.
+        if session.passport.user in connectedUserIds
+          console.info "user reconnected from different window"
+          session = userSessions[session.passport.user]
+        else 
+          console.info "user first time login "
+          connectedUserIds.push session.passport.user
+          userSessions[session.passport.user]=session
         data.session = session
         data.user = session.passport.user
         accept null, true
@@ -46,19 +56,33 @@ class exports.SocketHandler
       if DEBUG
         @.log.info "establishing connection"
         @.log.info "trying to find user:", hs.user
-      User.findById hs.user, (err, user) =>
-        return @.log.warn "Couldnt find user:", user if err || !user
-        if DEBUG
-          @.log.debug "found user by email:", user
+
+      logger = @.log
+      user = connectedUsers[hs.user]
+      sendLoginData= (user) => 
         socket.user = user
-        user.socket = socket
-        if DEBUG
-          @.log.debug "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
+        user.sockets.push socket
+        logger.debug "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
+        
+        connectedUsers[hs.user] = user
+        
         GameDao.retrieveGames (err, games) ->
           socket.emit "loggedin", games
 
         CreditDao.retrieveCredits user._id, (err, credits) ->
           socket.emit "credit", credits.length
+
+      if user
+        console.log "user reused " + user
+        sendLoginData(user)
+      else 
+        console.log "get user from db"
+        User.findById hs.user, (err, user) =>
+          return @.log.warn "Couldnt find user:", user if err || !user
+          if DEBUG
+            @.log.debug "found user by email:", user
+          user.sockets = []
+          sendLoginData(user)
 
       origemit = socket.$emit
 
@@ -80,4 +104,9 @@ class exports.SocketHandler
 
         if !gameevent
           @.log.warn "no game event"
+
           origemit.apply @, Array.prototype.slice.call arguments
+
+      socket.on "disconnect", () ->
+        socket.user.sockets.splice(socket)
+        @.log.debug "A socket with sessionID " + hs.sessionID + " disconnected!"
