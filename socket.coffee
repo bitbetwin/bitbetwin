@@ -57,7 +57,6 @@ class exports.Server
 
     @app.use logger
 
-
   start: (callback) ->
     console.log "DEBUG flag:", DataAccess.loadConfig().debug
 
@@ -67,17 +66,19 @@ class exports.Server
     HttpHandler = require('./app/httphandler').HttpHandler
     httpHandler = new HttpHandler
     httpHandler.init @app
+    switch DataAccess.loadConfig().mode
+      when "beta" then console.log "--------------------\nBeta Mode started -- no socket.io support\n--------------------"
+      else
+        # Socket IO
+        @public=(socketio.listen @http_server)
+        @private = @public.of "/auth"
 
-    # Socket IO
-    @public=(socketio.listen @http_server)
-    @private = @public.of "/auth"
+        DataAccess.init @private
 
-    DataAccess.init @private
-
-    @private.log.info "initialising socketHandler"
-    SocketHandler = require('./app/sockethandler').SocketHandler
-    socketHandler = new SocketHandler
-    socketHandler.init @private, @sessionStore, @DEBUG, @SESSION_SECRET
+        @private.log.info "initialising socketHandler"
+        SocketHandler = require('./app/sockethandler').SocketHandler
+        socketHandler = new SocketHandler
+        socketHandler.init @private, @sessionStore, @DEBUG, @SESSION_SECRET
 
     DataAccess.startup()
 

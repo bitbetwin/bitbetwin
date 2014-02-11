@@ -1,1 +1,1 @@
-mongo --host localhost bangmandbTest public/js/test/testdata.js
+mongo --host localhost bitbetwinTest public/js/test/testdata.js

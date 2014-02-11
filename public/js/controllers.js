@@ -38,10 +38,10 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
       countdown = $timeout($scope.onTimeout,1000);
   	});
 
-    $socket.on('loggedin', function(data) {
+    $socket.on('loggedin', function(games) {
         loggedIn = true;
         complete = false;
-        $scope.games = data.games;
+        $scope.games = games;
     });
 
     $socket.on('stop', function() {
@@ -56,11 +56,11 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
   	};
 
     $scope.leave = function() {
-      $socket.emit('leave', '', function(data) {
+      $socket.emit('leave', '', function(games) {
         $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
         $scope.time = '';
         started = false;
-        $scope.games = data.games;
+        $scope.games = games;
       });
     };
 
@@ -96,6 +96,17 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
         key.preventDefault();
     };
 }]);
+
+
+bangmanControllers.controller('MainCtrl', ['$scope', '$socket', '$log',
+  function($scope, $socket, $log) {
+
+    $socket.on('credit', function(credits) {
+      $log.warn("credits: " + credits);
+      $scope.credits = credits;
+    })
+}]);
+
 
 bangmanControllers.controller('ReportCtrl', ['$scope', '$socket', '$log', '$location', '$timeout',
   function($scope, $socket, $log, $location, $timeout) {
@@ -135,12 +146,13 @@ bangmanControllers.controller('ReportCtrl', ['$scope', '$socket', '$log', '$loca
 var landingpageControllers = angular.module('landingpageControllers', []);
 landingpageControllers.controller('LandingpageCtrl', function($scope, $http) {
 	$scope.subscribe = function() {
-		$http.put('/subscribe', {name: $scope.name, email: $scope.email}).success(function (data, status) {
+		$http.put('/subscribe', {name: $scope.name, email: $scope.email, newsletter: $scope.newsletter}).success(function (data, status) {
 		 	$scope.response = data;
       if (!data.err) {
         $scope.subscribe_form.$setPristine();
         $scope.name = '';
         $scope.email = '';
+        $scope.newsletter = false;
       }
 		});
 	}

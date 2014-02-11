@@ -1,73 +1,55 @@
 restful = require 'node-restful'
 mongoose = restful.mongoose
 
-User = require './models/user'
+GameDao = require './dao/gamedao'
+CreditDao = require './dao/creditdao'
 
 class DataAccess
 
-	@init: (@io) ->
-		Game = require('./hangman/game').Game
-		game1 = new Game io, 'game1'
-		game1.start()
-		game2 = new Game io, 'game2'
-		game2.start()
+  @init: (@io) ->
+    @loadConfig()
+    GameDao.init @io
+    CreditDao.init @io
 
-		@logger().info "initialised games"
+  @logger: () ->
+    @io.log
 
-		#TODO: move games to db
-		@commands = new Array()
-		@commands['game1'] = new Array()
-		@commands['game1']['instance'] = game1
-		@commands['game1']['functions'] = ['join', 'leave', 'guess', 'report']
-		@commands['game2'] = new Array()
-		@commands['game2']['instance'] = game2
-		@commands['game2']['functions'] = ['join', 'leave', 'guess', 'report']
+  @loadConfig: () ->
+    return @config if @config?
+    
+    #settings
+    switch process.env.NODE_ENV
+      when "development" 
+        @env = "development"
+      when "production"
+        @env = "production"
+      when "testing"
+        @env = "testing" 
+      else
+        @env = "development"
 
-		@loadConfig()
+    console.log @env + " mode started."
 
-	@retrieveGames: () ->
-		#TODO: move to db
-		return { games: [ {name: 'game1' }, {name: 'game2'}] }
+    @config = require("./config/config")[@env]
 
-	@logger: () ->
-		@io.log
+  @isInTestingMode: () ->
+    return @env == 'testing'
 
-	@loadConfig: () ->
-		return @config if @config?
-		
-		#settings
-		switch process.env.NODE_ENV
-		  when "development" 
-		    @env = "development"
-		  when "production"
-		    @env = "production"
-		  when "testing"
-		  	@env = "testing" 
-		  else
-		    @env = "development"
+  @isInDevMode: () ->
+    return @env == 'testing' || @env == 'development'
 
-		console.log @env + " mode started."
+  @startup: () ->
+    console.log "connecting to " + @loadConfig().db_address
+    mongoose.connect @loadConfig().db_address, (error) ->
+      console.log "could not connect because: " + error if error
+    db = mongoose.connection
 
-		@config = require("./config/config")[@env]
+    db.on 'error', console.error.bind(console, 'Mongo DB connection error:')
 
-	@isInTestingMode: () ->
-		return @env == 'testing'
+    db.once 'open', (callback) ->
+      console.log "connected with mongodb"
 
-	@isInDevMode: () ->
-		return @env == 'testing' || @env == 'development'
-
-	@startup: () ->
-		console.log "connecting to " + @loadConfig().db_address
-		mongoose.connect @loadConfig().db_address, (error) ->
-		  console.log "could not connect because: " + error if error
-		db = mongoose.connection
-
-		db.on 'error', console.error.bind(console, 'Mongo DB connection error:')
-
-		db.once 'open', (callback) ->
-		  console.log "connected with mongodb"
-
-	@shutdown: () ->
-    	mongoose.disconnect()
+  @shutdown: () ->
+      mongoose.disconnect()
 
 module.exports = DataAccess
