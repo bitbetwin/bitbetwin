@@ -3,9 +3,10 @@
 	.col-md-10
 		if (user)
 			h1(id="greeting") Bangman :) Hey: #{user.email}
-		p(id="countdown") {{ time }}
+		p(id="countdown") {{ duration}} {{ time }}
 		.jumbotron(ng-if="started()")
-			.well.well-lg(key-listener='handleKey')
+			bm-timer(time='time', duration='duration')
+			.well.well-lg
 				span(id='match') Guessed Word: {{ word }}
 			form(role='form', ng-submit="guess()")
 				.form-group
