@@ -37,10 +37,10 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
       countdown = $timeout($scope.onTimeout,1000);
   	});
 
-    $socket.on('loggedin', function(data) {
+    $socket.on('loggedin', function(games) {
         loggedIn = true;
         complete = false;
-        $scope.games = data.games;
+        $scope.games = games;
     });
 
     $socket.on('stop', function() {
@@ -55,11 +55,11 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
   	};
 
     $scope.leave = function() {
-      $socket.emit('leave', '', function(data) {
+      $socket.emit('leave', '', function(games) {
         $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
         $scope.time = '';
         started = false;
-        $scope.games = data.games;
+        $scope.games = games;
       });
     };
 
@@ -95,6 +95,17 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
         key.preventDefault();
     };
 }]);
+
+
+bangmanControllers.controller('MainCtrl', ['$scope', '$socket', '$log',
+  function($scope, $socket, $log) {
+
+    $socket.on('credit', function(credits) {
+      $log.warn("credits: " + credits);
+      $scope.credits = credits;
+    })
+}]);
+
 
 bangmanControllers.controller('ReportCtrl', ['$scope', '$socket', '$log', '$location', '$timeout',
   function($scope, $socket, $log, $location, $timeout) {

@@ -2,5 +2,6 @@ if (!user)
   include login
   include register
 if (user)
-  p(id="welcome") You are currently logged in as #{user.email}
-  a(href="/logout") Logout
+  div(ng-controller='MainCtrl')
+    p(id="welcome") You are currently logged in as #{user.email}, Credits: {{ credits }}
+    a(href="/logout") Logout
