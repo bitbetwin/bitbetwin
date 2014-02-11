@@ -43,7 +43,7 @@ class exports.GameEngine
 
       that.hangman.check player.game.guess.join(""), (match) ->
         complete = (match == that.hangman.word)
-        player.emit('hangman', { complete: complete, guesses: player.game.guess, time: that.countdown, phrase: match })
+        player.emit('hangman', { complete: complete, guesses: player.game.guess, duration: that.duration, time: that.countdown, phrase: match })
 
         socket.emit('credits', { money: player.user.money }) for socket in player.user.sockets
 
@@ -90,7 +90,7 @@ class exports.GameEngine
     @hangman = new Hangman phrase
     
     @io.log.info "calculating game duration"
-    @countdown = @simpleDurationCalculator.calculate phrase
+    @duration = @countdown = @simpleDurationCalculator.calculate phrase
     
     @io.log.info "broadcast game start"
     for socket in @io.clients @game.name

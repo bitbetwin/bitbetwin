@@ -3,7 +3,6 @@
 	.col-md-10
 		if (user)
 			h1(id="greeting") Bangman :) Hey: #{user.email}
-		p(id="countdown") {{ duration}} {{ time }}
 		.jumbotron(ng-if="started()")
 			bm-timer(time='time', duration='duration')
 			.well.well-lg
