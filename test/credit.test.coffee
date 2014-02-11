@@ -13,6 +13,8 @@ Promise = require 'promise'
 
 describe "Credit", ->
 
+  @timeout 15000
+
   before (done)->
     mongoose.connect "mongodb://localhost/bitbetwinTest"
     db = mongoose.connection
