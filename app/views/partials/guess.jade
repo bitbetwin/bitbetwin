@@ -15,7 +15,7 @@
 					input.btn.btn-primary(id="guess", type="submit", value="Guess!")
 					input.btn.btn-primary(ng-click="leave()", id="leave", type="button", value="Leave")
 				div
-					label(for='guesses') Guesses, Money: {{ money }}
+					label(for='guesses') Guesses
 					input.form-control#guesses(ng-model="guesses", type="text", readonly)
 		.jumbotron(ng-if="!started()")
 			.well.well-lg

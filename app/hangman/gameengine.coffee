@@ -39,18 +39,13 @@ class exports.GameEngine
       logger.info player.user.email + " guessed " + guess
       player.game.guess.push guess
 
-      player.user.money-- ##TODO use real user money account
-
+      player.user.credits -= (pot + commission)
+      
       that.hangman.check player.game.guess.join(""), (match) ->
         complete = (match == that.hangman.word)
         player.emit('hangman', { complete: complete, guesses: player.game.guess, duration: that.duration, time: that.countdown, phrase: match })
 
-        socket.emit('credits', { money: player.user.money }) for socket in player.user.sockets
-
-        # TODO: introduce caching
-        CreditDao.retrieveCredits player.user._id, (err, credits) ->
-          throw err if err
-          player.emit "credit", credits.length
+        socket.emit('wallet', { credits: player.user.credits }) for socket in player.user.sockets
 
         if (complete)
           player.game.complete = true
