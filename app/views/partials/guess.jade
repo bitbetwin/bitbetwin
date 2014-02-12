@@ -5,7 +5,7 @@
 			h1(id="greeting") Bangman :) Hey: #{user.email}
 		.jumbotron(ng-if="started()")
 			bm-timer(time='time', duration='duration')
-			.well.well-lg
+			.well.well-lg(key-listener='handleKey')
 				span(id='match') Guessed Word: {{ word }}
 			form(role='form', ng-submit="guess()")
 				.form-group
