@@ -70,7 +70,8 @@ class exports.SocketHandler
           socket.emit "loggedin", games
 
         CreditDao.retrieveCredits user._id, (err, credits) ->
-          socket.emit "credit", credits.length
+          socket.user.credits = credits.length
+          socket.emit "wallet", { credits: credits.length }
 
       if user
         console.log "user reused " + user
