@@ -34,7 +34,7 @@ class exports.GameEngine
     that = @
     CreditDao.chargeCredits player.user._id, @game._id, pot, commission, (err) ->
       # todo report warning to user
-      return logger.warn err if err
+      return player.emit('validation', { warning: err }) if err
 
       logger.info player.user.email + " guessed " + guess
       player.game.guess.push guess
