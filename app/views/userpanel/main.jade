@@ -4,4 +4,6 @@ if (!user)
 if (user)
   div(ng-controller='MainCtrl')
     p(id="welcome") You are currently logged in as #{user.email}, Credits: {{ credits }}
+    div
+      span.label.label-warning {{ warning }}
     a(href="/logout") Logout

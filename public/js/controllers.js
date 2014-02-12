@@ -108,7 +108,12 @@ bangmanControllers.controller('MainCtrl', ['$scope', '$socket', '$log',
     $socket.on('credit', function(credits) {
       $log.warn("credits: " + credits);
       $scope.credits = credits;
-    })
+    });
+
+    $socket.on('validation', function(validation) {
+      $log.warn(validation.warning);
+      $scope.warning = validation.warning;
+    });
 }]);
 
 
