@@ -37,6 +37,7 @@ testing:
       * webdriver-manager update
    * run tests
       * assure you set testing mode: source test.env
+      * assure you ran ./initTestData.sh
       * assure you started the server: coffee server.coffee
       * ./runE2Etests.sh
       

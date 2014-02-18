@@ -24,7 +24,10 @@ describe('HangmanCtrl', function() {
 
     var matchtext = element(by.id('match')).getText();
     expect(matchtext).toEqual('Guessed Word: __________');
-    element(by.model('letter')).sendKeys('T');
+
+    // send keys should also work, when sending it to a button!
+    element(by.id('guess')).sendKeys('T');
+    
     element(by.id('guess')).click();
     matchtext = element(by.id('match')).getText();
     expect(matchtext).toEqual('Guessed Word: t_________');
