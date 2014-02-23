@@ -5,7 +5,8 @@
 			.well.well-lg
 				span(ng-if="complete()") You win!
 				span(ng-if="!complete()") You lost!
-				div Next game starts in {{ time }}.
+				div Next game starts in 
+				bm-timer(time='time', duration='duration')
 
 .row(ng-if="!loggedIn()")
 	div Please log in
