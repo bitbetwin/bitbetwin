@@ -1,27 +1,25 @@
-.row(ng-if="loggedIn()")
-	.col-md-1
-	.col-md-10
-		if (user)
-			h1(id="greeting") Bangman :) Hey: #{user.email}
-		.jumbotron(ng-if="started()")
-			bm-timer(time='time', duration='duration')
-			.well.well-lg(key-listener='handleKey')
-				span(id='match') Guessed Word: {{ word }}
-			form(role='form', ng-submit="guess()")
-				.form-group
-					label(for='letter') Submit your guess
-					input.form-control#letter(ng-model="letter", type="text", placeholder="Enter a letter!")
-				div(ng-if="!complete()")
-					input.btn.btn-primary(id="guess", type="submit", value="Guess!")
-					input.btn.btn-primary(ng-click="leave()", id="leave", type="button", value="Leave")
-				div
-					label(for='guesses') Guesses
-					input.form-control#guesses(ng-model="guesses", type="text", readonly)
-		.jumbotron(ng-if="!started()")
-			.well.well-lg
-				.form-group
-					span Available games:
-					ul(class='games')
-						li(ng:repeat='game in games') 
-							a(id="{{ game.name }}", ng-click="join(game.name)", href='#') Join {{ game.name }} 
-	.col-md-1
+.container	
+	.row(ng-if="loggedIn()")
+		.col-md-1
+		.col-md-10
+			if (user)
+			.well.well-lg(ng-if="started()")
+				bm-timer(time='time', duration='duration')
+				div(key-listener='handleKey')
+					span(id='match') Guessed Word: {{ word }}
+				form(role='form', ng-submit="guess()")
+					.form-group
+						label(for='letter') Submit your guess
+						input.form-control#letter(ng-model="letter", type="text", placeholder="Enter a letter!")
+					div(ng-if="!complete()")
+						input.btn.btn-primary(id="guess", type="submit", value="Guess!")
+						input.btn.btn-primary(ng-click="leave()", id="leave", type="button", value="Leave")
+					div
+						label(for='guesses') Guesses
+						input.form-control#guesses(ng-model="guesses", type="text", readonly)
+			.well.well-lg(ng-if="!started()")
+				h1 Available games
+				ul.list-group(class='games')
+					li.list-group-item(ng:repeat='game in games') 
+						a(id="{{ game.name }}", ng-click="join(game.name)", href='#') Join {{ game.name }} 
+		.col-md-1

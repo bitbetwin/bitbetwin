@@ -1,14 +1,23 @@
-h2 Register
-- if ('undefined' !== typeof errors && errors.length)
-  ul#errors
-    - each error in errors
-      li.error= error
-form(action='/register', method='POST')
-  #reg-email-div
-    label(for='reg-email') Email
-    input(type='text', name='email', id='reg-email')
-  #reg-password-div
-    label(for='reg-password') Password
-    input(type='password', name='password', id='reg-password' )
-  #reg-submit-div
-    input(type='submit', id='register-btn') Register
+section.header.jumbotron
+  .container
+    - if ('undefined' !== typeof errors && errors.length)
+      .row
+        .col-md-12
+      - each error in errors
+          .alert.text-center.alert-danger= error
+    .row
+      .col-md-7.teaser
+        h1 Real-time Bitcoin Games 
+        p Bitbetwin is a platform allowing you to play <strong>real-time games</strong> against other players and <strong>win Bitcoins</strong> in each round!
+        p
+          small
+            |At the moment we are developing our first game and want to invite you to our beta program, to get early feedback from our future participants.
+            |<strong>Take the chance and shape the first games with us!</strong>
+      .col-md-5
+        form.form-register.well(action='/register', method='POST', role='form')
+          h2 Register
+          .form-group
+            input.form-control.input-lg(type='email', name='email', placeholder='Email', required)
+          .form-group
+            input.form-control.input-lg(type='password', name='password', placeholder='Password', required)
+          input.btn.btn-primary.btn-lg.btn-block(type='submit') Register
