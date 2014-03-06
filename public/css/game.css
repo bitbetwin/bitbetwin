@@ -1,12 +1,1 @@
-.progress-meter .background {
-  fill: #ffffff;
-}
-
-.progress-meter .foreground {
-  fill: #00aeef;
-}
-
-.progress-meter text {
-  fill: #00aeef;
-  font-size: 24px;
-}
+.key{color:#00aeef}body{background:url('/landingpage/img/bg_blurred_06.jpg') no-repeat center center fixed;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;padding-top:50px}.navbar-logo{height:40px;position:relative;top:3px}.navbar .form-group{margin-right:3px}.header{background-color:transparent;padding-top:40px;position:relative;width:100%}.header .teaser{color:#ffffff}.progress-meter .background{fill:#ffffff}.progress-meter .foreground{fill:#00aeef}.progress-meter text{fill:#00aeef;font-size:24px}.guess-field{background-color:#eeeeee;position:relative}.jumbotron{z-index:-2}.guess-field p{color:#88fb00;font-size:4em;font-weight:bold;text-align:center}.guess-field:before,.guess-field:after{content:"";position:absolute;z-index:-1}.guess-field:before{top:80%;left:15px;right:15px;bottom:0;-webkit-box-shadow:0 0 15px rgba(0,0,0,0.6);-moz-box-shadow:0 0 15px rgba(0,0,0,0.6);box-shadow:0 0 15px rgba(0,0,0,0.6);border-top-left-radius:100px 10px;border-top-right-radius:100px 10px;border-bottom-right-radius:100px 10px;border-bottom-left-radius:100px 10px}

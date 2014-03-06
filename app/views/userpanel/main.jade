@@ -1,20 +1,18 @@
-div(ng-controller='MainCtrl')
-  .navbar.navbar-inverse.navbar-fixed-top(role='navbar')
-    .container
-      .navbar-header
-        a(href='/', title='Home')
-          img.navbar-logo(src='/img/bitbetwin_logo_white.png', alt='Logo')
-      - if (!user)
-        include login
-      - if (user)
-        p.navbar-text Signed in as #{user.email}. You have <span class="label label-success">{{ credits }} credits</span>
-        .navbar-right
-          a.btn.btn-primary.navbar-btn(href='/logout') Logout
+.navbar.navbar-inverse.navbar-fixed-top(role='navbar', ng-controller='MainCtrl')
+  .container
+    .navbar-header
+      a(href='/', title='Home')
+        img.navbar-logo(src='/img/bitbetwin_logo_white.png', alt='Logo')
+    - if (!user)
+      include login
+    - if (user)
+      p.navbar-text Signed in as #{user.email}. You have <span class="label label-success">{{ credits }} credits</span>
+      .navbar-right
+        a.btn.btn-primary.navbar-btn(href='/logout') Logout
 
   - if (!user)
     include register
 
-  .alert.alert-warning(ng-show='warning') {{ warning }}
   //- .alert.alert-info=info
   //- .alert.alert-danger=error
   //- .alert.alert-info=messages

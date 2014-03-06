@@ -3,10 +3,11 @@
 		.col-md-1
 		.col-md-10
 			if (user)
-			.well.well-lg(ng-if="started()")
+			div(ng-if="started()")
+				.alert.alert-warning(ng-show='warning') {{ warning }}
 				bm-timer(time='time', duration='duration')
-				div(key-listener='handleKey')
-					span(id='match') Guessed Word: {{ word }}
+				div.guess-field(key-listener='handleKey')
+					p {{ word }}
 				form(role='form', ng-submit="guess()")
 					.form-group
 						label(for='letter') Submit your guess
@@ -17,8 +18,9 @@
 					div
 						label(for='guesses') Guesses
 						input.form-control#guesses(ng-model="guesses", type="text", readonly)
-			.well.well-lg(ng-if="!started()")
+			div(ng-if="!started()")
 				h1 Available games
+				p.lead Choose a game from the list below and dive right into!
 				ul.list-group(class='games')
 					li.list-group-item(ng:repeat='game in games') 
 						a(id="{{ game.name }}", ng-click="join(game.name)", href='#') Join {{ game.name }} 
