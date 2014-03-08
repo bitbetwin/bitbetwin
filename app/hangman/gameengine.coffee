@@ -56,7 +56,12 @@ class exports.GameEngine
     player.game = {}
     player.game.name = @game.name
     if @started
-      @broadcast player
+      player.game.guess = []
+      @guess player, ""
+
+      players = @io.clients(@game.name).length
+      @broadcast (player) ->
+        player.emit 'stats', {players: players, pot:0, winners: 0}
     else
       player.game.guess = []
       player.emit "stop"
@@ -67,9 +72,10 @@ class exports.GameEngine
     GameDao.retrieveGames (err, games) ->
       callback games
 
-  broadcast: (player) ->
-    player.game.guess = []
-    @guess player, ""
+  broadcast: (fx) ->
+    for player in @io.clients @game.name
+      fx player
+   
 
   start: () ->
     @io.log.info "starting " + @game.name
@@ -87,9 +93,10 @@ class exports.GameEngine
     @duration = @countdown = @simpleDurationCalculator.calculate phrase
     
     @io.log.info "broadcast game start"
-    for socket in @io.clients @game.name
-      socket.emit 'start'
-      @broadcast socket
+    @broadcast (player) ->
+      player.emit 'start'
+      player.game.guess = []
+      @guess player, ""
 
     starttime = new Date().getTime()
     interval = setInterval (engine) ->

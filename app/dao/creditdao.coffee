@@ -13,6 +13,13 @@ class CreditDao
     Credit.find owner: userid, game: null, (err, credits) ->
       callback err, credits
 
+
+  @retrievePot: (gameid, callback) ->
+    Credit.find game: gameid, (err, credits) ->
+      return callback err if err
+      callback err, credits
+
+
   @drawCommission: (credit, callback) ->
     User.findOne email: "mail@bitbetwin.co", (err, bank) ->
       return callback err if err
@@ -49,7 +56,7 @@ class CreditDao
         callback null
 
   @payWinners: (winners, gameid, callback) ->
-    Credit.find game: gameid, (err, credits) ->
+    @retrievePot gameid, (err, credits) ->
       return callback err if err
 
       if credits.length < winners.length

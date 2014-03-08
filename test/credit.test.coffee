@@ -316,3 +316,26 @@ describe "Credit", ->
         defined.should.be.true
         err.should.be.equal "Too small bet"
         done()
+
+  it "should retrieve all credits in pot", (done) ->
+    gamefx = (resolve, reject) =>
+      game = new Game name: "testgame1", phrasegenerator: "singlephrasegenerator", durationcalculator: "simpledurationcalculator"   
+      game.save (err, game) ->
+        return reject err if err
+        resolve game
+
+    bankfx = (resolve, reject) =>
+      bank = new User email: "mail@bitbetwin.co", password: "compl1c4t3d"
+      bank.save (err, bank) ->
+        return reject err if err
+        resolve bank
+
+    gamePromise = new Promise(gamefx)
+    bankPromise = new Promise(bankfx)
+    promises = []
+    promises.push gamePromise
+    promises.push bankPromise
+
+    Promise.all( promises ).then (game, bank) ->
+      console.log game
+      done()
