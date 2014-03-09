@@ -13,12 +13,10 @@ class CreditDao
     Credit.find owner: userid, game: null, (err, credits) ->
       callback err, credits
 
-
   @retrievePot: (gameid, callback) ->
     Credit.find game: gameid, (err, credits) ->
       return callback err if err
       callback err, credits
-
 
   @drawCommission: (credit, callback) ->
     User.findOne email: "mail@bitbetwin.co", (err, bank) ->

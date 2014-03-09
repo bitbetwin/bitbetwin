@@ -330,12 +330,46 @@ describe "Credit", ->
         return reject err if err
         resolve bank
 
+    userfx = (resolve, reject) =>
+      user = new User email: "user@gmail.com", password: "compl1c4t3d"
+      user.save (err, user) ->
+        return reject err if err
+        resolve user
+
     gamePromise = new Promise(gamefx)
     bankPromise = new Promise(bankfx)
+    userPromise = new Promise(userfx)
     promises = []
     promises.push gamePromise
     promises.push bankPromise
+    promises.push userPromise
 
-    Promise.all( promises ).then (game, bank) ->
-      console.log game
-      done()
+    Promise.all( promises ).then (results) ->
+      game = results[0]
+      bank = results[1]
+      user = results[2]
+
+      creditfx = (resolve, reject) =>
+        credit = new Credit owner: user._id, value: 1
+        credit.save (err, credit) ->
+          return reject err if err
+          resolve credit
+
+      creditPromises = []
+
+      i=0
+      while i < 21
+        creditPromises.push new Promise(creditfx) 
+        i++
+
+      Promise.all( creditPromises ).then (credits) ->
+
+        CreditDao.chargeCredits user._id, game._id, 10, 2, (err) ->
+          defined = err?
+          defined.should.be.false
+
+          CreditDao.retrievePot game._id, (err, credits) ->
+            defined = err?
+            defined.should.be.false
+            credits.length.should.be.equal 10
+            done()
