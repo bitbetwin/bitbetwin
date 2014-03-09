@@ -17,6 +17,8 @@
 				div
 					label(for='guesses') Guesses
 					input.form-control#guesses(ng-model="guesses", type="text", readonly)
+				div
+					p Pot: {{ pot }}, Players: {{ players }}, Winners: {{ winners }}
 		.jumbotron(ng-if="!started()")
 			.well.well-lg
 				.form-group

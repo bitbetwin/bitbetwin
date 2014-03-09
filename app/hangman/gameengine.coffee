@@ -42,13 +42,22 @@ class exports.GameEngine
       
       that.hangman.check player.game.guess.join(""), (match) ->
         complete = (match == that.hangman.word)
-        player.emit('hangman', { complete: complete, guesses: player.game.guess, duration: that.duration, time: that.countdown, phrase: match })
-
+        socket.emit('hangman', { complete: complete, guesses: player.game.guess, duration: that.duration, time: that.countdown, phrase: match }) for socket in player.user.sockets
         socket.emit('wallet', { credits: player.user.credits }) for socket in player.user.sockets
-
-        if (complete)
+        
+        if complete
           player.game.complete = true
           logger.info player.user.email + " guessed the whole word correctly!"
+
+        winners = 0
+        for player in that.io.clients(that.game.name)
+          if player.game.complete
+            winners++
+
+        players = that.io.clients(that.game.name).length
+        CreditDao.retrievePot that.game._id, (err, credits) ->
+          that.broadcast (player) ->
+            player.emit 'stats', { players: players, pot: credits.length, winners: winners }
 
   join: (player) ->
     @io.log.info player.user.email + " joined " + @game.name
@@ -58,10 +67,6 @@ class exports.GameEngine
     if @started
       player.game.guess = []
       @guess player, ""
-
-      players = @io.clients(@game.name).length
-      @broadcast (player) ->
-        player.emit 'stats', {players: players, pot:0, winners: 0}
     else
       player.game.guess = []
       player.emit "stop"
