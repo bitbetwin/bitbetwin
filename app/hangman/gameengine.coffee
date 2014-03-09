@@ -49,15 +49,19 @@ class exports.GameEngine
           player.game.complete = true
           logger.info player.user.email + " guessed the whole word correctly!"
 
-        winners = 0
-        for player in that.io.clients(that.game.name)
-          if player.game.complete
-            winners++
+        that.stats()
 
-        players = that.io.clients(that.game.name).length
-        CreditDao.retrievePot that.game._id, (err, credits) ->
-          that.broadcast (player) ->
-            player.emit 'stats', { players: players, pot: credits.length, winners: winners }
+  stats: () ->
+    winners = 0
+    for player in @io.clients(@game.name)
+      if player.game.complete
+        winners++
+
+    that = @
+    players = @io.clients(@game.name).length
+    CreditDao.retrievePot @game._id, (err, credits) ->
+      that.broadcast (player) ->
+        player.emit 'stats', { players: players, pot: credits.length, winners: winners }
 
   join: (player) ->
     @io.log.info player.user.email + " joined " + @game.name
@@ -74,13 +78,13 @@ class exports.GameEngine
   leave: (player, feed, callback) ->
     @io.log.info player.user.email + " left " + @game.name
     player.leave @game.name
+    @stats()
     GameDao.retrieveGames (err, games) ->
       callback games
 
   broadcast: (fx) ->
     for player in @io.clients @game.name
       fx player
-   
 
   start: () ->
     @io.log.info "starting " + @game.name
@@ -98,10 +102,12 @@ class exports.GameEngine
     @duration = @countdown = @simpleDurationCalculator.calculate phrase
     
     @io.log.info "broadcast game start"
+    that = @
     @broadcast (player) ->
       player.emit 'start'
       player.game.guess = []
-      @guess player, ""
+      player.game.complete = false
+      that.guess player, ""
 
     starttime = new Date().getTime()
     interval = setInterval (engine) ->
@@ -135,11 +141,22 @@ class exports.GameEngine
       player.game.guess.length = 0
       player.emit 'stop'
 
+    that = @
     logger = @io.log
-    CreditDao.payWinners winners, @game._id, (err) ->
+    CreditDao.payWinners winners, @game._id, (err, share) ->
       logger.warn if err
+      console.log "2: " + winners.length + ": " + share
+      console.log "3: " + that.io.clients.length + ": " + that.game.name
+      for winner in winners
+        console.log "bla" + winner.user.credits
+        winner.user.credits += share 
+        console.log winner.user.credits
+
+      for socket in that.io.clients that.game.name
+        socket.emit('wallet', { credits: socket.user.credits }) 
 
 
   report: (player, feed, callback) ->
     @io.log.info "sending report to " + player.user.email + "; time: " + (@countdown + @reporttime)
+    @stats()
     callback {'time': @countdown + @reporttime }

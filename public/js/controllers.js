@@ -149,6 +149,13 @@ bangmanControllers.controller('ReportCtrl', ['$scope', '$socket', '$log', '$loca
       });
     });
 
+    $socket.on('stats', function(stats) {
+      $log.info('stats');
+      $scope.pot = stats.pot
+      $scope.players = stats.players
+      $scope.winners = stats.winners
+    });
+
     $scope.loggedIn = function() {
       return loggedIn;
     };

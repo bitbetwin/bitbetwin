@@ -86,7 +86,7 @@ class CreditDao
             throw err if err
 
       Promise.all( promises ).then () ->
-        callback()
+        callback null, share
 
   @logger: () ->
     @io.log
