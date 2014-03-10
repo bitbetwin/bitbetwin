@@ -27,7 +27,7 @@ db.users.save({
 	activated: true
 })
 
-for (var i = 1; i <= 25; i++) {
+for (var i = 1; i <= 2000; i++) {
 	db.credits.save({
 		owner: db.users.findOne({ email: "user@gmail.com" })._id,
 		game: null,
