@@ -134,6 +134,9 @@ class exports.GameEngine
     @io.log.info "stopping " + @game.name
     @countdown = 0
 
+    if @io.clients(@game.name).length < 1
+      return
+
     winners = []
     for player in @io.clients @game.name
       if player.game.complete
@@ -145,12 +148,10 @@ class exports.GameEngine
     logger = @io.log
     CreditDao.payWinners winners, @game._id, (err, share) ->
       logger.warn if err
-      console.log "2: " + winners.length + ": " + share
-      console.log "3: " + that.io.clients.length + ": " + that.game.name
+      
+      console.log winners
       for winner in winners
-        console.log "bla" + winner.user.credits
-        winner.user.credits += share 
-        console.log winner.user.credits
+        winner.credits += share 
 
       for socket in that.io.clients that.game.name
         socket.emit('wallet', { credits: socket.user.credits }) 
