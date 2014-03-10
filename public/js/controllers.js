@@ -38,6 +38,13 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
       countdown = $timeout($scope.onTimeout,1000);
   	});
 
+    $socket.on('stats', function(stats) {
+      $log.info('stats');
+      $scope.pot = stats.pot
+      $scope.players = stats.players
+      $scope.winners = stats.winners
+    });
+
     $socket.on('loggedin', function(games) {
         loggedIn = true;
         complete = false;
@@ -140,6 +147,13 @@ bangmanControllers.controller('ReportCtrl', ['$scope', '$socket', '$log', '$loca
         }
         countdown = $timeout($scope.onTimeout,1000);
       });
+    });
+
+    $socket.on('stats', function(stats) {
+      $log.info('stats');
+      $scope.pot = stats.pot
+      $scope.players = stats.players
+      $scope.winners = stats.winners
     });
 
     $scope.loggedIn = function() {

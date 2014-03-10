@@ -16,6 +16,7 @@
 								span.input-group-btn
 									button.btn.btn-primary.btn-lg.btn-success(ng-disabled="complete()", click="guess()") Guess
 					
+					p.game-stats.text-center Pot: {{ pot }}, Players: {{ players }}, Winners: {{ winners }}
 					p.guesses.text-center			
 						span.label.label-info(ng-repeat="guess in guesses", ng-show="guess.length > 0") {{ guess }}
 							
@@ -23,6 +24,5 @@
 					h1 Available games
 					p.lead Choose a game from the list below and dive right into!
 					ul.list-group(class='games')
-						li.list-group-item(ng-repeat='game in games') 
-							a(id="{{ game.name }}", ng-click="join(game.name)", href='#') Join {{ game.name }} 
-			.col-md-3
+						li.list-group-item(ng-repeat='game in games')
+							a(id="{{ game.name }}", ng-click="join(game.name)", href='#') Join {{ game.name }}

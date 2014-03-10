@@ -6,6 +6,7 @@
         .well.well-lg
           span(ng-if="complete()") You win!
           span(ng-if="!complete()") You lost!
+          p.game-stats.text-center Pot: {{ pot }}, Players: {{ players }}, Winners: {{ winners }}
           div Next game starts in {{ time }}.
       .col-md-1
 
