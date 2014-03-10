@@ -1,7 +1,7 @@
 bangman.directive('bmTimer', function() {
 
-  var diameter = 100,
-      stroke = 10,
+  var diameter = 150,
+      stroke = 3,
       twoPi = 2 * Math.PI;
 
   return {
@@ -17,6 +17,7 @@ bangman.directive('bmTimer', function() {
         .outerRadius(diameter / 2);
 
       var svg = d3.select(element[0]).append("svg")
+        .attr("class", "bbw-timer")
         .attr("width", diameter)
         .attr("height", diameter)
         .append("g")

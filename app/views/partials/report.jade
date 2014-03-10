@@ -1,13 +1,14 @@
-.container
-  .row(ng-if="loggedIn()")
-    .col-md-1
-    .col-md-10
-      .well.well-lg
-        span(ng-if="complete()") You win!
-        span(ng-if="!complete()") You lost!
-        div Next game starts in {{ time }}.
-    .col-md-1
+.jumbotron 
+  .container
+    .row(ng-if="loggedIn()")
+      .col-md-1
+      .col-md-10
+        .well.well-lg
+          span(ng-if="complete()") You win!
+          span(ng-if="!complete()") You lost!
+          div Next game starts in {{ time }}.
+      .col-md-1
 
-  .row(ng-if="!loggedIn()")
-    .col-md-12
-      div Please log in
+    .row(ng-if="!loggedIn()")
+      .col-md-12
+        div Please log in
