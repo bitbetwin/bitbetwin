@@ -1,14 +1,13 @@
 .jumbotron 
   .container
     .row(ng-if="loggedIn()")
-      .col-md-1
-      .col-md-10
-        .well.well-lg
-          span(ng-if="complete()") You win!
-          span(ng-if="!complete()") You lost!
-          p.game-stats.text-center Pot: {{ pot }}, Players: {{ players }}, Winners: {{ winners }}
-          div Next game starts in {{ time }}.
-      .col-md-1
+      .col-md-3
+      .col-md-6
+        h1.text-success.text-center(ng-if="complete()") You win!
+        h1.text-warning.text-center(ng-if="!complete()") You lost!
+        p.game-stats.text-center Pot: {{ pot }}, Players: {{ players }}, Winners: {{ winners }}
+        p.lead.text-center Next game starts in {{ time }} seconds.
+      .col-md-3
 
     .row(ng-if="!loggedIn()")
       .col-md-12

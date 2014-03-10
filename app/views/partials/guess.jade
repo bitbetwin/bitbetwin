@@ -7,6 +7,7 @@
 				div(ng-if="started()")
 					.alert.alert-warning(ng-show='warning') {{ warning }}
 					bm-timer(time='time', duration='duration')
+					p.game-stats.text-center Pot: {{ pot }}, Players: {{ players }}, Winners: {{ winners }}
 					.guess-field(key-listener='handleKey')
 						.guess-field-inner
 							button.close(aria-hidden="true", ng-click="leave()") &times;
@@ -16,7 +17,6 @@
 								span.input-group-btn
 									button.btn.btn-primary.btn-lg.btn-success(ng-disabled="complete()", click="guess()") Guess
 					
-					p.game-stats.text-center Pot: {{ pot }}, Players: {{ players }}, Winners: {{ winners }}
 					p.guesses.text-center			
 						span.label.label-info(ng-repeat="guess in guesses", ng-show="guess.length > 0") {{ guess }}
 							
