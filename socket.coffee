@@ -1,6 +1,8 @@
 request = require 'request'
 socketio = require 'socket.io'
 express = require 'express'
+less = require 'less-middleware'
+path = require 'path'
 
 MongoStore = require('connect-mongo')(express)
 ObjectId = require('mongoose').Types.ObjectId
@@ -23,12 +25,12 @@ class exports.Server
     @app.set 'view engine', 'jade'
     @app.use express.bodyParser()
     @app.use express.methodOverride()
-    
-    @app.use express.static(__dirname + '/public')
-    @app.use '/components', express.static(__dirname + '/bower_components');
     @app.use express.cookieParser('guess')
-
     @app.use express.session { secret: @SESSION_SECRET, store: @sessionStore, key: 'sessionID', cookie: { maxAge: 60*60*1000 }}
+
+    @app.use less path.join __dirname, 'public'
+    @app.use express.static path.join __dirname, 'public'
+    @app.use '/components', express.static path.join __dirname, 'bower_components'
 
     # error message handling
     flash = require 'connect-flash'

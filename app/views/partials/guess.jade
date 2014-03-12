@@ -1,27 +1,28 @@
-.row(ng-if="loggedIn()")
-	.col-md-1
-	.col-md-10
-		if (user)
-			h1(id="greeting") Bangman :) Hey: #{user.email}
-		.jumbotron(ng-if="started()")
-			bm-timer(time='time', duration='duration')
-			.well.well-lg(key-listener='handleKey')
-				span(id='match') Guessed Word: {{ word }}
-			form(role='form', ng-submit="guess()")
-				.form-group
-					label(for='letter') Submit your guess
-					input.form-control#letter(ng-model="letter", type="text", placeholder="Enter a letter!")
-				div(ng-if="!complete()")
-					input.btn.btn-primary(id="guess", type="submit", value="Guess!")
-					input.btn.btn-primary(ng-click="leave()", id="leave", type="button", value="Leave")
-				div
-					label(for='guesses') Guesses
-					input.form-control#guesses(ng-model="guesses", type="text", readonly)
-		.jumbotron(ng-if="!started()")
-			.well.well-lg
-				.form-group
-					span Available games:
-					ul(class='games')
-						li(ng:repeat='game in games') 
-							a(id="{{ game.name }}", ng-click="join(game.name)", href='#') Join {{ game.name }} 
-	.col-md-1
+.jumbotron(ng-if="loggedIn()")
+	.container	
+		.row
+			.col-md-3
+			.col-md-6
+				if (user)
+				div(ng-if="started()")
+					.alert.alert-warning(ng-show='warning') {{ warning }}
+					bm-timer(time='time', duration='duration')
+					p.game-stats.text-center Pot: {{ pot }}, Players: {{ players }}, Winners: {{ winners }}
+					.guess-field(key-listener='handleKey')
+						.guess-field-inner
+							button.close(aria-hidden="true", ng-click="leave()") &times;
+							p {{ word }}
+							.input-group
+								input.form-control.input-lg(ng-model="letter", type="text", placeholder="Enter your guess!")
+								span.input-group-btn
+									button.btn.btn-primary.btn-lg.btn-success(ng-disabled="complete()", click="guess()") Guess
+					
+					p.guesses.text-center			
+						span.label.label-info(ng-repeat="guess in guesses", ng-show="guess.length > 0") {{ guess }}
+							
+				div(ng-if="!started()")
+					h1 Available games
+					p.lead Choose a game from the list below and dive right into!
+					ul.list-group(class='games')
+						li.list-group-item(ng-repeat='game in games')
+							a(id="{{ game.name }}", ng-click="join(game.name)", href='#') Join {{ game.name }}

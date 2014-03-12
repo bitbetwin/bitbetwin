@@ -1,12 +1,1 @@
-.progress-meter .background {
-  fill: #ffffff;
-}
-
-.progress-meter .foreground {
-  fill: #00aeef;
-}
-
-.progress-meter text {
-  fill: #00aeef;
-  font-size: 24px;
-}
+.key{color:#00aeef}body{background:url('/landingpage/img/bg_blurred_06.jpg') no-repeat center center fixed;-webkit-background-size:cover;-moz-background-size:cover;-o-background-size:cover;background-size:cover;padding-top:50px}.navbar-logo{height:40px;position:relative;top:3px}.navbar .form-group{margin-right:3px}.header{background-color:transparent;padding-top:40px;position:relative;width:100%}.header .teaser{color:#ffffff}.bbw-timer{display:block;margin:0 auto 10px auto}.progress-meter .background{fill:#00aeef;fill-opacity:0.1}.progress-meter .foreground{fill:#00aeef}.progress-meter text{font-weight:lighter;fill:#00aeef;font-size:100px}.guess-field{background-color:#eeeeee;position:relative}.guess-field .guess-field-inner{background-color:#eeeeee;color:#88fb00;font-size:1.5em;font-weight:bold;letter-spacing:0.1em;margin:25px 0;padding:20px 0;position:relative;text-align:center;z-index:200}.guess-field:before{-webkit-box-shadow:0 0 25px rgba(0,0,0,0.1);-moz-box-shadow:0 0 25px rgba(0,0,0,0.1);box-shadow:0 0 25px rgba(0,0,0,0.1);border-top-left-radius:100px 10px;border-top-right-radius:100px 10px;border-bottom-right-radius:100px 10px;border-bottom-left-radius:100px 10px;bottom:0;content:"";left:25px;right:25px;position:absolute;top:0;z-index:100}.guess-field .close{position:absolute;right:0;top:5px}.guesses span{margin-right:0.2em}.game-stats{color:#00aeef}
