@@ -1,12 +1,20 @@
 module.exports =
   development:
-    db_address: "mongodb://localhost/bitbetwindb"
+    dbname: "bitbetwindb"
+    username: "root"
+    password: "password"
+    host: "localhost"
+    port: 3306
     app:
       name: "BitBetWin -- Dev"
     debug: true
 
   testing:
-    db_address: "mongodb://localhost/bitbetwinTest"
+    dbname: "bitbetwinTest"
+    username: "root"
+    password: "password"
+    host: "localhost"
+    port: 3306
     app:
       name: "BitBetWin -- Test"
     debug: true

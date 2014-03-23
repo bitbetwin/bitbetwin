@@ -1,5 +1,4 @@
 async = require 'async'
-User = require './models/user'
 EmailActivator = require './emailActivator'
 passport = require 'passport'
 bcrypt = require 'bcrypt'
@@ -24,7 +23,8 @@ class exports.Security
       process.nextTick ->
         condition = 
           email: email
-        User.findOne condition, (err, user) ->
+
+        DataAccess.db.User.find(where: condition).complete (err, user) ->
           unless user
             return done(null, false, message: "Incorrect username or password.")
           unless user.activated==true 
@@ -36,10 +36,12 @@ class exports.Security
 
 
     passport.serializeUser (user, done) ->
-      done(null, user._id)
+      done(null, user.id)
 
     passport.deserializeUser (id, done) ->
-      User.findById id, done  
+      DataAccess.db.User.find(where: id: id).complete (err, user) ->
+        console.log user
+        done err, user
 
     app.post '/login', passport.authenticate('local', { successRedirect: '/',  failureRedirect: '/', failureFlash: true })
 
@@ -50,10 +52,10 @@ class exports.Security
       email = req.body.email
       password = req.body.password
 
-      user = new User(
+      user = DataAccess.db.User.build(
         email: email
         password: password
-      )   
+      )
 
       if !validator.validate(email)
         res.render "index",
@@ -64,9 +66,9 @@ class exports.Security
       
       email = req.body.email
       password = req.body.password
-      User.findOne email: email, (err, data) ->
+      DataAccess.db.User.find( where: email: email).complete (err, data) ->
         unless data 
-          user.save (err) ->
+          user.save().complete (err, user) ->
             #sending activation email
 
             if(!DEBUG)
@@ -90,7 +92,7 @@ class exports.Security
 
     app.get "/activate", (req, res) ->
       token = req.query["token"]
-      User.findOne token: token, (err, user) ->
+      DataAccess.db.User.find( token: token).complete (err, user) ->
         return next(err)  if err
         unless user
           res.render "index",

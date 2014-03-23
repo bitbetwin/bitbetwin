@@ -1,7 +1,8 @@
-User = require "../app/models/user"
 should = require "should"
 async = require "async"
 validator = require("email-validator")
+
+DataAccess = require "../app/dataaccess"
 
 restful = require 'node-restful'
 mongoose = restful.mongoose
@@ -9,41 +10,48 @@ mongoose = restful.mongoose
 describe "User", ->
 
   before (done)->
-    mongoose.connect "mongodb://localhost/bitbetwinTest"
-    db = mongoose.connection
-    db.on 'error', done
-    db.once 'open', done
-
-  after (done)->
-    mongoose.connection.close()
-    done()
+    process.env.NODE_ENV = "testing"
+    DataAccess.startup (err, @db) =>
+      throw err if err
+      done()
     
-  beforeEach (done)->
-    User.remove {}, done #empty database
+  beforeEach (done) ->
+    @db.User.destroy().success () ->
+      done()
+    .error (error) ->
+      throw error
+      done()
   
   it "looks for a nonexisting user in db", (done) ->
-    User.findOne email: "nonexisting@gmail.com" , (err, user) ->
-      defined = user?
-      defined.should.be.false
-      done()
+    @db.User.find( where: 
+      email: "nonexisting@gmail.com"
+    ).success((user) ->
+        defined = user?
+        defined.should.be.false
+        done()
+    ).error((error) ->
+        throw error)
 
   it "creates a user", (done) ->
-    @testUser = new User email: "encypt@gmail.com", password: "compl1c4t3d"   
-    @testUser.save (err) ->
+    @testUser = @db.User.build email: "encypt@gmail.com", password: "compl1c4t3d"
+    @testUser.save().success (user) =>
     # fetch user and test password verification
-      User.findOne email: "encypt@gmail.com", (err, user) ->
-        throw err  if err
-        done()  
+      @db.User.find(where: email: "encypt@gmail.com").success((user) ->
+        done()
+      ).error((error) ->
+        throw error
+        done())
           
 
   it "creates a user and tests encryption", (done) ->
-    async.waterfall [(callback) ->
-      @testUser = new User email: "encypt@gmail.com", password: "compl1c4t3d"   
-      @testUser.save (err) ->        
-        callback null, @testUser
-    , (arg2, callback) ->
-      User.findOne email: "encypt@gmail.com", (err, user) ->
-        throw err  if err
+    async.waterfall [(callback) =>
+      @testUser = @db.User.build email: "encypt@gmail.com", password: "compl1c4t3d"   
+      @testUser.save().complete (err, user) ->        
+        throw err if err
+        callback err, user
+    , (arg2, callback) =>
+      @db.User.find( where: email: "encypt@gmail.com" ).complete (err, user) ->
+        throw err if err
         callback err, user
     , (user, callback) ->
       user.comparePassword "compl1c4t3d", (err, isMatch) ->

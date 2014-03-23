@@ -4,8 +4,9 @@ express = require 'express'
 less = require 'less-middleware'
 path = require 'path'
 
-MongoStore = require('connect-mongo')(express)
+SessionStore = require('express-mysql-session')
 ObjectId = require('mongoose').Types.ObjectId
+Promise = require 'promise'
 
 DataAccess = require './app/dataaccess'
 
@@ -14,7 +15,15 @@ class exports.Server
   constructor: (@port) ->
     @SESSION_SECRET = "ci843tgbza11e"
 
-    @sessionStore = new MongoStore url: DataAccess.loadConfig().db_address
+    config = DataAccess.loadConfig()
+
+    options =
+     host: config.host
+     port: config.port
+     user: config.user
+     password: config.password
+     database: config.dbname
+    @sessionStore = new SessionStore(options)
 
     @app = express()
 

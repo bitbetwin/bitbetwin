@@ -1,15 +1,16 @@
-restful = require 'node-restful'
-mongoose = restful.mongoose
-
 GameDao = require './dao/gamedao'
 CreditDao = require './dao/creditdao'
+fs = require("fs")
+path = require("path")
+Sequelize = require("sequelize")
+lodash = require("lodash")
 
 class DataAccess
 
   @init: (@io) ->
     @loadConfig()
-    GameDao.init @io
-    CreditDao.init @io
+    #GameDao.init @io
+    #CreditDao.init @io
 
   @logger: () ->
     @io.log
@@ -38,18 +39,34 @@ class DataAccess
   @isInDevMode: () ->
     return @env == 'testing' || @env == 'development'
 
-  @startup: () ->
-    console.log "connecting to " + @loadConfig().db_address
-    mongoose.connect @loadConfig().db_address, (error) ->
-      console.log "could not connect because: " + error if error
-    db = mongoose.connection
+  @startup: (callback) ->
+    console.log "connecting to " + @loadConfig().dbname
+    sequelize = new Sequelize(@loadConfig().dbname, @loadConfig().username, @loadConfig().password, {
+        dialect: "mysql",
+        port: @loadConfig().port,
+        host: @loadConfig().host,
+      })
 
-    db.on 'error', console.error.bind(console, 'Mongo DB connection error:')
+    @db = {}
 
-    db.once 'open', (callback) ->
-      console.log "connected with mongodb"
+    dirname = __dirname + "/models/"
+    fs.readdirSync(dirname).filter((file) =>
+      (file.indexOf(".") isnt 0) and (file.slice(-13) is ".model.coffee")
+    ).forEach (file) =>
+      model = sequelize.import(path.join(dirname, file))
+      @db[model.name] = model
+      return
+
+    Object.keys(@db).forEach (modelName) =>
+      @db[modelName].options.associate @db  if @db[modelName].options.hasOwnProperty("associate")
+      return
+
+    @db.sequelize = sequelize
+
+    sequelize.sync( force: true ).complete (err) =>
+      callback err, @db if callback
 
   @shutdown: () ->
-      mongoose.disconnect()
+      #mongoose.disconnect()
 
 module.exports = DataAccess
