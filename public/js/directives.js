@@ -27,11 +27,14 @@ bangman.directive('bmTimer', function() {
         .attr("class", "progress-meter");
 
       meter.append("path")
+        .datum({ endAngle: twoPi })
         .attr("class", "background")
-        .attr("d", arc.endAngle(twoPi));
+        .attr("d", arc);
 
       var foreground = meter.append("path")
-        .attr("class", "foreground");
+        .datum({ endAngle: twoPi })
+        .attr("class", "foreground")
+        .attr("d", arc);
 
       var text = meter.append("text")
         .attr("text-anchor", "middle")
@@ -44,9 +47,20 @@ bangman.directive('bmTimer', function() {
         .attr("dy", "2.3em")
         .text("sec")
 
+      // see http://bl.ocks.org/mbostock/5100636
+      arcTween = function(transition, newAngle) {
+        transition.attrTween("d", function(d) {
+          var interpolate = d3.interpolate(d.endAngle, newAngle);
+          return function(t) {
+            d.endAngle = interpolate(t);
+            return arc(d);
+          };
+        });
+      };
+
       scope.$watch("time", function (newVal, oldVal) {
         if (newVal) {
-          foreground.attr("d", arc.endAngle(twoPi * newVal / scope.duration));
+          foreground.transition().duration(200).call(arcTween, twoPi * newVal / scope.duration);
           text.text(newVal);
         }
       });
