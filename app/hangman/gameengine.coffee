@@ -22,6 +22,7 @@ class exports.GameEngine
     @simpleDurationCalculator = new SimpleDurationCalculator
     @simpleChargeCalculator = new SimpleChargeCalculator
     @reporttime = 10
+    @reportduration = @reporttime
 
   guess: (player, guess) ->
     pot = @simpleChargeCalculator.pot guess
@@ -160,4 +161,6 @@ class exports.GameEngine
   report: (player, feed, callback) ->
     @io.log.info "sending report to " + player.user.email + "; time: " + (@countdown + @reporttime)
     @stats()
-    callback {'time': @countdown + @reporttime }
+    callback
+      'time': @countdown + @reporttime
+      'duration': @countdown + @reportduration

@@ -141,9 +141,10 @@ bangmanControllers.controller('ReportCtrl', ['$scope', '$socket', '$log', '$loca
 
     $scope.$on('$routeChangeSuccess', function(next, current) { 
       $log.info('init report!');
-      $socket.emit('report', '', function(data) {
+      $socket.emit('report', '', function(report) {
       $log.info('timeout was successfully canceled: ' + $timeout.cancel(countdown));
-      $scope.time = data.time;
+      $scope.time = report.time;
+      $scope.duration = report.duration;
       $scope.onTimeout = function() {
           $scope.time--;
           if ($scope.time <= 0) {
