@@ -40,7 +40,6 @@ class exports.Security
 
     passport.deserializeUser (id, done) ->
       DataAccess.db.User.find(where: id: id).complete (err, user) ->
-        console.log user
         done err, user
 
     app.post '/login', passport.authenticate('local', { successRedirect: '/',  failureRedirect: '/', failureFlash: true })
@@ -48,7 +47,6 @@ class exports.Security
     app.post "/register", (req, res) ->  
       # attach POST to user schema
 
-      
       email = req.body.email
       password = req.body.password
 
