@@ -10,11 +10,8 @@ describe "Game", ->
     process.env.NODE_ENV = "testing"
     DataAccess.startup (err, @db) =>
       throw err if err
+      DataAccess.db.Game.destroy()
       done()
-
-  after (done)->
-    DataAccess.db.Game.destroy()
-    done()
 
   it "should create a game", (done) ->
     @game = DataAccess.db.Game.build name: "testgame", phrasegenerator: "singlephrasegenerator", durationcalculator: "simpledurationcalculator"   
