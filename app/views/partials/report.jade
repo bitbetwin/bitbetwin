@@ -6,7 +6,7 @@
         h1.text-success.text-center(ng-if="complete()") You win!
         h1.text-warning.text-center(ng-if="!complete()") You lost!
         p.game-stats.text-center Pot: {{ pot }}, Players: {{ players }}, Winners: {{ winners }}
-        p.game-stats.text-center Next game in {{ duration }} sec
+        p.game-stats.text-center Next game in
         bm-timer(time="time", duration="duration")
       .col-md-3
 
