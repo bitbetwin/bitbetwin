@@ -3,7 +3,6 @@ CreditDao = require './dao/creditdao'
 fs = require("fs")
 path = require("path")
 Sequelize = require("sequelize")
-lodash = require("lodash")
 
 class DataAccess
 
@@ -63,7 +62,7 @@ class DataAccess
 
     @db.sequelize = sequelize
 
-    sequelize.sync( force: true ).complete (err) =>
+    sequelize.sync( force: false ).complete (err) =>
       callback err, @db if callback
 
   @shutdown: () ->
