@@ -1,32 +1,27 @@
-Game = require "../app/models/game"
 should = require "should"
 GameDao = require "../app/dao/gamedao"
 async = require "async"
 
-restful = require 'node-restful'
-mongoose = restful.mongoose
+DataAccess = require "../app/dataaccess"
 
 describe "Game", ->
 
   before (done)->
-    mongoose.connect "mongodb://localhost/bitbetwinTest"
-    db = mongoose.connection
-    db.on 'error', done
-    db.once 'open', done
+    process.env.NODE_ENV = "testing"
+    DataAccess.startup (err, @db) =>
+      throw err if err
+      done()
 
   after (done)->
-    Game.remove {}
-    mongoose.connection.close()
+    DataAccess.db.Game.destroy()
     done()
-    
-  beforeEach (done)->
-    Game.remove {}, done #empty database
 
   it "should create a game", (done) ->
-    @game = new Game name: "testgame", phrasegenerator: "singlephrasegenerator", durationcalculator: "simpledurationcalculator"   
-    @game.save (err) ->
-      Game.findOne name: "testgame", (err, game) ->
-        throw err  if err
+    @game = DataAccess.db.Game.build name: "testgame", phrasegenerator: "singlephrasegenerator", durationcalculator: "simpledurationcalculator"   
+    @game.save().complete (err, game) ->
+      DataAccess.db.Game.find( where: name: "testgame").complete (err, game) ->
+        throw err if err
+
         game.name.should.be.equal "testgame"
         game.phrasegenerator.should.be.equal "singlephrasegenerator"
         game.durationcalculator.should.be.equal "simpledurationcalculator"
@@ -34,16 +29,16 @@ describe "Game", ->
 
   it "should return all games", (done) ->
     async.parallel [(callback) ->
-      @game = new Game name: "testgame1", phrasegenerator: "singlephrasegenerator", durationcalculator: "simpledurationcalculator"   
-      @game.save (err) ->
+      @game = DataAccess.db.Game.build name: "testgame1", phrasegenerator: "singlephrasegenerator", durationcalculator: "simpledurationcalculator"
+      @game.save().complete (err, game) ->
         callback err
     , (callback) ->
-      @game = new Game name: "testgame2", phrasegenerator: "singlephrasegenerator", durationcalculator: "simpledurationcalculator"   
-      @game.save (err) ->
+      @game = DataAccess.db.Game.build name: "testgame2", phrasegenerator: "singlephrasegenerator", durationcalculator: "simpledurationcalculator"   
+      @game.save().complete (err, game) ->
         callback err
     ], (err) ->
-      throw err  if err
+      throw err if err
       GameDao.retrieveGames (err, games) ->
         throw err if err
-        games.length.should.be.equal 2
+        games.length.should.be.equal 3
         done()

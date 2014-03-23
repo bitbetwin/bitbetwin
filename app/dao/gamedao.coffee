@@ -1,7 +1,4 @@
-restful = require 'node-restful'
-mongoose = restful.mongoose
-
-Game = require '../models/game'
+DataAccess = require '../dataaccess'
 
 class GameDao
 
@@ -24,7 +21,7 @@ class GameDao
     @io.log
 
   @retrieveGames: (callback) ->
-    Game.find {}, (err, games) ->
+    DataAccess.db.Game.findAll().complete (err, games) ->
       callback err, games
 
 module.exports = GameDao
