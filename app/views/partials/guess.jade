@@ -11,11 +11,40 @@
 					.guess-field(key-listener='handleKey')
 						.guess-field-inner
 							button.close(aria-hidden="true", ng-click="leave()") &times;
-							p {{ word }}
+							p.word {{ word.toUpperCase() }}
 							.input-group
 								input.form-control.input-lg(ng-model="letter", type="text", placeholder="Enter your guess!")
 								span.input-group-btn
-									button.btn.btn-primary.btn-lg.btn-success(ng-disabled="complete()", click="guess()") Guess
+									button.btn.btn-primary.btn-lg.btn-success(ng-disabled="!letter || complete()", ng-click="guess()") Guess
+							.keyboard
+								.upper
+									span.key(ng-click="addLetter('a')", ng-class="{ 'active': containsLetter('a') }") A
+									span.key(ng-click="addLetter('b')", ng-class="{ 'active': containsLetter('b') }") B
+									span.key(ng-click="addLetter('c')", ng-class="{ 'active': containsLetter('c') }") C
+									span.key(ng-click="addLetter('d')", ng-class="{ 'active': containsLetter('d') }") D
+									span.key(ng-click="addLetter('e')", ng-class="{ 'active': containsLetter('e') }") E
+									span.key(ng-click="addLetter('f')", ng-class="{ 'active': containsLetter('f') }") F
+									span.key(ng-click="addLetter('g')", ng-class="{ 'active': containsLetter('g') }") G
+									span.key(ng-click="addLetter('h')", ng-class="{ 'active': containsLetter('h') }") H
+									span.key(ng-click="addLetter('i')", ng-class="{ 'active': containsLetter('i') }") I
+									span.key(ng-click="addLetter('j')", ng-class="{ 'active': containsLetter('j') }") J
+									span.key(ng-click="addLetter('k')", ng-class="{ 'active': containsLetter('k') }") K
+									span.key(ng-click="addLetter('l')", ng-class="{ 'active': containsLetter('l') }") L
+									span.key(ng-click="addLetter('m')", ng-class="{ 'active': containsLetter('m') }") M
+								.lower
+									span.key(ng-click="addLetter('n')", ng-class="{ 'active': containsLetter('n') }") N
+									span.key(ng-click="addLetter('o')", ng-class="{ 'active': containsLetter('o') }") O
+									span.key(ng-click="addLetter('p')", ng-class="{ 'active': containsLetter('p') }") P
+									span.key(ng-click="addLetter('q')", ng-class="{ 'active': containsLetter('q') }") Q
+									span.key(ng-click="addLetter('r')", ng-class="{ 'active': containsLetter('r') }") R
+									span.key(ng-click="addLetter('s')", ng-class="{ 'active': containsLetter('s') }") S
+									span.key(ng-click="addLetter('t')", ng-class="{ 'active': containsLetter('t') }") T
+									span.key(ng-click="addLetter('u')", ng-class="{ 'active': containsLetter('u') }") U
+									span.key(ng-click="addLetter('v')", ng-class="{ 'active': containsLetter('v') }") V
+									span.key(ng-click="addLetter('w')", ng-class="{ 'active': containsLetter('w') }") W
+									span.key(ng-click="addLetter('x')", ng-class="{ 'active': containsLetter('x') }") X
+									span.key(ng-click="addLetter('y')", ng-class="{ 'active': containsLetter('y') }") Y
+									span.key(ng-click="addLetter('z')", ng-class="{ 'active': containsLetter('z') }") Z
 					
 					p.guesses.text-center			
 						span.label.label-info(ng-repeat="guess in guesses", ng-show="guess.length > 0") {{ guess }}

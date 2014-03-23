@@ -35,9 +35,16 @@ bangman.directive('bmTimer', function() {
 
       var text = meter.append("text")
         .attr("text-anchor", "middle")
+        .attr("class", "value")
         .attr("dy", ".35em");
 
-      scope.$watch('time', function (newVal, oldVal) {
+      var label = meter.append("text")
+        .attr("text-anchor", "middle")
+        .attr("class", "label")
+        .attr("dy", "2.3em")
+        .text("sec")
+
+      scope.$watch("time", function (newVal, oldVal) {
         if (newVal) {
           foreground.attr("d", arc.endAngle(twoPi * newVal / scope.duration));
           text.text(newVal);
