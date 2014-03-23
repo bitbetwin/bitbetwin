@@ -20,10 +20,11 @@ class exports.Server
     options =
      host: config.host
      port: config.port
-     user: config.user
+     user: config.username
      password: config.password
      database: config.dbname
-    @sessionStore = new SessionStore(options)
+
+    @sessionStore = new SessionStore options
 
     @app = express()
 
