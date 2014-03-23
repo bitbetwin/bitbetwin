@@ -57,8 +57,8 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
     });
 
     $scope.guess = function() {
-      sendGuess(this.letter);
-      this.letter = '';
+      sendGuess($scope.letter);
+      $scope.letter = '';
     };
 
     $scope.leave = function() {
@@ -86,17 +86,24 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
     $scope.handleKey = function(key) {
         if (key.keyCode == '13') {
           $log.info('got enter!');
-          sendGuess(this.letter);
-          this.letter = '';
+          sendGuess($scope.letter);
+          $scope.letter = '';
         } else {
-          var sign = String.fromCharCode(key.keyCode);
-          if (typeof(this.letter) != 'undefined') {
-            this.letter = this.letter + sign;
-          } else {
-            this.letter = sign;
-          }
+          $scope.addLetter(String.fromCharCode(key.keyCode));
         }
         key.preventDefault();
+    };
+
+    $scope.addLetter = function(letter) {
+      if (typeof($scope.letter) != 'undefined') {
+        $scope.letter = $scope.letter + letter;
+      } else {
+        $scope.letter = letter;
+      }
+    };
+
+    $scope.containsLetter = function(letter) {
+      return typeof($scope.letter) != 'undefined' ? (""+$scope.letter).toUpperCase().indexOf(letter.toUpperCase()) != -1 : false;
     };
 
     function sendGuess(letter) {
@@ -104,7 +111,7 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
         $log.info('guessing ' + letter);
         $socket.emit('guess', letter);
       }
-    }
+    };
 }]);
 
 

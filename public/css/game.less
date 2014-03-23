@@ -65,6 +65,11 @@
   top: 5px;
 }
 
+.guess-field p.word {
+  margin-bottom: 20px;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 .guesses span {
   margin-right: 0.2em;
 }
@@ -72,3 +77,41 @@
 .game-stats {
   color: @colorBase;
 }
+
+/********************************************************************************
+* KEYBOARD
+********************************************************************************/
+.keyboard {
+  margin: 20px 0 0 0;
+  padding: 0;
+}
+
+.keyboard .upper {
+  margin-bottom: 3px;
+}
+
+.keyboard span.key:first-child {
+  margin-left: 0;
+}
+
+.keyboard span.key {
+  border: 2px solid @colorBase;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.8em;
+  font-weight: 200;
+  height: 1.6em;
+  line-height: 1.6em;
+  margin-left: 3px;
+  text-align: center;
+  vertical-align: middle;
+  width: 1.2em;
+}
+
+.keyboard span.key.active,
+.keyboard span.key:hover {
+  background-color: @colorBase;
+  color: #ffffff;
+}
+
