@@ -96,9 +96,9 @@ bangmanControllers.controller('GuessCtrl', ['$scope', '$socket', '$timeout', '$l
 
     $scope.addLetter = function(letter) {
       if (typeof($scope.letter) != 'undefined') {
-        $scope.letter = $scope.letter + letter;
+        $scope.letter = $scope.letter + letter.toUpperCase();
       } else {
-        $scope.letter = letter;
+        $scope.letter = letter.toUpperCase();
       }
     };
 

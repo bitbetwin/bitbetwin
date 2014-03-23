@@ -11,7 +11,7 @@
 					.guess-field(key-listener='handleKey')
 						.guess-field-inner
 							button.close(aria-hidden="true", ng-click="leave()") &times;
-							p.word {{ word }}
+							p.word {{ word.toUpperCase() }}
 							.input-group
 								input.form-control.input-lg(ng-model="letter", type="text", placeholder="Enter your guess!")
 								span.input-group-btn
