@@ -3,6 +3,7 @@ cook = require 'cookie'
 socketio = require 'socket.io'
 CreditDao = require './dao/creditdao'
 GameDao = require './dao/gamedao'
+DataAccess = require './dataaccess'
 
 class exports.SocketHandler
 
@@ -48,8 +49,6 @@ class exports.SocketHandler
         data.user = session.passport.user
         accept null, true
 
-    User = require('./models/user')
-
     io.on "connection", (socket) ->
       hs = socket.handshake
       @.log.info "debug " + DEBUG
@@ -65,7 +64,7 @@ class exports.SocketHandler
         logger.debug "A socket with sessionID " + hs.sessionID + " and name: " + user.email + " connected."
         
         connectedUsers[hs.user] = user
-        
+
         GameDao.retrieveGames (err, games) ->
           socket.emit "loggedin", games
 
@@ -75,10 +74,10 @@ class exports.SocketHandler
 
       if user
         console.log "user reused " + user
-        sendLoginData(user)
+        sendLoginData user
       else 
         console.log "get user from db"
-        User.findById hs.user, (err, user) =>
+        DataAccess.db.User.find( where: id: hs.user ).complete (err, user) =>
           return @.log.warn "Couldnt find user:", user if err || !user
           if DEBUG
             @.log.debug "found user by email:", user
