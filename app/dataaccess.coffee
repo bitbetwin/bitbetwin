@@ -8,8 +8,8 @@ class DataAccess
 
   @init: (@io) ->
     @loadConfig()
-    #GameDao.init @io
-    #CreditDao.init @io
+    GameDao.init @io
+    CreditDao.init @io
 
   @logger: () ->
     @io.log
@@ -39,12 +39,17 @@ class DataAccess
     return @env == 'testing' || @env == 'development'
 
   @startup: (callback) ->
+    if @db?
+      console.log "already connected to " + @loadConfig().dbname
+      callback null, @db
+      return
+
     console.log "connecting to " + @loadConfig().dbname
     sequelize = new Sequelize(@loadConfig().dbname, @loadConfig().username, @loadConfig().password, {
         dialect: "mysql",
         port: @loadConfig().port,
         host: @loadConfig().host,
-        multipleStatements: true
+        multipleStatements: true,
       })
 
     @db = {}
@@ -63,10 +68,9 @@ class DataAccess
 
     @db.sequelize = sequelize
 
-    sequelize.sync( force: false ).complete (err) =>
+    sequelize.sync( force: true ).complete (err) =>
       callback err, @db if callback
 
   @shutdown: () ->
-      #mongoose.disconnect()
 
 module.exports = DataAccess

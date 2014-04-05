@@ -19,48 +19,39 @@ describe "Credit", ->
   beforeEach (done) ->
     #empty database
     async.parallel [(callback) =>
-        @db.Game.destroy().success () ->
-          callback()
-        .error (error) ->
-          throw error
-          done()
+      @db.Game.destroy().complete (err) ->
+        throw err if err
+        callback()
     , (callback) =>
-        @db.Credit.destroy().success () ->
-          callback()
-        .error (error) ->
-          throw error
-          done()
+      @db.Credit.destroy().complete (err) ->
+        throw err if err
+        callback()
     , (callback) =>
-        @db.User.destroy().success () ->
-          callback()
-        .error (error) ->
-          throw error
-          done()
+      @db.User.destroy().complete (err) ->
+        throw err if err
+        callback()
     ], done 
 
   it "should create a user with credits", (done) ->
     @testUser = @db.User.build email: "encypt@gmail.com", password: "compl1c4t3d"   
-    @testUser.save().success (user) =>
-      @db.User.find(where: email: "encypt@gmail.com").success (user) =>
+    @testUser.save().complete (err, user) =>
+      throw err if err
+      @db.User.find(where: email: "encypt@gmail.com").complete (err, user) =>
+        throw err if err
         @credit = @db.Credit.build UserId: user.id, GameId: null, value: 1
 
         @credit.save().success (credit) ->
+
+          console.log "++++++++++++--------------+++++++++++++++++" + DataAccess.db
+
           CreditDao.retrieveCredits user.id, (err, credits) ->
             throw err if err
             credits.length.should.be.equal 1
-
-            console.log "+++++" + credits[0].UserId + ", " + credits[0].value
 
             credits[0].UserId.should.be.equal user.id
             credits[0].value.should.be.equal 1
 
             done()
-        .error (error) ->
-          throw error
-          done()
-      .error (error) ->
-        throw error
-        done()
 
   it "should charge a credit to a game", (done) ->
     async.waterfall [(callback) =>
@@ -154,9 +145,6 @@ describe "Credit", ->
     ], (err, bank, game, user1, user2) =>
       throw err if err
       CreditDao.payWinners [], game.id, (err) ->
-
-        console.log " +++++ " + err
-
         defined = err?
         defined.should.be.false
         done()
@@ -255,7 +243,7 @@ describe "Credit", ->
         callback null, item
     , (bank, callback) =>
       game = @db.Game.build name: "testgame1", phrasegenerator: "singlephrasegenerator", durationcalculator: "simpledurationcalculator"   
-      game.save (err, item) ->
+      game.save().complete (err, item) ->
         throw err if err
         callback null, bank, item
     , (bank, game, callback) =>
@@ -278,7 +266,6 @@ describe "Credit", ->
         i++
 
       Promise.all( promises ).then () ->
-        console.log "done"
         callback null, bank, game, user1, user2
           
     ], (err, bank, game, user1, user2) =>
@@ -361,13 +348,13 @@ describe "Credit", ->
     promises.push bankPromise
     promises.push userPromise
 
-    Promise.all( promises ).then (results) ->
+    Promise.all( promises ).then (results) =>
       game = results[0]
       bank = results[1]
       user = results[2]
 
       creditfx = (resolve, reject) =>
-        credit = @db.Credit.build UserId: user.id, value: 1
+        credit = @db.Credit.build UserId: user.id, GameId: null, value: 1
         credit.save().complete (err, credit) ->
           return reject err if err
           resolve credit

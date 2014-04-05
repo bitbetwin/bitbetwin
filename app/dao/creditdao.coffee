@@ -1,5 +1,3 @@
-Credit = require '../models/credit'
-User = require '../models/user'
 Promise = require 'promise'
 
 DataAccess = require '../dataaccess'
