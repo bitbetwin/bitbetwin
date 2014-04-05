@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) ->
     durationcalculator: DataTypes.STRING
   ,
     associate: (models) ->
-      Game.hasMany models.Credit
+      Game.hasMany models.Credit, { foreignKey: 'game' , foreignKeyConstraint:false }
       return
   )
   Game

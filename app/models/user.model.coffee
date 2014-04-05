@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) ->
           cb null, isMatch
   ,
     associate: (models) ->
-      User.hasMany models.Credit
+      User.hasMany models.Credit, { foreignKey: 'owner' , foreignKeyConstraint:true }
       return
 
   User.hook 'beforeCreate', (user, fn) ->

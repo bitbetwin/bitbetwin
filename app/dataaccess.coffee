@@ -44,6 +44,7 @@ class DataAccess
         dialect: "mysql",
         port: @loadConfig().port,
         host: @loadConfig().host,
+        multipleStatements: true
       })
 
     @db = {}

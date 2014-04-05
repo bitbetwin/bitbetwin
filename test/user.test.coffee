@@ -4,9 +4,6 @@ validator = require("email-validator")
 
 DataAccess = require "../app/dataaccess"
 
-restful = require 'node-restful'
-mongoose = restful.mongoose
-
 describe "User", ->
 
   before (done)->

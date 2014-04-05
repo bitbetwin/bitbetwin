@@ -1,29 +1,28 @@
-restful = require 'node-restful'
-mongoose = restful.mongoose
-
 Credit = require '../models/credit'
 User = require '../models/user'
 Promise = require 'promise'
+
+DataAccess = require '../dataaccess'
 
 class CreditDao
 
   @init: (@io) ->
 
   @retrieveCredits: (userid, callback) ->
-    Credit.find owner: userid, game: null, (err, credits) ->
+    DataAccess.db.Credit.findAll(where: UserId: userid, GameId: null).complete (err, credits) ->
       callback err, credits
 
   @retrievePot: (gameid, callback) ->
-    Credit.find game: gameid, (err, credits) ->
+    DataAccess.db.Credit.findAll(where: GameId: gameid).complete (err, credits) ->
       return callback err if err
       callback err, credits
 
   @drawCommission: (credit, callback) ->
-    User.findOne email: "mail@bitbetwin.co", (err, bank) ->
+    DataAccess.db.User.find(where: email: "mail@bitbetwin.co").complete (err, bank) ->
       return callback err if err
-      credit.game = null
-      credit.owner = bank._id
-      credit.save (err) ->
+      credit.GameId = null
+      credit.UserId = bank.id
+      credit.save().complete (err) ->
         callback err
 
   @chargeCredits: (userid, gameid, pot, commission, callback) ->
@@ -41,8 +40,8 @@ class CreditDao
 
       promises = []
       for credit in credits when credits.indexOf(credit) < pot
-        credit.game = gameid
-        promises.push credit.save (err) ->
+        credit.GameId = gameid
+        promises.push credit.save().complete (err) ->
           return callback err if err
 
       for credit in credits when credits.indexOf(credit) >= pot && credits.indexOf(credit) < (pot + commission)
@@ -57,7 +56,10 @@ class CreditDao
     @retrievePot gameid, (err, credits) ->
       return callback err if err
 
-      if credits.length < winners.length
+      if !credits? && winners.length == 0
+        return callback null
+
+      if !credits? || credits.length < winners.length
         return callback "Less credits than winners is not possible."
 
       share = Math.floor(credits.length / winners.length)
@@ -71,10 +73,10 @@ class CreditDao
         deal = 0
         while deal < share
           index = winnum + deal
-          console.log credits[index]._id + ", index: " + index + " -> " + winner._id
-          credits[index].owner = winner._id
-          credits[index].game = null
-          promises.push credits[index].save (err) ->
+          console.log credits[index].id + ", index: " + index + " -> " + winner.id
+          credits[index].UserId = winner.id
+          credits[index].GameId = null
+          promises.push credits[index].save().complete (err) ->
             throw err if err
           deal++
         winnum += share
