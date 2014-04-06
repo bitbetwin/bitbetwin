@@ -8,11 +8,6 @@ class DataAccess
 
   @init: (@io) ->
     @loadConfig()
-    GameDao.init @io
-    CreditDao.init @io
-
-  @logger: () ->
-    @io.log
 
   @loadConfig: () ->
     return @config if @config?
@@ -68,9 +63,12 @@ class DataAccess
 
     @db.sequelize = sequelize
 
-    sequelize.sync( force: true ).complete (err) =>
+    sequelize.sync( force: false ).complete (err) =>
       callback err, @db if callback
 
   @shutdown: () ->
+
+  @logger: () ->
+    @io.log
 
 module.exports = DataAccess

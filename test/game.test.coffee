@@ -10,7 +10,7 @@ describe "Game", ->
     process.env.NODE_ENV = "testing"
     DataAccess.startup (err, @db) =>
       throw err if err
-      DataAccess.db.Game.destroy()
+      @db.Game.destroy()
       done()
 
   it "should create a game", (done) ->
@@ -25,17 +25,21 @@ describe "Game", ->
         done()  
 
   it "should return all games", (done) ->
-    async.parallel [(callback) ->
+    async.parallel [(callback) =>
+      console.log "step1"
       @game = DataAccess.db.Game.build name: "testgame1", phrasegenerator: "singlephrasegenerator", durationcalculator: "simpledurationcalculator"
       @game.save().complete (err, game) ->
         callback err
-    , (callback) ->
+    , (callback) =>
+      console.log "step2"
       @game = DataAccess.db.Game.build name: "testgame2", phrasegenerator: "singlephrasegenerator", durationcalculator: "simpledurationcalculator"   
       @game.save().complete (err, game) ->
         callback err
-    ], (err) ->
+    ], (err) =>
+      console.log "step3"
       throw err if err
       GameDao.retrieveGames (err, games) ->
+        console.log "step4"
         throw err if err
         games.length.should.be.equal 3
         done()

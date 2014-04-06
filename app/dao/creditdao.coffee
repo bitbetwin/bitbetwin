@@ -7,6 +7,7 @@ class CreditDao
   @init: (@io) ->
 
   @retrieveCredits: (userid, callback) ->
+    DataAccess = require '../dataaccess'
     DataAccess.db.Credit.findAll(where: UserId: userid, GameId: null).complete (err, credits) ->
       callback err, credits
 

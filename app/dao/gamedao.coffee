@@ -1,8 +1,6 @@
-DataAccess = require '../dataaccess'
-
 class GameDao
 
-  @init: (@io) ->
+  @init: (@io, @db) ->
     GameEngine = require('../hangman/gameengine').GameEngine
 
     gamedao = @
@@ -21,6 +19,7 @@ class GameDao
     @io.log
 
   @retrieveGames: (callback) ->
+    DataAccess = require '../dataaccess'
     DataAccess.db.Game.findAll().complete (err, games) ->
       callback err, games
 
