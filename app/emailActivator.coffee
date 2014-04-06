@@ -1,4 +1,3 @@
-Subscriber = require './models/subscriber'
 Mandrill = require 'mandrill-api/mandrill'
 
 email_message =

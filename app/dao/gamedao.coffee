@@ -13,10 +13,10 @@ class GameDao
         gamedao.commands[game.name]['instance'] = engine
         gamedao.commands[game.name]['functions'] = ['join', 'leave', 'guess', 'report']
         engine.start()
-      GameDao.logger().info "initialised games"
+      GameDao.logger().info "initialised games" if GameDao.logger()
 
   @logger: () ->
-    @io.log
+    @io.log if @io?
 
   @retrieveGames: (callback) ->
     DataAccess = require '../dataaccess'

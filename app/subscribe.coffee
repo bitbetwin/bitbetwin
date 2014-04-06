@@ -1,4 +1,4 @@
-Subscriber = require './models/subscriber'
+DataAccess = require './dataaccess'
 Mandrill = require 'mandrill-api/mandrill'
 Validator = require 'email-validator'
 
@@ -28,16 +28,12 @@ class exports.Subscribe
         return
 
       # Check for existing subscribers
-      Subscriber.find { email: email }, (err, docs) ->
+      DataAccess.db.Subscriber.find(where: email: email).complete (err, docs) ->
         if docs.length == 0
 
-          # Save subscriber into MongoDB
-          s = new Subscriber
-            email: email
-            name: name
-            has_newsletter: newsletter
-          
-          s.save (err) ->
+          # Save subscriber into DB
+          s = DataAccess.db.Subscriber.build email: email, name: name, has_newsletter: newsletter
+          s.save().complete (err) ->
             if err
               ret.err = true
               ret.msg = "Sorry, an error occured. Please try again later."
@@ -64,11 +60,7 @@ class exports.Subscribe
             "async": false
             (results) ->
               if (results[0].status == "sent")
-                Subscriber.update
-                  email: results[0].email
-                ,
-                  "$set": confirmation_sent: yes
-                , (err) ->
+                DataAccess.db.Subscriber.update(confirmation_sent: yes, email: results[0].email).complete (err) ->
                   console.error "{results[0].email} could not bet updated: {err}" if err
                 console.log "confirmation mail sent to #{results[0].email}"
             (e) ->

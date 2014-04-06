@@ -1,1 +1,1 @@
-mongo --host localhost bitbetwindb initdata.js
+mysql -u root -ppassword bitbetwindb < initdata.sql

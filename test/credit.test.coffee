@@ -8,7 +8,7 @@ Promise = require 'promise'
 
 describe "Credit", ->
 
-  #@timeout 15000
+  @timeout 15000
 
   before (done)->
     process.env.NODE_ENV = "testing"
@@ -41,9 +41,6 @@ describe "Credit", ->
         @credit = @db.Credit.build UserId: user.id, GameId: null, value: 1
 
         @credit.save().success (credit) ->
-
-          console.log "++++++++++++--------------+++++++++++++++++" + DataAccess.db
-
           CreditDao.retrieveCredits user.id, (err, credits) ->
             throw err if err
             credits.length.should.be.equal 1

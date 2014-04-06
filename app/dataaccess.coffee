@@ -64,6 +64,10 @@ class DataAccess
     @db.sequelize = sequelize
 
     sequelize.sync( force: false ).complete (err) =>
+      GameDao.init @io
+
+      CreditDao = require('./dao/creditdao')
+      CreditDao.init @io
       callback err, @db if callback
 
   @shutdown: () ->

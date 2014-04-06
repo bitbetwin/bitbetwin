@@ -19,6 +19,8 @@ class CreditDao
   @drawCommission: (credit, callback) ->
     DataAccess.db.User.find(where: email: "mail@bitbetwin.co").complete (err, bank) ->
       return callback err if err
+      if !bank?
+        return callback "Cannot draw commission: Reason: Missing bank user!"
       credit.GameId = null
       credit.UserId = bank.id
       credit.save().complete (err) ->
