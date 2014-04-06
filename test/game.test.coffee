@@ -6,11 +6,15 @@ DataAccess = require "../app/dataaccess"
 
 describe "Game", ->
 
-  before (done)->
+  before (done) ->
     process.env.NODE_ENV = "testing"
     DataAccess.startup (err, @db) =>
       throw err if err
-      @db.Game.destroy()
+      @db.Game.destroy().complete (err) ->
+        done()
+
+  after (done) ->
+    @db.Game.destroy().complete (err) ->
       done()
 
   it "should create a game", (done) ->

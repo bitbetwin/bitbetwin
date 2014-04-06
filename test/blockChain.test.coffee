@@ -4,6 +4,7 @@ DataAccess = require "../app/dataaccess"
 describe "Blockchain", ->
 
   before (done) ->
+    process.env.NODE_ENV = "testing"
     DataAccess.loadConfig()
     PaymentAPI = require("../app/btc/paymentAPI")
     @blockchainWallet = PaymentAPI.getInstance()
