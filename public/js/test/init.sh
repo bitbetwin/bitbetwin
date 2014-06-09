@@ -1,1 +1,1 @@
-mongo --host localhost bitbetwinTest public/js/test/testdata.js
+mysql -u root -ppassword bitbetwinTest < public/js/test/testdata.sql
